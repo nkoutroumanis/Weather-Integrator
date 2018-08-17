@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="netcdfAll-4.6.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Java Libraries/WeatherIntegrator/netcdfAll-4.6.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
