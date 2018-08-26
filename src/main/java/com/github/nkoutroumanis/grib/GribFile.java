@@ -1,5 +1,6 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.grib;
 
+import com.github.nkoutroumanis.ParellelJob;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -7,16 +8,21 @@ import ucar.nc2.Variable;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class GribFile {
 
     private final String path;
     private final List<Variable> listOfVariables;
 
-    private GribFile(String path, List<String> listOfVariables){
+    private GribFile(String path, List<String> listOfVariables) throws IOException {
         this.path = path;
         NetcdfFile ncf = NetcdfFile.open(path);
         this.listOfVariables = listOfVariables.stream().map(s->ncf.findVariable(s)).collect(Collectors.toList());
+    }
+
+    public Stream<Variable> getVariablesAsStream(){
+        return listOfVariables.stream();
     }
 
     public String getPath() {
@@ -29,7 +35,7 @@ public final class GribFile {
         listOfVariables.forEach(v->{
             try {
 
-                s.append(Job.CSV_SEPARATOR+" ");
+                s.append(ParellelJob.SEPARATOR+" ");
                 s.append(v.read("0,0,"+getLatIndex(lat)+","+getLonIndex(lon)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -41,7 +47,7 @@ public final class GribFile {
         return s.toString();
     }
 
-    public static GribFile newGribFile(String path, List<String> listOfVariables){
+    public static GribFile newGribFile(String path, List<String> listOfVariables) throws IOException {
         return new GribFile(path, listOfVariables);
     }
 
@@ -62,13 +68,13 @@ public final class GribFile {
         }
     }
 
-    private static int getLatIndex(float fLat) { // lats: 90...-90 per 0.5 (361 values)
+    public static int getLatIndex(float fLat) { // lats: 90...-90 per 0.5 (361 values)
         double dLat = roundToHalf(fLat);
         int i = (int) (2 * (90 - dLat));
         return i;
     }
 
-    private static int getLonIndex(float fLon) { // lons: 0...359.5, per 0.5  (720 values)
+    public static int getLonIndex(float fLon) { // lons: 0...359.5, per 0.5  (720 values)
         double dLon = roundToHalf(fLon);
         int i = (int) (2 * dLon);
         return i;

@@ -1,4 +1,11 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.lru;
+
+import com.github.nkoutroumanis.ParellelJob;
+import com.github.nkoutroumanis.grib.GribFile;
+import com.github.nkoutroumanis.grib.GribFilesTree;
+
+import java.io.IOException;
+import java.util.Date;
 
 public final class LRUCacheManager {
 
@@ -10,12 +17,13 @@ public final class LRUCacheManager {
         this.cache = cache;
     }
 
-    public String getData(String date,long lat, long lon){
+    public String getData(Date date, long lat, long lon) throws IOException {
 
-        String choosenGribFilePath = tree.getFilePathByUnixTime();
+
+        String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime());
 
         if(!isGribFileContainedInCache(choosenGribFilePath)){
-            cache.put(choosenGribFilePath, GribFile.newGribFile(choosenGribFilePath,Job.VARIABLES_TO_BE_INTEGRATED));
+            cache.put(choosenGribFilePath, GribFile.newGribFile(choosenGribFilePath, ParellelJob.VARIABLES_TO_BE_INTEGRATED));
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);

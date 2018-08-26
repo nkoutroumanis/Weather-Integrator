@@ -1,5 +1,6 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.grib;
 
+import com.github.nkoutroumanis.ParellelJob;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 public enum GribFilesTree {
-    INSTANCE(Job.GRIB_FILES_FOLDER_PATH);
+    INSTANCE(ParellelJob.GRIB_FILES_FOLDER_PATH);
 
     private final TreeMap gribFilesTreeMap;
 
@@ -19,10 +20,8 @@ public enum GribFilesTree {
     }
 
 
-    public String getFilePathByUnixTime(String date){
-
-
-       return (String) gribFilesTreeMap.floorEntry().getValue();
+    public String getFilePathByUnixTime(long date){
+       return (String) gribFilesTreeMap.floorEntry(date).getValue();
     }
 
     private void traverseFolder(String folderName)
@@ -33,7 +32,7 @@ public enum GribFilesTree {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String filename = listOfFiles[i].getName();
-                if( filename.endsWith(Job.GRIB_FILES_EXTENSION))
+                if( filename.endsWith(ParellelJob.GRIB_FILES_EXTENSION))
                 {
                     String completeFilename = folderName +"//"+filename;
                     long time = getTimeOfGribFile(completeFilename);
@@ -80,12 +79,23 @@ public enum GribFilesTree {
             e.printStackTrace();
         }
         Variable timeVariable = ncf.findVariable("time");
-        float time_val = (60*60)* ((float)timeVariable.readScalarDouble());
+
+        float time_val = 0;
+        try {
+            time_val = (60*60)* ((float)timeVariable.readScalarDouble());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String timeUnits = timeVariable.getUnitsString();
         String strToRemove = "Hour since ";
         String strConverted = timeUnits.substring(strToRemove.length());
         System.out.println("getTime() "+strConverted);
-        ncf.close();
+        try {
+            ncf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         DateTime date = DateTime.parse(strConverted);
         long unixTime = date.getMillis() / 1000;
         return (unixTime + (long)time_val);

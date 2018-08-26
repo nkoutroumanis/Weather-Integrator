@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.lru;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
