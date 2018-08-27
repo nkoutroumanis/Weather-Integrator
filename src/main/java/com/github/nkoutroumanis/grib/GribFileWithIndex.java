@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.ParellelJob;
+import com.github.nkoutroumanis.Job;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 
@@ -30,15 +30,15 @@ public class GribFileWithIndex {
         }).collect(Collectors.toList());
     }
 
-    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables){
-        return newGribFileWithIndex(path, listOfVariables);
+    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables) throws IOException {
+        return new GribFileWithIndex(path, listOfVariables);
     }
 
     public String getDataValuesByLatLon(float lat, float lon){
         StringBuilder s = new StringBuilder();
 
         listOfEntries.forEach(e->{
-                s.append(ParellelJob.SEPARATOR+" ");
+                s.append(Job.SEPARATOR);
                 s.append(e.getKey().getFloat(e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))));
         });
         return s.toString();

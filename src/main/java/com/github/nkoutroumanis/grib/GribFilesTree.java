@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.ParellelJob;
+import com.github.nkoutroumanis.Job;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 public enum GribFilesTree {
-    INSTANCE(ParellelJob.GRIB_FILES_FOLDER_PATH);
+    INSTANCE(Job.GRIB_FILES_FOLDER_PATH);
 
     private final TreeMap gribFilesTreeMap;
 
@@ -18,7 +18,6 @@ public enum GribFilesTree {
         gribFilesTreeMap = new TreeMap<Long,String>();
         traverseFolder(folderPath);
     }
-
 
     public String getFilePathByUnixTime(long date){
        return (String) gribFilesTreeMap.floorEntry(date).getValue();
@@ -32,7 +31,7 @@ public enum GribFilesTree {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String filename = listOfFiles[i].getName();
-                if( filename.endsWith(ParellelJob.GRIB_FILES_EXTENSION))
+                if( filename.endsWith(Job.GRIB_FILES_EXTENSION))
                 {
                     String completeFilename = folderName +"//"+filename;
                     long time = getTimeOfGribFile(completeFilename);
@@ -90,7 +89,6 @@ public enum GribFilesTree {
         String timeUnits = timeVariable.getUnitsString();
         String strToRemove = "Hour since ";
         String strConverted = timeUnits.substring(strToRemove.length());
-        System.out.println("getTime() "+strConverted);
         try {
             ncf.close();
         } catch (IOException e) {

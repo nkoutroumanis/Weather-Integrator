@@ -1,7 +1,8 @@
 package com.github.nkoutroumanis.lru;
 
-import com.github.nkoutroumanis.ParellelJob;
+import com.github.nkoutroumanis.Job;
 import com.github.nkoutroumanis.grib.GribFile;
+import com.github.nkoutroumanis.grib.GribFileWithIndex;
 import com.github.nkoutroumanis.grib.GribFilesTree;
 
 import java.io.IOException;
@@ -17,18 +18,27 @@ public final class LRUCacheManager {
         this.cache = cache;
     }
 
-    public String getData(Date date, long lat, long lon) throws IOException {
-
+    public String getData(Date date, float lat, float lon) throws IOException {
 
         String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime());
 
-        if(!isGribFileContainedInCache(choosenGribFilePath)){
-            cache.put(choosenGribFilePath, GribFile.newGribFile(choosenGribFilePath, ParellelJob.VARIABLES_TO_BE_INTEGRATED));
+        if(Job.USE_INDEX){
+            if(!isGribFileContainedInCache(choosenGribFilePath)){
+                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, Job.VARIABLES_TO_BE_INTEGRATED));
+            }
+
+            GribFileWithIndex gribFileWithIndex = (GribFileWithIndex) cache.get(choosenGribFilePath);
+            return gribFileWithIndex.getDataValuesByLatLon(lat, lon);
         }
 
-        GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
+        else{
+            if(!isGribFileContainedInCache(choosenGribFilePath)){
+                cache.put(choosenGribFilePath, GribFile.newGribFile(choosenGribFilePath, Job.VARIABLES_TO_BE_INTEGRATED));
+            }
 
-        return gribFile.getDataValuesByLatLon(lat, lon);
+            GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
+            return gribFile.getDataValuesByLatLon(lat, lon);
+        }
     }
 
     private boolean isGribFileContainedInCache(String filePath){
@@ -36,7 +46,7 @@ public final class LRUCacheManager {
     }
 
     public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache){
-        return newLRUCacheManager(tree, cache);
+        return new LRUCacheManager(tree, cache);
     }
 
 

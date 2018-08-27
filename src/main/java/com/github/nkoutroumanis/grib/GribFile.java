@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.ParellelJob;
+import com.github.nkoutroumanis.Job;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -32,11 +32,11 @@ public final class GribFile {
     public String getDataValuesByLatLon(float lat, float lon){
         StringBuilder s = new StringBuilder();
 
+
         listOfVariables.forEach(v->{
             try {
-
-                s.append(ParellelJob.SEPARATOR+" ");
-                s.append(v.read("0,0,"+getLatIndex(lat)+","+getLonIndex(lon)));
+                s.append(Job.SEPARATOR);
+                s.append(String.valueOf(v.read("0,0,"+getLatIndex(lat)+","+getLonIndex(lon))).replace(" ",""));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InvalidRangeException e) {
