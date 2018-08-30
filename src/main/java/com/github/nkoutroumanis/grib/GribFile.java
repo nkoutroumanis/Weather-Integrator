@@ -5,6 +5,7 @@ import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,10 @@ public final class GribFile {
         listOfVariables.forEach(v->{
             try {
                 s.append(Job.SEPARATOR);
+                double t1 = System.nanoTime();
                 s.append(String.valueOf(v.read("0,0,"+getLatIndex(lat)+","+getLonIndex(lon))).replace(" ",""));
+                Job.TEMPORARY_POINTER1 = (System.nanoTime() - t1);
+                Job.TEMPORARY_POINTER2++;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InvalidRangeException e) {

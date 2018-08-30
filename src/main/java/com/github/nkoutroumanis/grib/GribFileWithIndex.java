@@ -38,8 +38,12 @@ public class GribFileWithIndex {
         StringBuilder s = new StringBuilder();
 
         listOfEntries.forEach(e->{
+
                 s.append(Job.SEPARATOR);
+            double t1 = System.nanoTime();
                 s.append(e.getKey().getFloat(e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))));
+            Job.TEMPORARY_POINTER1 = (System.nanoTime()-t1);
+            Job.TEMPORARY_POINTER2++;
         });
         return s.toString();
     }

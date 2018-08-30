@@ -8,7 +8,7 @@ import com.github.nkoutroumanis.grib.GribFilesTree;
 import java.io.IOException;
 import java.util.Date;
 
-public final class LRUCacheManager {
+public final class LRUCacheManager<T> {
 
     private final GribFilesTree tree;
     private final LRUCache cache;

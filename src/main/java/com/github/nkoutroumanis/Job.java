@@ -18,8 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
-
 public final class Job {
 
     public static final String FILES_PATH = "/Users/nicholaskoutroumanis/Desktop/csv";
@@ -40,6 +38,9 @@ public final class Job {
     private static final String[] VARIABLES = {"Relative_humidity_height_above_ground","Temperature_height_above_ground"};
     public static final List<String> VARIABLES_TO_BE_INTEGRATED = Collections.unmodifiableList(Arrays.asList(VARIABLES));
 
+    public static double TEMPORARY_POINTER1 = 0;
+    public static double TEMPORARY_POINTER2 = 0;
+
     public static void main(String args[]) {
 
         //delete existing exported files on the export path
@@ -47,9 +48,14 @@ public final class Job {
 
         final LRUCacheManager manager = LRUCacheManager.newLRUCacheManager(GribFilesTree.INSTANCE, LRUCache.newLRUCache(LRUCACHE_MAX_ENTRIES));
 
+        long t1;
+
+        t1 = System.currentTimeMillis();
         try (Stream<Path> stream = Files.walk(Paths.get(FILES_PATH)).filter(path->path.getFileName().toString().endsWith(FILES_EXTENSION))) {
 
             stream.forEach((path) -> {
+
+
 
                 try (Stream<String> innerStream = Files.lines(path);
                      FileOutputStream fos = new FileOutputStream(FILES_EXPORT_PATH +path.getFileName().toString(), true);
@@ -61,6 +67,8 @@ public final class Job {
 
                         String[] separatedLine = line.split(SEPARATOR);
 
+
+                        long t2 = 0;
                         try {
                             String dataToBeIntegrated = manager.getData(DATE_FORMAT.parse(separatedLine[NUMBER_OF_COLULMN_DATE-1]),Float.parseFloat(separatedLine[NUMBER_OF_COLULMN_LATITUDE-1]),Float.parseFloat(separatedLine[NUMBER_OF_COLULMN_LONGITUDE-1]));
                             pw.write(line + dataToBeIntegrated + "\r\n") ;
@@ -80,6 +88,10 @@ public final class Job {
         } catch (IOException ex) {
             Logger.getLogger("OUTER: "+Job.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        System.out.println("Average: "+ Job.TEMPORARY_POINTER1/Job.TEMPORARY_POINTER2);
+        System.out.println("TIME ELAPSED: "+ (System.currentTimeMillis()-t1));
+
     }
 
 }

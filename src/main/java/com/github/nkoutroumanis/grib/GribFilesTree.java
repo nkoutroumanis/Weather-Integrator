@@ -33,7 +33,7 @@ public enum GribFilesTree {
                 String filename = listOfFiles[i].getName();
                 if( filename.endsWith(Job.GRIB_FILES_EXTENSION))
                 {
-                    String completeFilename = folderName +"//"+filename;
+                    String completeFilename = folderName + File.separator +filename;
                     long time = getTimeOfGribFile(completeFilename);
                     gribFilesTreeMap.put(time, completeFilename);
                 }

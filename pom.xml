@@ -8,4 +8,100 @@
     <artifactId>weather-integrator</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- keep jmh at 1.11.3 to support java 6 -->
+        <jmh.version>1.21</jmh.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${maven.compiler.target}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>benchmark</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.3.2</version>
+                        <executions>
+                            <execution>
+                                <id>run-benchmarks</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <classpathScope>test</classpathScope>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath />
+                                        <argument>org.openjdk.jmh.Main</argument>
+                                        <!-- -h for help -->
+                                        <argument>-f</argument>
+                                        <argument>1</argument>
+                                        <argument>-i</argument>
+                                        <argument>10</argument>
+                                        <argument>-wi</argument>
+                                        <argument>3</argument>
+                                        <argument>-jvmArgs</argument>
+                                        <argument>-Xmx512m</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+    </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.lasersonlab.thredds</groupId>
+            <artifactId>netcdfAll</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+    </dependencies>
+
 </project>
