@@ -12,16 +12,29 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class BenchmarksTest {
 
-    private final WeatherIntegrator wi = WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
+    private final WeatherIntegrator wiWithIndex = WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
+            "/Users/nicholaskoutroumanis/Desktop/folder/", "./grib_files", 4,
+            9, 8, "dd/MM/yyyy hh:mm:ss",
+            List.of("Relative_humidity_height_above_ground", "Temperature_height_above_ground"))
+            .clearExportingFiles().useIndex().build();
+
+    private final WeatherIntegrator wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
             "/Users/nicholaskoutroumanis/Desktop/folder/", "./grib_files", 4,
             9, 8, "dd/MM/yyyy hh:mm:ss",
             List.of("Relative_humidity_height_above_ground", "Temperature_height_above_ground"))
             .clearExportingFiles().useIndex().build();
 
     @Benchmark
-    @BenchmarkMode(Mode.All)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void integrateData(Blackhole bh) {
-        wi.IntegrateData();
+    @BenchmarkMode(Mode.Throughput)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void integrateDataUsingIndex(Blackhole bh) {
+        wiWithIndex.IntegrateData();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.Throughput)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void integrateDataWithoutIndex(Blackhole bh) {
+        wiWithIndex.IntegrateData();
     }
 }
