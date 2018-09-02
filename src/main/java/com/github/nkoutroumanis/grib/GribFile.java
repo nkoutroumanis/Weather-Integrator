@@ -1,7 +1,5 @@
 package com.github.nkoutroumanis.grib;
 
-import com.sun.tools.javac.util.List;
-
 public interface GribFile {
 
     String getDataValuesByLatLon(float lat, float lon);

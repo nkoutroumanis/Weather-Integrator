@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.Job;
 import com.github.nkoutroumanis.WeatherIntegrator;
 import ucar.ma2.Array;
 import ucar.ma2.Index;

@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.Job;
 import com.github.nkoutroumanis.WeatherIntegrator;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 public final class GribFileWithoutIndex implements GribFile {
 
-    //private final String path;
     private final List<Variable> listOfVariables;
     private final String separator;
 

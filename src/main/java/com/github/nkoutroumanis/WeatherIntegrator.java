@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -130,7 +129,7 @@ public class WeatherIntegrator {
         }
 
         lruCacheManager = LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension),
-                LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, builder.variables, separator);
+                LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, Collections.unmodifiableList(builder.variables), separator);
     }
 
     private void clearExportingDirectory() {
@@ -178,8 +177,8 @@ public class WeatherIntegrator {
             Logger.getLogger("OUTER: " + Job.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Average: " + WeatherIntegrator.TEMPORARY_POINTER1 / WeatherIntegrator.TEMPORARY_POINTER2);
-        System.out.println("TIME ELAPSED: " + (System.currentTimeMillis() - t1));
+        //System.out.println("Average: " + WeatherIntegrator.TEMPORARY_POINTER1 / WeatherIntegrator.TEMPORARY_POINTER2);
+        //System.out.println("TIME ELAPSED: " + (System.currentTimeMillis() - t1));
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,

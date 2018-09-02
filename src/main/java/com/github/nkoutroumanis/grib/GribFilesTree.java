@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.grib;
 
-import com.github.nkoutroumanis.Job;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
