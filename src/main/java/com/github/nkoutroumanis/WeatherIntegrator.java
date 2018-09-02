@@ -41,7 +41,7 @@ public class WeatherIntegrator {
     public static double TEMPORARY_POINTER1 = 0;
     public static double TEMPORARY_POINTER2 = 0;
 
-    public static class Builder{
+    public static class Builder {
 
         private final String filesPath;
         private final String filesExportPath;
@@ -60,7 +60,7 @@ public class WeatherIntegrator {
         private boolean clearExportingDirectory = false;
 
         public Builder(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,
-                       int numberOfColumnLatitude,int numberOfColumnLongitude, String dateFormat, List<String> variables){
+                       int numberOfColumnLatitude, int numberOfColumnLongitude, String dateFormat, List<String> variables) {
 
             this.filesPath = filesPath;
             this.filesExportPath = filesExportPath;
@@ -72,43 +72,43 @@ public class WeatherIntegrator {
             this.variables = variables;
         }
 
-        public Builder filesExtension(String filesExtension){
+        public Builder filesExtension(String filesExtension) {
             this.filesExtension = filesExtension;
             return this;
         }
 
-        public Builder gribFilesExtension(String gribFilesExtension){
+        public Builder gribFilesExtension(String gribFilesExtension) {
             this.gribFilesExtension = gribFilesExtension;
             return this;
         }
 
-        public Builder separator(String separator){
+        public Builder separator(String separator) {
             this.separator = separator;
             return this;
         }
 
-        public Builder lruCacheMaxEntries(int lruCacheMaxEntries){
+        public Builder lruCacheMaxEntries(int lruCacheMaxEntries) {
             this.lruCacheMaxEntries = lruCacheMaxEntries;
             return this;
         }
 
-        public Builder useIndex(){
+        public Builder useIndex() {
             this.useIndex = true;
             return this;
         }
 
-        public Builder clearExportingFiles(){
+        public Builder clearExportingFiles() {
             this.clearExportingDirectory = true;
             return this;
         }
 
-        public WeatherIntegrator build(){
+        public WeatherIntegrator build() {
             return new WeatherIntegrator(this);
         }
 
     }
 
-    private WeatherIntegrator(Builder builder){
+    private WeatherIntegrator(Builder builder) {
         filesPath = builder.filesPath;
         filesExportPath = builder.filesExportPath;
         gribFilesFolderPath = builder.gribFilesFolderPath;
@@ -125,7 +125,7 @@ public class WeatherIntegrator {
         useIndex = builder.useIndex;
         clearExportingDirectory = builder.clearExportingDirectory;
 
-        if(clearExportingDirectory){
+        if (clearExportingDirectory) {
             clearExportingDirectory();
         }
 
@@ -138,29 +138,29 @@ public class WeatherIntegrator {
         Stream.of(new File(filesExportPath).listFiles()).filter((file -> file.toString().endsWith(filesExtension))).forEach(File::delete);
     }
 
-    public void IntegrateData(){
+    public void IntegrateData() {
         long t1;
 
         t1 = System.currentTimeMillis();
-        try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path->path.getFileName().toString().endsWith(filesExtension))) {
+        try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
             stream.forEach((path) -> {
 
                 try (Stream<String> innerStream = Files.lines(path);
-                     FileOutputStream fos = new FileOutputStream(filesExportPath +path.getFileName().toString(), true);
+                     FileOutputStream fos = new FileOutputStream(filesExportPath + path.getFileName().toString(), true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
                      BufferedWriter bw = new BufferedWriter(osw);
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
-                    innerStream.forEach( line -> {
+                    innerStream.forEach(line -> {
 
                                 String[] separatedLine = line.split(separator);
 
 
                                 //long t2 = 0;
                                 try {
-                                    String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate-1]),Float.parseFloat(separatedLine[numberOfColumnLatitude-1]),Float.parseFloat(separatedLine[numberOfColumnLongitude-1]));
-                                    pw.write(line + dataToBeIntegrated + "\r\n") ;
+                                    String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
+                                    pw.write(line + dataToBeIntegrated + "\r\n");
 
                                 } catch (ParseException e) {
                                     e.printStackTrace();
@@ -171,20 +171,20 @@ public class WeatherIntegrator {
                     );
 
                 } catch (IOException ex) {
-                    Logger.getLogger("INNER: "+Job.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("INNER: " + Job.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger("OUTER: "+Job.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("OUTER: " + Job.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Average: "+ WeatherIntegrator.TEMPORARY_POINTER1/WeatherIntegrator.TEMPORARY_POINTER2);
-        System.out.println("TIME ELAPSED: "+ (System.currentTimeMillis()-t1));
+        System.out.println("Average: " + WeatherIntegrator.TEMPORARY_POINTER1 / WeatherIntegrator.TEMPORARY_POINTER2);
+        System.out.println("TIME ELAPSED: " + (System.currentTimeMillis() - t1));
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,
-                                               int numberOfColumnLatitude,int numberOfColumnLongitude, String dateFormat, List<String> variables){
-        return new WeatherIntegrator.Builder( filesPath, filesExportPath, gribFilesFolderPath, numberOfColumnDate,
+                                               int numberOfColumnLatitude, int numberOfColumnLongitude, String dateFormat, List<String> variables) {
+        return new WeatherIntegrator.Builder(filesPath, filesExportPath, gribFilesFolderPath, numberOfColumnDate,
                 numberOfColumnLatitude, numberOfColumnLongitude, dateFormat, variables);
     }
 

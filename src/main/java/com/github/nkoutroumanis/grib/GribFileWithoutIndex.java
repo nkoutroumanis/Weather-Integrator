@@ -10,7 +10,6 @@ import ucar.nc2.Variable;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class GribFileWithoutIndex implements GribFile {
 
@@ -20,19 +19,19 @@ public final class GribFileWithoutIndex implements GribFile {
 
     private GribFileWithoutIndex(String path, List<String> listOfVariables, String separator) throws IOException {
         NetcdfFile ncf = NetcdfFile.open(path);
-        this.listOfVariables = listOfVariables.stream().map(s->ncf.findVariable(s)).collect(Collectors.toList());
+        this.listOfVariables = listOfVariables.stream().map(s -> ncf.findVariable(s)).collect(Collectors.toList());
         this.separator = separator;
     }
 
-    public String getDataValuesByLatLon(float lat, float lon){
+    public String getDataValuesByLatLon(float lat, float lon) {
         StringBuilder s = new StringBuilder();
 
 
-        listOfVariables.forEach(v->{
+        listOfVariables.forEach(v -> {
             try {
                 s.append(separator);
                 double t1 = System.nanoTime();
-                s.append(String.valueOf(v.read("0,0,"+GribFile.getLatIndex(lat)+","+GribFile.getLonIndex(lon))).replace(" ",""));
+                s.append(String.valueOf(v.read("0,0," + GribFile.getLatIndex(lat) + "," + GribFile.getLonIndex(lon))).replace(" ", ""));
                 WeatherIntegrator.TEMPORARY_POINTER1 = (System.nanoTime() - t1);
                 WeatherIntegrator.TEMPORARY_POINTER2++;
             } catch (IOException e) {

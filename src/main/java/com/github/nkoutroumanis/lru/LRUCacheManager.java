@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public final class LRUCacheManager{
+public final class LRUCacheManager {
 
     private final GribFilesTree tree;
     private final LRUCache cache;
@@ -15,7 +15,7 @@ public final class LRUCacheManager{
     private final List<String> variables;
     private final String separator;
 
-    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator){
+    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator) {
         this.tree = tree;
         this.cache = cache;
         this.useIndex = useIndex;
@@ -27,24 +27,23 @@ public final class LRUCacheManager{
 
         String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime());
 
-            if(!isGribFileContainedInCache(choosenGribFilePath)){
-                if(useIndex){
-                    cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables, separator));
-                }
-                else{
-                    cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
-                }
+        if (!isGribFileContainedInCache(choosenGribFilePath)) {
+            if (useIndex) {
+                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables, separator));
+            } else {
+                cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
             }
+        }
 
-            GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
-            return gribFile.getDataValuesByLatLon(lat, lon);
+        GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
+        return gribFile.getDataValuesByLatLon(lat, lon);
     }
 
-    private boolean isGribFileContainedInCache(String filePath){
+    private boolean isGribFileContainedInCache(String filePath) {
         return cache.containsKey(filePath);
     }
 
-    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator){
+    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator) {
         return new LRUCacheManager(tree, cache, useIndex, variables, separator);
     }
 
