@@ -9,38 +9,41 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public enum GribFilesTree {
-    INSTANCE(Job.GRIB_FILES_FOLDER_PATH);
+public final class GribFilesTree {
 
     private final TreeMap gribFilesTreeMap;
+    private final String gribFilesFolderPath;
+    private final String gribFilesExtension;
 
-    GribFilesTree(String folderPath){
-        gribFilesTreeMap = new TreeMap<Long,String>();
-        traverseFolder(folderPath);
+    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension){
+        this.gribFilesTreeMap = new TreeMap<Long,String>();
+        this.gribFilesFolderPath = gribFilesFolderPath;
+        this.gribFilesExtension = gribFilesExtension;
+        traverseFolder(gribFilesFolderPath);
     }
 
     public String getFilePathByUnixTime(long date){
        return (String) gribFilesTreeMap.floorEntry(date).getValue();
     }
 
-    private void traverseFolder(String folderName)
+    private void traverseFolder(String gribFilesFolderPath)
     {
-        File folder = new File(folderName);
+        File folder = new File(gribFilesFolderPath);
 
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String filename = listOfFiles[i].getName();
-                if( filename.endsWith(Job.GRIB_FILES_EXTENSION))
+                if( filename.endsWith(gribFilesExtension))
                 {
-                    String completeFilename = folderName + File.separator +filename;
+                    String completeFilename = gribFilesFolderPath + File.separator +filename;
                     long time = getTimeOfGribFile(completeFilename);
                     gribFilesTreeMap.put(time, completeFilename);
                 }
             }
             else if(listOfFiles[i].isDirectory())
             {
-                traverseFolder(folderName+ File.separator +listOfFiles[i].getName());
+                traverseFolder(gribFilesFolderPath+ File.separator +listOfFiles[i].getName());
             }
         }
     }
@@ -97,6 +100,10 @@ public enum GribFilesTree {
         DateTime date = DateTime.parse(strConverted);
         long unixTime = date.getMillis() / 1000;
         return (unixTime + (long)time_val);
+    }
+
+    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension){
+        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
     }
 
 //    private long getTime(String completeFilename) throws IOException
