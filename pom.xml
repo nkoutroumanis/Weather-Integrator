@@ -63,6 +63,8 @@
                                         <argument>3</argument>
                                         <argument>-jvmArgs</argument>
                                         <argument>-Xmx512m</argument>
+                                        <argument>-prof</argument>
+                                        <argument>gc</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
