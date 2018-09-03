@@ -26,15 +26,15 @@ public class BenchmarksTest {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     public void integrateDataUsingIndex(Blackhole bh) {
         wiWithIndex.IntegrateData();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     public void integrateDataWithoutIndex(Blackhole bh) {
-        wiWithIndex.IntegrateData();
+        wiWithoutIndex.IntegrateData();
     }
 }
