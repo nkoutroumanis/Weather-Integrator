@@ -1,14 +1,31 @@
 package com.github.nkoutroumanis;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class Job {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
+
+        try{
+       Stream<String> stream = Files.lines(Paths.get("/Users/nicholaskoutroumanis/Desktop/variables.txt"));
+
         WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
                 "/Users/nicholaskoutroumanis/Desktop/folder/", "./grib_files", 4,
                 9, 8, "dd/MM/yyyy hh:mm:ss",
-                Arrays.asList("Relative_humidity_height_above_ground", "Temperature_height_above_ground"))
+                /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
                 .clearExportingFiles().useIndex().build().IntegrateData();
+
+        Runtime rt = Runtime.getRuntime();
+        System.out.println("Approximation of used Memory: "+(rt.totalMemory()-rt.freeMemory())/1000000 +" MB");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
+
 }

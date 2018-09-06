@@ -40,11 +40,19 @@ public final class GribFileWithIndex implements GribFile {
     public String getDataValuesByLatLon(float lat, float lon) {
         StringBuilder s = new StringBuilder();
 
-        listOfEntries.forEach(e -> {
 
+        listOfEntries.forEach(e -> {
             s.append(separator);
             double t1 = System.nanoTime();
-            s.append(e.getKey().getFloat(e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))));
+            try {
+                s.append(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))));
+            } catch (ArrayIndexOutOfBoundsException k) {
+                try {
+                    s.append(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))));
+                } catch (ArrayIndexOutOfBoundsException j) {
+                    s.append(e.getKey().copy());
+                }
+            }
             WeatherIntegrator.TEMPORARY_POINTER1 = (System.nanoTime() - t1);
             WeatherIntegrator.TEMPORARY_POINTER2++;
         });
