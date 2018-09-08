@@ -11,11 +11,11 @@ public final class Job {
     public static void main(String args[]) throws InterruptedException {
 
         try{
-       Stream<String> stream = Files.lines(Paths.get("/Users/nicholaskoutroumanis/Desktop/variables.txt"));
+       Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
         WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                "/Users/nicholaskoutroumanis/Desktop/folder/", "./grib_files", 4,
-                9, 8, "dd/MM/yyyy hh:mm:ss",
+                "/Users/nicholaskoutroumanis/Desktop/folder/", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
+                8, 7, "yyyy-MM-dd HH:mm:ss",
                 /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
                 .clearExportingFiles().useIndex().build().IntegrateData();
 
