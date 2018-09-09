@@ -25,17 +25,16 @@ public final class LRUCacheManager {
 
     public String getData(Date date, float lat, float lon) throws IOException {
 
-        String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime()/1000L);
-
+        String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime() / 1000L);
 
         if (!isGribFileContainedInCache(choosenGribFilePath)) {
             if (useIndex) {
-
-System.out.println("PUT "+choosenGribFilePath);
                 cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables, separator));
             } else {
                 cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
             }
+        } else {
+            Job.hits++;
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);

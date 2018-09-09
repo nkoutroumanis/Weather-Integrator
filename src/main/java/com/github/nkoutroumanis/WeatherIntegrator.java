@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -152,6 +153,7 @@ public class WeatherIntegrator {
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
                     innerStream.forEach(line -> {
+                                Job.numberofRows++;
 
                                 String[] separatedLine = line.split(separator);
 

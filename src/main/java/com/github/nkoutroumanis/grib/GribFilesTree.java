@@ -1,12 +1,17 @@
 package com.github.nkoutroumanis.grib;
 
+import com.sleepycat.persist.impl.SimpleFormat;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.SimpleFormatter;
 
 public final class GribFilesTree {
 
@@ -22,7 +27,25 @@ public final class GribFilesTree {
     }
 
     public String getFilePathByUnixTime(long date) {
-        return (String) gribFilesTreeMap.floorEntry(date).getValue();
+
+        Map.Entry tmsmp1 = gribFilesTreeMap.floorEntry(date);
+        Map.Entry tmsmp2 = gribFilesTreeMap.ceilingEntry(date);
+
+        try{
+            if(Long.compare(Math.abs(date-(long)tmsmp1.getKey()),Math.abs(date-(long)tmsmp2.getKey()))==-1){
+                return (String) tmsmp1.getValue();
+            }else{
+                return (String) tmsmp2.getValue();
+            }
+        }
+        catch(NullPointerException e){//if floorEntry or ceiling entry does not exist
+            if(tmsmp1!=null){
+                return (String) tmsmp1.getValue();
+            }
+            else{
+                return (String) tmsmp2.getValue();
+            }
+        }
     }
 
     private void traverseFolder(String gribFilesFolderPath) {
@@ -36,6 +59,7 @@ public final class GribFilesTree {
                     String completeFilename = gribFilesFolderPath + File.separator + filename;
                     long time = getTimeOfGribFile(completeFilename);
                     gribFilesTreeMap.put(time, completeFilename);
+                    System.out.println("time "+ time+" completeFileName "+completeFilename);
                 }
             } else if (listOfFiles[i].isDirectory()) {
                 traverseFolder(gribFilesFolderPath + File.separator + listOfFiles[i].getName());
@@ -87,6 +111,7 @@ public final class GribFilesTree {
         String timeUnits = timeVariable.getUnitsString();
         String strToRemove = "Hour since ";
         String strConverted = timeUnits.substring(strToRemove.length());
+
         try {
             ncf.close();
         } catch (IOException e) {
@@ -94,6 +119,7 @@ public final class GribFilesTree {
         }
         DateTime date = DateTime.parse(strConverted);
         long unixTime = date.getMillis() / 1000;
+
         return (unixTime + (long) time_val);
     }
 
