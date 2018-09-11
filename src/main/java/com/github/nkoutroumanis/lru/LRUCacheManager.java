@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.lru;
 
-import com.github.nkoutroumanis.Job;
+import com.github.nkoutroumanis.JobUsingIndex;
 import com.github.nkoutroumanis.grib.*;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public final class LRUCacheManager {
                 cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
             }
         } else {
-            Job.hits++;
+            JobUsingIndex.hits++;
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);

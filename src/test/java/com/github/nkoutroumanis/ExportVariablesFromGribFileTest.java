@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class VariablesTest {
+public class ExportVariablesFromGribFileTest {
 
     @Test
     public void exportVariablesInFile() throws IOException {

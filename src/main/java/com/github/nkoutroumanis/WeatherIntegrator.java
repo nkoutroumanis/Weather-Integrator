@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -153,7 +152,7 @@ public class WeatherIntegrator {
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
                     innerStream.forEach(line -> {
-                                Job.numberofRows++;
+                                JobUsingIndex.numberofRows++;
 
                                 String[] separatedLine = line.split(separator);
 
@@ -172,11 +171,11 @@ public class WeatherIntegrator {
                     );
 
                 } catch (IOException ex) {
-                    Logger.getLogger("INNER: " + Job.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger("INNER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger("OUTER: " + Job.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("OUTER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //System.out.println("Average: " + WeatherIntegrator.TEMPORARY_POINTER1 / WeatherIntegrator.TEMPORARY_POINTER2);
