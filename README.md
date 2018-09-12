@@ -2,10 +2,10 @@ Weather Integrator
 =========
 [![Travis CI](https://travis-ci.org/nkoutroumanis/Weather-Integrator.svg?branch=master)](https://travis-ci.org/nkoutroumanis/Weather-Integrator)<br/>
 
-This work provides a mechanism for integrating weather data in files (such as csv) that contain information about Absolute Time and Coordinates (longitude and latitude) of a location.
+This work provides a mechanism for integrating weather data in files (such as csv) consisting of records that contain information about Absolute Time and Coordinates (longitude and latitude) of a location.
 
 Weather data is exported from [Grib files](http://weather.mailasail.com/Franks-Weather/Grib-Files-Explained)
-(in a few words, a grib file contains weather data - features about weather for a certain time), and then is integrated in the records of files (csv, txt etc.)
+(in a few words, a grib file contains weather data - features about weather for a certain time in a serialized form), and then is integrated in the records of files (csv, txt etc.). Grib files can be found [here](ftp://nomads.ncdc.noaa.gov/GFS/Grid4/)
 
 A file can be enriched with weather data only if its records contain information about Absolute Time (Date & Time) and Coordinates (longitude and latitude).
 
@@ -181,14 +181,13 @@ The available features that can be exported from the Grib Files (and then be add
 * v-component_of_wind_tropopause
 * v-component_of_wind_sigma
 
-Features that are correlated with Precipitation
+Features correlated with Precipitation
 ------------
-* The available features that are accociated with Precipitation are the following;
+The available features that are accociated with Precipitation are the following;
 * Per_cent_frozen_precipitation_surface
 * Precipitable_water_entire_atmosphere_single_layer
 * Precipitation_rate_surface_3_Hour_Average
 * Storm_relative_helicity_height_above_ground_layer
-* Temperature_surface
 * Total_precipitation_surface_3_Hour_Accumulation
 * Categorical_Rain_surface_3_Hour_Average
 * Categorical_Freezing_Rain_surface_3_Hour_Average

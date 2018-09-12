@@ -11,13 +11,14 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public class WeatherIntegrator {
+public final class WeatherIntegrator {
 
     private final String filesPath;
     private final String filesExportPath;
@@ -26,7 +27,6 @@ public class WeatherIntegrator {
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
     private final DateFormat dateFormat;
-    //private final String[] variables;
 
     private final String filesExtension;
     private final String gribFilesExtension;
@@ -138,9 +138,9 @@ public class WeatherIntegrator {
     }
 
     public void IntegrateData() {
-        long t1;
 
-        t1 = System.currentTimeMillis();
+        List<Long> times = new ArrayList<>();
+
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
             stream.forEach((path) -> {
@@ -152,12 +152,13 @@ public class WeatherIntegrator {
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
                     innerStream.forEach(line -> {
+
+                        long t1 = System.currentTimeMillis();
+
                                 JobUsingIndex.numberofRows++;
 
                                 String[] separatedLine = line.split(separator);
 
-
-                                //long t2 = 0;
                                 try {
                                     String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
                                     pw.write(line + dataToBeIntegrated + "\r\n");
@@ -167,6 +168,8 @@ public class WeatherIntegrator {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+
+                                 times.add(System.currentTimeMillis() -t1);
                             }
                     );
 
@@ -178,8 +181,7 @@ public class WeatherIntegrator {
             Logger.getLogger("OUTER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //System.out.println("Average: " + WeatherIntegrator.TEMPORARY_POINTER1 / WeatherIntegrator.TEMPORARY_POINTER2);
-        //System.out.println("TIME ELAPSED: " + (System.currentTimeMillis() - t1));
+        System.out.println("Average Time per Record: " + times.stream().mapToLong(Long::longValue).average());
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,

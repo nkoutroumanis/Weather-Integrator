@@ -16,7 +16,7 @@ public final class GribFileWithIndex implements GribFile {
     private final List<Map.Entry<Array, Index>> listOfEntries;
     private final String separator;
 
-    private final String path;
+    //private final String path;
 
     private GribFileWithIndex(String path, List<String> listOfVariables, String separator) throws IOException {
 
@@ -34,7 +34,7 @@ public final class GribFileWithIndex implements GribFile {
 
         this.separator = separator;
 
-        this.path = path;
+        //this.path = path;
     }
 
     public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables, String separator) throws IOException {
@@ -61,7 +61,7 @@ public final class GribFileWithIndex implements GribFile {
             WeatherIntegrator.TEMPORARY_POINTER2++;
         });
 
-        s.append(";" + path);
+//        s.append(";" + path);
         return s.toString();
     }
 

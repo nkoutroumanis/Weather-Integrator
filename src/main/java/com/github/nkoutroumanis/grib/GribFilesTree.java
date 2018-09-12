@@ -59,7 +59,6 @@ public final class GribFilesTree {
                     String completeFilename = gribFilesFolderPath + File.separator + filename;
                     long time = getTimeOfGribFile(completeFilename);
                     gribFilesTreeMap.put(time, completeFilename);
-                    System.out.println("time "+ time+" completeFileName "+completeFilename);
                 }
             } else if (listOfFiles[i].isDirectory()) {
                 traverseFolder(gribFilesFolderPath + File.separator + listOfFiles[i].getName());
