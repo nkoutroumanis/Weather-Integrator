@@ -115,7 +115,6 @@ public final class WeatherIntegrator {
         numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
         dateFormat = builder.dateFormat;
-        //variables = builder.variables;
 
         filesExtension = builder.filesExtension;
         gribFilesExtension = builder.gribFilesExtension;
@@ -143,8 +142,9 @@ public final class WeatherIntegrator {
 
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
-            stream.forEach((path) -> {
 
+            stream.forEach((path) -> {
+                System.out.println(path.getFileName().getRoot());
                 try (Stream<String> innerStream = Files.lines(path);
                      FileOutputStream fos = new FileOutputStream(filesExportPath + path.getFileName().toString(), true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");

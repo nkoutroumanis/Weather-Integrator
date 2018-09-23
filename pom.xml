@@ -15,21 +15,34 @@
         <jmh.version>1.21</jmh.version>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>${maven.compiler.target}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
 
-            </plugin>
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.7.0</version>
+                    <configuration>
+                        <source>${maven.compiler.target}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
 
-        </plugins>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <mainClass>com.github.nkoutroumanis.JobUsingIndex</mainClass>
+                            </manifest>
+                        </archive>
+                        <descriptorRefs>
+                            <descriptorRef>jar-with-dependencies</descriptorRef>
+                        </descriptorRefs>
+                    </configuration>
+                </plugin>
 
-    </build>
+            </plugins>
+        </build>
 
     <profiles>
         <profile>
@@ -58,9 +71,9 @@
                                         <argument>-f</argument>
                                         <argument>1</argument>
                                         <argument>-i</argument>
-                                        <argument>10</argument>
+                                        <argument>1</argument>
                                         <argument>-wi</argument>
-                                        <argument>3</argument>
+                                        <argument>1</argument>
                                         <argument>-jvmArgs</argument>
                                         <argument>-Xmx512m</argument>
                                         <!--  <argument>-prof</argument>
@@ -98,11 +111,10 @@
          </dependency>
 
          <dependency>
-             <groupId>org.lasersonlab.thredds</groupId>
-             <artifactId>netcdfAll</artifactId>
-             <version>5.0.0-SNAPSHOT</version>
+             <groupId>edu.ucar</groupId>
+             <artifactId>grib</artifactId>
+             <version>4.5.5</version>
          </dependency>
-
 
      </dependencies>
 

@@ -1,13 +1,18 @@
 package com.github.nkoutroumanis;
 
+import com.github.nkoutroumanis.grib.GribFilesTree;
+import com.github.nkoutroumanis.lru.LRUCache;
+import com.github.nkoutroumanis.lru.LRUCacheManager;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class JobWithoutIndex {
-
+public final class PreProcessing {
+    
     public static void main(String args[]) throws InterruptedException {
 
         long start = System.currentTimeMillis();
@@ -15,18 +20,15 @@ public final class JobWithoutIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                    "/Users/nicholaskoutroumanis/Desktop/folder/", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
-                    8, 7, "yyyy-MM-dd HH:mm:ss",
-                    /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
-                    .clearExportingFiles().lruCacheMaxEntries(1).build().IntegrateData();
+            LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("/Users/nicholaskoutroumanis/Desktop/grib_files", ".grb2"),
+                    LRUCache.newLRUCache(4), true, Collections.unmodifiableList(stream.collect(Collectors.toList())), ";");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
             System.out.println("Elapsed Time: "+ (System.currentTimeMillis() - start)/1000+" sec");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

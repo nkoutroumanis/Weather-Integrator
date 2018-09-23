@@ -39,6 +39,9 @@ public final class LRUCacheManager {
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
         return gribFile.getDataValuesByLatLon(lat, lon);
+
+//        return GribFileWithoutIndex.newGribFileWithoutIndex(tree.getFilePathByUnixTime(date.getTime() / 1000L), variables, separator).getDataValuesByLatLon(lat, lon);
+
     }
 
     private boolean isGribFileContainedInCache(String filePath) {

@@ -9,6 +9,8 @@ Weather data is exported from [Grib files](http://weather.mailasail.com/Franks-W
 
 A file can be enriched with weather data only if its records contain information about Absolute Time (Date & Time) and Coordinates (longitude and latitude).
 
+
+
 Available Features that can be Integrated in Files
 ------------
 The available features that can be exported from the Grib Files (and then be added on files) are the following;
@@ -194,5 +196,6 @@ The available features that are accociated with Precipitation are the following;
 * Categorical_Ice_Pellets_surface_3_Hour_Average
 * Categorical_Snow_surface_3_Hour_Average
 * Convective_Precipitation_Rate_surface_3_Hour_Average
+* Convective_precipitation_surface_3_Hour_Accumulation
 * U-Component_Storm_Motion_height_above_ground_layer
 * V-Component_Storm_Motion_height_above_ground_layer

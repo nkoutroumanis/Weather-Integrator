@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 
 public final class JobUsingIndex {
 
-    public static int hits = 0;
-    public static int numberofRows = 0;
+    public static float hits = 0;
+    public static float numberofRows = 0;
 
     public static void main(String args[]) throws InterruptedException {
 
@@ -22,7 +22,7 @@ public final class JobUsingIndex {
                     "/Users/nicholaskoutroumanis/Desktop/folder/", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
                     8, 7, "yyyy-MM-dd HH:mm:ss",
                     /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
-                    .clearExportingFiles().useIndex().build().IntegrateData();
+                    .clearExportingFiles().lruCacheMaxEntries(4).useIndex().build().IntegrateData();
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
@@ -33,7 +33,7 @@ public final class JobUsingIndex {
 
         System.out.println("Number Of Hits: " + hits);
         System.out.println("Number Of Records: " + numberofRows);
-        System.out.println("(Number Of Hits)/(Number Of Records): " + hits / numberofRows);
+        System.out.println("(Number Of Hits)/(Number Of Records): " +  hits / numberofRows);
 
 
     }
