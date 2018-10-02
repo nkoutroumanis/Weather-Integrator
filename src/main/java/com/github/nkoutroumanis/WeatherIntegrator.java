@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -133,27 +134,55 @@ public final class WeatherIntegrator {
 
     private void clearExportingDirectory() {
         //delete existing exported files on the export path
-        Stream.of(new File(filesExportPath).listFiles()).filter((file -> file.toString().endsWith(filesExtension))).forEach(File::delete);
+        if(Files.exists(Paths.get(filesExportPath)))
+        {
+            Stream.of(new File(filesExportPath).listFiles()).filter((file -> file.toString().endsWith(filesExtension))).forEach(File::delete);
+        }
     }
 
-    public void IntegrateData() {
+    public void integrateData() {
 
         List<Long> times = new ArrayList<>();
 
+        int filesPathLength = filesPath.length();
+
+        //create Export Directory
+        try {
+            Files.createDirectories(Paths.get(filesExportPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //create subdirectories if exist in Export Directory
+        try (Stream<String> stream =Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).map(p -> p.getParent().toString().substring(filesPathLength + 1)).distinct()) {
+
+            stream.forEach(subdirectory ->
+            {
+                try {
+                    Files.createDirectories(Paths.get(filesExportPath + File.separator + subdirectory));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //for each file do data integration
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
-
             stream.forEach((path) -> {
-                System.out.println(path.getFileName().getRoot());
+
                 try (Stream<String> innerStream = Files.lines(path);
-                     FileOutputStream fos = new FileOutputStream(filesExportPath + path.getFileName().toString(), true);
+                     FileOutputStream fos = new FileOutputStream(filesExportPath + File.separator+ path.toString().substring(filesPathLength+1), true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
                      BufferedWriter bw = new BufferedWriter(osw);
                      PrintWriter pw = new PrintWriter(bw, true)) {
-
                     innerStream.forEach(line -> {
 
-                        long t1 = System.currentTimeMillis();
+
+                                long t1 = System.currentTimeMillis();
 
                                 JobUsingIndex.numberofRows++;
 
@@ -169,7 +198,7 @@ public final class WeatherIntegrator {
                                     e.printStackTrace();
                                 }
 
-                                 times.add(System.currentTimeMillis() -t1);
+                                times.add(System.currentTimeMillis() - t1);
                             }
                     );
 
@@ -177,11 +206,16 @@ public final class WeatherIntegrator {
                     Logger.getLogger("INNER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-        } catch (IOException ex) {
+        } catch (
+                IOException ex) {
             Logger.getLogger("OUTER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Average Time per Record: " + times.stream().mapToLong(Long::longValue).average());
+        System.out.println("Average Time per Record: " + times.stream().
+
+                mapToLong(Long::longValue).
+
+                average());
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,

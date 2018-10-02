@@ -44,7 +44,6 @@ public final class GribFileWithIndex implements GribFile {
     public String getDataValuesByLatLon(float lat, float lon) {
         StringBuilder s = new StringBuilder();
 
-
         listOfEntries.forEach(e -> {
             s.append(separator);
             double t1 = System.nanoTime();
