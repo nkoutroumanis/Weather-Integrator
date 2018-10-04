@@ -65,29 +65,6 @@ public final class GribFilesTree {
         }
     }
 
-//    private static TreeMap<Long, NetcdfFile> traverseFolder(String folderName) throws IOException {
-//        File folder = new File(folderName);
-//        File[] listOfFiles = folder.listFiles();
-//        System.out.println("Number of Files:"+listOfFiles.length);
-//        TreeMap<Long, NetcdfFile> result = new TreeMap<Long, NetcdfFile>();
-//        for (int i = 0; i < listOfFiles.length; i++) {
-//            NetcdfFile ncf;
-//
-//            String filename = listOfFiles[i].getAbsolutePath();
-//            if (listOfFiles[i].isFile()) {
-//                if( filename.endsWith(targetExtension)) {
-//                    ncf = NetcdfFile.open(filename);
-//                    long time = getTime(ncf);//long time = new Random().nextLong() * new Random().nextLong() *  new Random().nextLong() +10000L ;
-//                    result.put(time, ncf);
-//                }
-//            } else if(listOfFiles[i].isDirectory()) {
-//                result.putAll(traverseFolder(filename));
-//            }
-//        }
-//        System.out.println("loaded " + result.size() + " grib files");
-//        return result;
-//    }
-
     private long getTimeOfGribFile(String completeFilename) {
         NetcdfFile ncf = null;
         try {
@@ -124,35 +101,5 @@ public final class GribFilesTree {
     public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) {
         return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
     }
-
-//    private long getTime(String completeFilename) throws IOException
-//    {
-//        NetcdfFile ncf = NetcdfFile.open(completeFilename);
-//        Variable timeVariable = ncf.findVariable("time");
-//        float time_val = (60*60)* ((float)timeVariable.readScalarDouble());
-//        String timeUnits = timeVariable.getUnitsString();
-//        String strToRemove = "Hour since ";
-//        String strConverted = timeUnits.substring(strToRemove.length());
-//        long unixTime = getUnixTime(strConverted);
-//        return (unixTime + (long)time_val);
-//    }
-
-//    private long getUnixTime(String dateTime) {
-//        try {
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-//            return sdf.parse(getLiteralValue(dateTime).replace("T", " ")).getTime()/1000l;
-//        }catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//        return Long.MIN_VALUE;
-//    }
-
-//    public static String getLiteralValue(String l) {
-//        String r = l.split("\\^\\^")[0];
-//        if(r.startsWith("\"")&&r.endsWith("\""))
-//            return r.substring(1, r.length()-1);
-//        return r;
-//    }
 
 }
