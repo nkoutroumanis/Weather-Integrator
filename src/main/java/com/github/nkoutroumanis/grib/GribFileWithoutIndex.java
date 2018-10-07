@@ -21,7 +21,7 @@ public final class GribFileWithoutIndex implements GribFile {
         this.separator = separator;
     }
 
-    public static int i =0;
+    public static int i = 0;
 
     public String getDataValuesByLatLon(float lat, float lon) {
         StringBuilder s = new StringBuilder();
@@ -31,11 +31,10 @@ public final class GribFileWithoutIndex implements GribFile {
             try {
                 s.append(separator);
                 double t1 = System.nanoTime();
-                try{
+                try {
                     s.append(String.valueOf(v.read("0,0," + GribFile.getLatIndex(lat) + "," + GribFile.getLonIndex(lon))).replace(" ", ""));
-                }
-                catch (InvalidRangeException i){
-                        s.append(String.valueOf(v.read()));
+                } catch (InvalidRangeException i) {
+                    s.append(String.valueOf(v.read()));
                 }
 
                 i++;

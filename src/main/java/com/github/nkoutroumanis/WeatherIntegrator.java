@@ -180,8 +180,8 @@ public final class WeatherIntegrator {
                      BufferedWriter bw = new BufferedWriter(osw);
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
-                        //for each line
-                        innerStream.forEach(line -> {
+                    //for each line
+                    innerStream.forEach(line -> {
 
                                 long t1 = System.currentTimeMillis();
 

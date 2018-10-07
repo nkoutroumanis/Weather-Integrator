@@ -30,18 +30,16 @@ public final class GribFilesTree {
         Map.Entry tmsmp1 = gribFilesTreeMap.floorEntry(date);
         Map.Entry tmsmp2 = gribFilesTreeMap.ceilingEntry(date);
 
-        try{
-            if(Long.compare(Math.abs(date-(long)tmsmp1.getKey()),Math.abs(date-(long)tmsmp2.getKey()))==-1){
+        try {
+            if (Long.compare(Math.abs(date - (long) tmsmp1.getKey()), Math.abs(date - (long) tmsmp2.getKey())) == -1) {
                 return (String) tmsmp1.getValue();
-            }else{
+            } else {
                 return (String) tmsmp2.getValue();
             }
-        }
-        catch(NullPointerException e){//if floorEntry or ceiling entry does not exist
-            if(tmsmp1!=null){
+        } catch (NullPointerException e) {//if floorEntry or ceiling entry does not exist
+            if (tmsmp1 != null) {
                 return (String) tmsmp1.getValue();
-            }
-            else{
+            } else {
                 return (String) tmsmp2.getValue();
             }
         }
