@@ -17,6 +17,10 @@ public interface GribFile {
     static int getLonIndex(float fLon) { // lons: 0...359.5, per 0.5  (720 values)
         double dLon = roundToHalf(fLon);
         int i = (int) (2 * dLon);
+        if(i<0){
+            i = 720 + i;
+        }
         return i;
     }
+
 }

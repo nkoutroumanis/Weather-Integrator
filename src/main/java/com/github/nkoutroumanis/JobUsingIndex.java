@@ -18,22 +18,21 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                    "/Users/nicholaskoutroumanis/Desktop/folder/", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
-                    8, 7, "yyyy-MM-dd HH:mm:ss",
-                    /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
-                    .clearExportingFiles().lruCacheMaxEntries(4).useIndex().build().IntegrateData();
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/sample-csv",
+                    "/home/nikolaos/Documents/sample-export-csv", "/home/nikolaos/Documents/gb", 3,
+                    8, 7, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
+                    .clearExportingFiles().lruCacheMaxEntries(5).useIndex().build().integrateData();
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
-            System.out.println("Elapsed Time: "+ (System.currentTimeMillis() - start)/1000+" sec");
+            System.out.println("Elapsed Time: " + (System.currentTimeMillis() - start) / 1000 + " sec");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         System.out.println("Number Of Hits: " + hits);
         System.out.println("Number Of Records: " + numberofRows);
-        System.out.println("(Number Of Hits)/(Number Of Records): " +  hits / numberofRows);
+        System.out.println("(Number Of Hits)/(Number Of Records): " + hits / numberofRows);
 
 
     }

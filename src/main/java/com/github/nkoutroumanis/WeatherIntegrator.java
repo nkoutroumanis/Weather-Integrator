@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -133,55 +134,99 @@ public final class WeatherIntegrator {
 
     private void clearExportingDirectory() {
         //delete existing exported files on the export path
-        Stream.of(new File(filesExportPath).listFiles()).filter((file -> file.toString().endsWith(filesExtension))).forEach(File::delete);
+        if (Files.exists(Paths.get(filesExportPath))) {
+            Stream.of(new File(filesExportPath).listFiles()).filter((file -> file.toString().endsWith(filesExtension))).forEach(File::delete);
+        }
     }
 
-    public void IntegrateData() {
+    public void integrateData() {
 
         List<Long> times = new ArrayList<>();
+        List<String> fileswithProblem = new ArrayList<String>();
 
+        int filesPathLength = filesPath.length();
+
+        //create Export Directory
+        try {
+            Files.createDirectories(Paths.get(filesExportPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //create subdirectories in Export Directory if exist
+        try (Stream<String> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).map(p -> p.getParent().toString().substring(filesPathLength)).distinct()) {
+
+            stream.forEach(subdirectory ->
+            {
+                try {
+                    Files.createDirectories(Paths.get(filesExportPath + subdirectory));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //for each file do data integration
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
-
             stream.forEach((path) -> {
-                System.out.println(path.getFileName().getRoot());
+
                 try (Stream<String> innerStream = Files.lines(path);
-                     FileOutputStream fos = new FileOutputStream(filesExportPath + path.getFileName().toString(), true);
+                     FileOutputStream fos = new FileOutputStream(filesExportPath + File.separator + path.toString().substring(filesPathLength + 1), true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
                      BufferedWriter bw = new BufferedWriter(osw);
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
-                    innerStream.forEach(line -> {
+                        //for each line
+                        innerStream.forEach(line -> {
 
-                        long t1 = System.currentTimeMillis();
+                                long t1 = System.currentTimeMillis();
 
                                 JobUsingIndex.numberofRows++;
 
                                 String[] separatedLine = line.split(separator);
 
-                                try {
-                                    String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
-                                    pw.write(line + dataToBeIntegrated + "\r\n");
+                                if ((separatedLine[numberOfColumnDate - 1].isEmpty() || separatedLine[numberOfColumnLatitude - 1].isEmpty() || separatedLine[numberOfColumnLongitude - 1].isEmpty()) || (separatedLine[numberOfColumnDate - 1].equals("") || separatedLine[numberOfColumnLatitude - 1].equals("") || separatedLine[numberOfColumnLongitude - 1].equals(""))) {
+                                    pw.write(line + ";;;;;;;;;;;;;" + "\r\n");
+                                    if (!fileswithProblem.contains(path.toString())) {
+                                        fileswithProblem.add(path.toString());
+                                    }
 
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } else {
+
+                                    try {
+                                        String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
+                                        pw.write(line + dataToBeIntegrated + "\r\n");
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-
-                                 times.add(System.currentTimeMillis() -t1);
+//                                times.add(System.currentTimeMillis() - t1);
                             }
                     );
 
                 } catch (IOException ex) {
-                    Logger.getLogger("INNER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-        } catch (IOException ex) {
-            Logger.getLogger("OUTER: " + JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (
+                IOException ex) {
+            Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Average Time per Record: " + times.stream().mapToLong(Long::longValue).average());
+        fileswithProblem.stream().forEach(System.out::println);
+
+        System.out.println("Average Time per Record: " + times.stream().
+
+                mapToLong(Long::longValue).
+
+                average());
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,

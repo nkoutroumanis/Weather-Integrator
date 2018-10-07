@@ -16,10 +16,9 @@ public final class JobWithoutIndex {
             Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
 
             WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                    "/Users/nicholaskoutroumanis/Desktop/folder/", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
-                    8, 7, "yyyy-MM-dd HH:mm:ss",
-                    /*Arrays.asList("Temperature_isobaric")*/stream.collect(Collectors.toList()))
-                    .clearExportingFiles().lruCacheMaxEntries(1).build().IntegrateData();
+                    "/Users/nicholaskoutroumanis/Desktop/folder", "/Users/nicholaskoutroumanis/Desktop/grib_files", 3,
+                    8, 7, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
+                    .clearExportingFiles().lruCacheMaxEntries(1).build().integrateData();
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
