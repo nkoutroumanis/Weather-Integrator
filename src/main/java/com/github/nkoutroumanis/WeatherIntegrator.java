@@ -163,13 +163,13 @@ public final class WeatherIntegrator {
         int cellsInXAxis = 10000;
         int cellsInYAxis = 10000;
 
-        double x = 60D/cellsInXAxis;
-        double y = 149D/cellsInYAxis;
+        double x = 60D / cellsInXAxis;
+        double y = 149D / cellsInYAxis;
 
         System.out.println(x);
         System.out.println(y);
 
-        int[] cell = new int[cellsInXAxis*cellsInYAxis];
+        int[] cell = new int[cellsInXAxis * cellsInYAxis];
 
 
         //create Export Directory
@@ -208,8 +208,8 @@ public final class WeatherIntegrator {
                      BufferedWriter bw = new BufferedWriter(osw);
                      PrintWriter pw = new PrintWriter(bw, true)) {
 
-                        //for each line
-                        innerStream.forEach(line -> {
+                    //for each line
+                    innerStream.forEach(line -> {
 
                                 long t1 = System.currentTimeMillis();
 
@@ -223,33 +223,29 @@ public final class WeatherIntegrator {
 //                                        fileswithProblem.add(path.toString());
 //                                    }
 
-                                }
-                                else if((Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]),180)==1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]),-180)==-1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]),90)==1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]),-90)==-1) ){
+                                } else if ((Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), 180) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), -180) == -1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), 90) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), -90) == -1)) {
 
-                                    System.out.println("entopistikan lathos sintetagmenes LONGITUDE:"+Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]) +" LATITUDE:"+Float.parseFloat(separatedLine[numberOfColumnLatitude - 1])+" "+path.toString());
+                                    System.out.println("entopistikan lathos sintetagmenes LONGITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]) + " LATITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]) + " " + path.toString());
 
 //                                    if (!cordinatesProblem.contains(path.toString())) {
 //                                        cordinatesProblem.add(path.toString());
 //                                    }
 
-                                }
-
-
-                                else {
+                                } else {
 
                                     try {
 
                                         //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]))).append("date",dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
 
-                                        Document embeddedDoc = new Document("type","Point").append("coordinates",Arrays.asList(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1])));
-                                        docs.add( new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date",dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
+                                        Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1])));
+                                        docs.add(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
 
 
-                                        int xc = (int) (Double.parseDouble(separatedLine[numberOfColumnLongitude - 1])/x);
+                                        int xc = (int) (Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]) / x);
 
-                                        int yc = (int) ( Double.parseDouble(separatedLine[numberOfColumnLatitude - 1])/y);
+                                        int yc = (int) (Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]) / y);
 
-                                        int k = xc + (yc*cellsInXAxis);
+                                        int k = xc + (yc * cellsInXAxis);
 
                                         cell[k] = cell[k] + 1;
 
@@ -272,12 +268,11 @@ public final class WeatherIntegrator {
 //                                times.add(System.currentTimeMillis() - t1);
                             }
                     );
-                        if(docs.size()>0){
+                    if (docs.size() > 0) {
 //                            m.insertMany(docs);
-                        }
-                        else{
-                            System.out.print(path);
-                        }
+                    } else {
+                        System.out.print(path);
+                    }
 
 
                 } catch (IOException ex) {
@@ -301,7 +296,6 @@ public final class WeatherIntegrator {
 //                average());
 
 
-
         try {
             FileOutputStream file = new FileOutputStream("/home/nikolaos/Desktop/histogram.dat");
             for (int i = 0; i < cell.length; i++)
@@ -310,10 +304,6 @@ public final class WeatherIntegrator {
         } catch (IOException e) {
             System.out.println("Error - " + e.toString());
         }
-
-
-
-
 
 
     }
