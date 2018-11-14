@@ -97,6 +97,12 @@
      </dependency>
 
          <dependency>
+             <groupId>org.mongodb</groupId>
+             <artifactId>mongo-java-driver</artifactId>
+             <version>3.8.2</version>
+         </dependency>
+
+         <dependency>
              <groupId>org.openjdk.jmh</groupId>
              <artifactId>jmh-core</artifactId>
              <version>${jmh.version}</version>
