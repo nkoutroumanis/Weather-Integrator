@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.grib;
+package com.github.nkoutroumanis.weatherIntegrator.grib;
 
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
@@ -6,11 +6,8 @@ import ucar.nc2.Variable;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.SimpleFormatter;
 
 public final class GribFilesTree {
 

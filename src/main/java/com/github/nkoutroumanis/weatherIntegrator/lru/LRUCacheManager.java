@@ -1,9 +1,10 @@
-package com.github.nkoutroumanis.lru;
+package com.github.nkoutroumanis.weatherIntegrator.lru;
 
-import com.github.nkoutroumanis.JobUsingIndex;
-import com.github.nkoutroumanis.grib.*;
+import com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex;
+import com.github.nkoutroumanis.weatherIntegrator.grib.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +15,21 @@ public final class LRUCacheManager {
     private final boolean useIndex;
     private final List<String> variables;
     private final String separator;
+    private final int numberOfVariables;
 
     private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator) {
         this.tree = tree;
         this.cache = cache;
         this.useIndex = useIndex;
-        this.variables = variables;
+        this.variables = Collections.unmodifiableList(variables);
         this.separator = separator;
+
+        this.numberOfVariables = variables.size();
+    }
+
+    //we can get safely the size because list is unmodifiable
+    public int getNumberOfVariables(){
+        return numberOfVariables;
     }
 
     public String getData(Date date, float lat, float lon) throws IOException {

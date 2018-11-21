@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.weatherIntegrator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,11 +18,10 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator
-                    .newWeatherIntegrator("/home/nikolaos/Documents/tambak",
-                    "/home/nikolaos/Documents/eraseItt", "/home/nikolaos/Documents/gb", 4,
-                    3, 2, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .clearExportingFiles().lruCacheMaxEntries(5).useIndex().build().integrateData();
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/tambak",
+                    "/home/nikolaos/Documents/gb", 2,
+                    3, 4, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
+                    .lruCacheMaxEntries(5).useIndex().build().integrateData("/home/nikolaos/Documents/eraseItt");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println ("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

@@ -5,12 +5,12 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-public class MongoDbConnector {
+public final class MongoDbConnector {
 
     private final MongoClient mongoClient;
     private final String database;
 
-    private MongoDbConnector(String host, int port, String username, String password, String database) {
+    private MongoDbConnector(String host, int port, String database, String username, String password) {
 
         MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
         MongoClientOptions options = MongoClientOptions.builder()/*.sslEnabled(true)*/.build();
@@ -19,16 +19,16 @@ public class MongoDbConnector {
         this.database = database;
     }
 
-    public String getDatabase(){
+    public String getDatabase() {
         return database;
     }
 
-    public MongoClient getMongoClient(){
+    public MongoClient getMongoClient() {
         return mongoClient;
     }
 
-    public static MongoDbConnector newMongoDbConnector(String host, int port, String username, String password, String database) {
-        return new MongoDbConnector(host, port, username, password, database);
+    public static MongoDbConnector newMongoDbConnector(String host, int port, String database, String username, String password) {
+        return new MongoDbConnector(host, port, database, username, password);
     }
 
 

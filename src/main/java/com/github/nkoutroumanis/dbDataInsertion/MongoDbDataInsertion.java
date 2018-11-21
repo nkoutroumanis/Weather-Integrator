@@ -10,10 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class MongoDbDataInsertion implements FilesParse {
-
-    private List<Document> docs;
-    private MongoCollection mongoCollection;
+public final class MongoDbDataInsertion implements FilesParse {
 
     private final MongoDbConnector mongoDbConnector;
     private final String database;
@@ -26,7 +23,10 @@ public class MongoDbDataInsertion implements FilesParse {
     private final String filesExtension;
     private final String separator;
 
-    public static class Builder{
+    private List<Document> docs;
+    private MongoCollection mongoCollection;
+
+    public static class Builder {
 
         private final MongoDbConnector mongoDbConnector;
         private final String database;
@@ -39,7 +39,7 @@ public class MongoDbDataInsertion implements FilesParse {
         private String filesExtension = ".csv";
         private String separator = ";";
 
-        public Builder(MongoDbConnector mongoDbConnector, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat){
+        public Builder(MongoDbConnector mongoDbConnector, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) {
             this.mongoDbConnector = mongoDbConnector;
             this.database = mongoDbConnector.getDatabase();
             this.filesPath = filesPath;
@@ -60,8 +60,8 @@ public class MongoDbDataInsertion implements FilesParse {
             return this;
         }
 
-        public void insertDataOnCollection(String collection) {
-            new MongoDbDataInsertion(this).insertDataOnCollection(collection);
+        public MongoDbDataInsertion build() {
+            return new MongoDbDataInsertion(this);
         }
     }
 
@@ -79,11 +79,11 @@ public class MongoDbDataInsertion implements FilesParse {
     }
 
 
-    public static Builder newMongoDbDataInsertion(MongoDbConnector mongoDbConnector, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat){
-        return new MongoDbDataInsertion.Builder( mongoDbConnector, filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
+    public static Builder newMongoDbDataInsertion(MongoDbConnector mongoDbConnector, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) {
+        return new MongoDbDataInsertion.Builder(mongoDbConnector, filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
-    public void insertDataOnCollection(String collection){
+    public void insertDataOnCollection(String collection) {
 
         mongoCollection = mongoDbConnector.getMongoClient().getDatabase(database).getCollection(collection);
 
@@ -95,23 +95,23 @@ public class MongoDbDataInsertion implements FilesParse {
     }
 
     @Override
-    public void fileParse(Path filePath){
+    public void fileParse(Path filePath) {
         docs = new ArrayList<>();
     }
 
     @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float  latitude){
-              try {
-                  //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(longitude, latitude)).append("date",df.parse(separatedLine[numberOfColumnDate - 1])));
-                  Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(longitude, latitude));
-                  docs.add(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
+    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float latitude) {
+        try {
+            //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(longitude, latitude)).append("date",df.parse(separatedLine[numberOfColumnDate - 1])));
+            Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(longitude, latitude));
+            docs.add(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void afterLineParse(){
+    public void afterLineParse() {
         if (docs.size() > 0) {
             mongoCollection.insertMany(docs);
         }

@@ -1,23 +1,21 @@
-package com.github.nkoutroumanis.histogramCreation;
+package com.github.nkoutroumanis.histogram;
 
-public class Space2D {
+public final class Space2D {
 
     private final float maxx;
     private final float maxy;
     private final float minx;
     private final float miny;
 
-    private Space2D(float minx, float miny, float maxx, float maxy){
+    private Space2D(float minx, float miny, float maxx, float maxy) {
         this.minx = minx;
         this.miny = miny;
         this.maxx = maxx;
         this.maxy = maxy;
     }
 
-
-
-    public static Space2D newSpace2D(float minx, float miny, float maxx, float maxy){
-        return new Space2D ( minx,  miny,  maxx, maxy);
+    public static Space2D newSpace2D(float minx, float miny, float maxx, float maxy) {
+        return new Space2D(minx, miny, maxx, maxy);
     }
 
     public float getMaxx() {

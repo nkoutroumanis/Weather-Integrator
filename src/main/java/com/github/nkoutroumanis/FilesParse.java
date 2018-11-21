@@ -24,11 +24,11 @@ public interface FilesParse {
 
     }
 
-    default void emptySpatiotemporalInformation(){
+    default void emptySpatiotemporalInformation(String line){
 
     }
 
-    default void outOfRangeSpatialInformation(){
+    default void outOfRangeSpatialInformation(String line){
 
     }
 
@@ -49,12 +49,12 @@ public interface FilesParse {
                         float latitude = Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]);
 
                         if(FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])){
-                            emptySpatiotemporalInformation();
+                            emptySpatiotemporalInformation(line);
                             return;
 
                         }
                         else if(FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)){
-                            outOfRangeSpatialInformation();
+                            outOfRangeSpatialInformation(line);
                             return;
                         }
 

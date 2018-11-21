@@ -1,6 +1,6 @@
-package com.github.nkoutroumanis.grib;
+package com.github.nkoutroumanis.weatherIntegrator.grib;
 
-import com.github.nkoutroumanis.WeatherIntegrator;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 import ucar.nc2.NetcdfFile;
@@ -59,6 +59,4 @@ public final class GribFileWithIndex implements GribFile {
 
         return s.toString();
     }
-
-
 }
