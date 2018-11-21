@@ -177,6 +177,7 @@ public final class WeatherIntegrator implements FilesParse {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
+
     }
 
     @Override
