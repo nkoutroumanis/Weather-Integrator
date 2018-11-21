@@ -18,15 +18,13 @@ import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public final class WeatherIntegrator {
+public final class WeatherIntegrator implements FilesParse {
 
     private final String filesPath;
     private final String filesExportPath;
@@ -44,6 +42,11 @@ public final class WeatherIntegrator {
     private final boolean clearExportingDirectory;
 
     private final LRUCacheManager lruCacheManager;
+
+    private FileOutputStream fos;
+    private OutputStreamWriter osw;
+    private BufferedWriter bw;
+    private PrintWriter pw;
 
     public static double TEMPORARY_POINTER1 = 0;
     public static double TEMPORARY_POINTER2 = 0;
@@ -146,31 +149,59 @@ public final class WeatherIntegrator {
         }
     }
 
-    public void integrateData() {
+    @Override
+    public void fileParse(Path filePath){
 
-//        MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
-//        MongoClientOptions options = MongoClientOptions.builder()/*.sslEnabled(true)*/.build();
-//        MongoClient mongoClient = new MongoClient(new ServerAddress("83.216.102.163", 28017), credential, options);
-//        MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
-//
-//
+        try {
+            fos = new FileOutputStream(filesExportPath + File.separator + filePath.toString().substring(filesPath.length() + 1), true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            osw = new OutputStreamWriter(fos, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        bw = new BufferedWriter(osw);
+        pw = new PrintWriter(bw, true);
+    }
+
+    @Override
+    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float  latitude){
+                                    try {
+                                        String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
+                                        pw.write(line + dataToBeIntegrated + "\r\n");
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+    }
+
+    @Override
+    public void afterLineParse(){
+        try {
+            fos.close();
+            osw.close();
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        pw.close();
+
+    }
+
+    public void integrateData() {
 //        List<Long> times = new ArrayList<>();
 //        List<String> fileswithProblem = new ArrayList<String>();
 //        List<String> cordinatesProblem = new ArrayList<>();
 
-        int filesPathLength = filesPath.length();
 
-        int cellsInXAxis = 10000;
-        int cellsInYAxis = 10000;
-
-        double x = 60D / cellsInXAxis;
-        double y = 149D / cellsInYAxis;
-
-        System.out.println(x);
-        System.out.println(y);
-
-        int[] cell = new int[cellsInXAxis * cellsInYAxis];
-
+//        double x = 149D / cellsInXAxis;
+//        double y = 60D / cellsInYAxis;
 
         //create Export Directory
         try {
@@ -180,7 +211,7 @@ public final class WeatherIntegrator {
         }
 
         //create subdirectories in Export Directory if exist
-        try (Stream<String> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).map(p -> p.getParent().toString().substring(filesPathLength)).distinct()) {
+        try (Stream<String> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).map(p -> p.getParent().toString().substring(filesPath.length())).distinct()) {
 
             stream.forEach(subdirectory ->
             {
@@ -195,94 +226,60 @@ public final class WeatherIntegrator {
             e.printStackTrace();
         }
 
-        //for each file do data integration
-        try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
+        parse(filesPath, separator, filesExtension, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate);
 
-            stream.forEach((path) -> {
-
-                List<Document> docs = new ArrayList<>();
-
-                try (Stream<String> innerStream = Files.lines(path);
-                     FileOutputStream fos = new FileOutputStream(filesExportPath + File.separator + path.toString().substring(filesPathLength + 1), true);
-                     OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
-                     BufferedWriter bw = new BufferedWriter(osw);
-                     PrintWriter pw = new PrintWriter(bw, true)) {
-
-                    //for each line
-                    innerStream.forEach(line -> {
-
-                                long t1 = System.currentTimeMillis();
-
-                                JobUsingIndex.numberofRows++;
-
-                                String[] separatedLine = line.split(separator);
-
-                                if ((separatedLine[numberOfColumnDate - 1].isEmpty() || separatedLine[numberOfColumnLatitude - 1].isEmpty() || separatedLine[numberOfColumnLongitude - 1].isEmpty()) || (separatedLine[numberOfColumnDate - 1].equals("") || separatedLine[numberOfColumnLatitude - 1].equals("") || separatedLine[numberOfColumnLongitude - 1].equals(""))) {
-                                    //pw.write(line + ";;;;;;;;;;;;;" + "\r\n");
-//                                    if (!fileswithProblem.contains(path.toString())) {
-//                                        fileswithProblem.add(path.toString());
-//                                    }
-
-                                } else if ((Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), 180) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), -180) == -1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), 90) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), -90) == -1)) {
-
-                                    System.out.println("entopistikan lathos sintetagmenes LONGITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]) + " LATITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]) + " " + path.toString());
-
-//                                    if (!cordinatesProblem.contains(path.toString())) {
-//                                        cordinatesProblem.add(path.toString());
-//                                    }
-
-                                } else {
-
-                                    try {
-
-                                        //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]))).append("date",dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
-
-                                        Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1])));
-                                        docs.add(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
-
-
-                                        int xc = (int) (Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]) / x);
-
-                                        int yc = (int) (Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]) / y);
-
-                                        int k = xc + (yc * cellsInXAxis);
-
-                                        cell[k] = cell[k] + 1;
-
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-
+//        //for each file do data integration
+//        try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 //
-//                                    try {
-//                                        String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]));
-//                                        pw.write(line + dataToBeIntegrated + "\r\n");
+//            stream.forEach((path) -> {
 //
-//                                    } catch (ParseException e) {
-//                                        e.printStackTrace();
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-                                }
-//                                times.add(System.currentTimeMillis() - t1);
-                            }
-                    );
-                    if (docs.size() > 0) {
-//                            m.insertMany(docs);
-                    } else {
-                        System.out.print(path);
-                    }
-
-
-                } catch (IOException ex) {
-                    Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-        } catch (
-                IOException ex) {
-            Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//                try (Stream<String> innerStream = Files.lines(path);
+//                     FileOutputStream fos = new FileOutputStream(filesExportPath + File.separator + path.toString().substring(filesPathLength + 1), true);
+//                     OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
+//                     BufferedWriter bw = new BufferedWriter(osw);
+//                     PrintWriter pw = new PrintWriter(bw, true)) {
+//
+//
+//                    //for each line
+//                    innerStream.forEach(line -> {
+//
+//                                long t1 = System.currentTimeMillis();
+//
+//                                JobUsingIndex.numberofRows++;
+//
+//                                String[] separatedLine = line.split(separator);
+//
+//                                if ((separatedLine[numberOfColumnDate - 1].isEmpty() || separatedLine[numberOfColumnLatitude - 1].isEmpty() || separatedLine[numberOfColumnLongitude - 1].isEmpty()) || (separatedLine[numberOfColumnDate - 1].equals("") || separatedLine[numberOfColumnLatitude - 1].equals("") || separatedLine[numberOfColumnLongitude - 1].equals(""))) {
+//                                    //pw.write(line + ";;;;;;;;;;;;;" + "\r\n");
+////                                    if (!fileswithProblem.contains(path.toString())) {
+////                                        fileswithProblem.add(path.toString());
+////                                    }
+//
+//                                } else if ((Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), 180) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]), -180) == -1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), 90) == 1) || (Float.compare(Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]), -90) == -1)) {
+//
+//                                    System.out.println("entopistikan lathos sintetagmenes LONGITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]) + " LATITUDE:" + Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]) + " " + path.toString());
+//
+////                                    if (!cordinatesProblem.contains(path.toString())) {
+////                                        cordinatesProblem.add(path.toString());
+////                                    }
+//
+//                                } else {
+//
+//
+//                                }
+////                                times.add(System.currentTimeMillis() - t1);
+//                            }
+//                    );
+//
+//
+//                } catch (IOException ex) {
+//                    Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            });
+//        } catch (
+//                IOException ex) {
+//            Logger.getLogger(JobUsingIndex.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
 //        fileswithProblem.stream().forEach(System.out::println);
 //
@@ -296,16 +293,6 @@ public final class WeatherIntegrator {
 //                average());
 
 
-        try {
-            FileOutputStream file = new FileOutputStream("/home/nikolaos/Desktop/histogram.dat");
-            for (int i = 0; i < cell.length; i++)
-                file.write(cell[i]);
-            file.close();
-        } catch (IOException e) {
-            System.out.println("Error - " + e.toString());
-        }
-
-
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String filesExportPath, String gribFilesFolderPath, int numberOfColumnDate,
@@ -313,6 +300,7 @@ public final class WeatherIntegrator {
         return new WeatherIntegrator.Builder(filesPath, filesExportPath, gribFilesFolderPath, numberOfColumnDate,
                 numberOfColumnLatitude, numberOfColumnLongitude, dateFormat, variables);
     }
+
 
 
 }
