@@ -35,14 +35,14 @@ public class BenchmarksTest {
     }
 
     private final WeatherIntegrator wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-             gribFilesPath, 3,
-            8, 7, "yyyy-MM-dd HH:mm:ss",
+             gribFilesPath, 7,
+            8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
             .lruCacheMaxEntries(1).useIndex().build();
 
     private final WeatherIntegrator wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-             gribFilesPath, 3,
-            8, 7, "yyyy-MM-dd HH:mm:ss",
+             gribFilesPath, 7,
+            8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
             .lruCacheMaxEntries(1).build();
 
