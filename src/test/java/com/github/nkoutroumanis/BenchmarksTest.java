@@ -35,29 +35,29 @@ public class BenchmarksTest {
     }
 
     private final WeatherIntegrator wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-            filesExportPath, gribFilesPath, 3,
+             gribFilesPath, 3,
             8, 7, "yyyy-MM-dd HH:mm:ss",
             variables)
-            .clearExportingFiles().lruCacheMaxEntries(1).useIndex().build();
+            .lruCacheMaxEntries(1).useIndex().build();
 
     private final WeatherIntegrator wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-            filesExportPath, gribFilesPath, 3,
+             gribFilesPath, 3,
             8, 7, "yyyy-MM-dd HH:mm:ss",
             variables)
-            .clearExportingFiles().lruCacheMaxEntries(1).build();
+            .lruCacheMaxEntries(1).build();
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.MINUTES)
     public void integrateDataUsingIndex() {
-        wiWithIndex.integrateData();
+        wiWithIndex.integrateData(filesExportPath);
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.HOURS)
     public void integrateDataWithoutIndex() {
-        wiWithoutIndex.integrateData();
+        wiWithoutIndex.integrateData(filesExportPath);
     }
 
     @Benchmark
