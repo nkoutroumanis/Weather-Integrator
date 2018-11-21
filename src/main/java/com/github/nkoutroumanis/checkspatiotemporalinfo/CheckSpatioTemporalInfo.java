@@ -78,10 +78,9 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
     @Override
     public void emptySpatiotemporalInformation(Path file, String line) {
 
-        if(filesWithErrors.contains("Empty Spatitemporal Information " + file.toString())){
+        if (filesWithErrors.contains("Empty Spatitemporal Information " + file.toString())) {
             filesWithErrors.add("Empty Spatiotemporal Information " + file.toString());
-        }
-        else{
+        } else {
             filesWithErrors.add("Empty Spatitemporal Information " + file.toString());
         }
     }
@@ -89,10 +88,9 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
     @Override
     public void outOfRangeSpatialInformation(Path file, String line) {
 
-        if(filesWithErrors.contains("Out of Range Spatial Information " + file.toString())){
+        if (filesWithErrors.contains("Out of Range Spatial Information " + file.toString())) {
             filesWithErrors.add("Out of Range Spatial Information " + file.toString());
-        }
-        else{
+        } else {
             filesWithErrors.add("Out of Range Spatial Information " + file.toString());
         }
     }
@@ -111,10 +109,10 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
         }
 
 
-        try(FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "SpatiotemporalFilesInfo.txt", true);
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);){
+        try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "SpatiotemporalFilesInfo.txt", true);
+             OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);) {
 
-            filesWithErrors.forEach((s)-> pw.write(s + "\r\n"));
+            filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
