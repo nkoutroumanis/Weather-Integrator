@@ -159,13 +159,13 @@ public final class WeatherIntegrator implements FilesParse {
     }
 
     @Override
-    public void emptySpatiotemporalInformation(String line){
+    public void emptySpatiotemporalInformation(Path file, String line) {
         pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 
     }
 
     @Override
-    public void outOfRangeSpatialInformation(String line){
+    public void outOfRangeSpatialInformation(Path file, String line) {
         pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 
     }
@@ -218,7 +218,7 @@ public final class WeatherIntegrator implements FilesParse {
     }
 
     public static Builder newWeatherIntegrator(String filesPath, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) {
-        return new WeatherIntegrator.Builder(filesPath,  gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, variables);
+        return new WeatherIntegrator.Builder(filesPath, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, variables);
     }
 
 

@@ -4,10 +4,6 @@ public interface GribFile {
 
     String getDataValuesByLatLon(float lat, float lon);
 
-    default void smth(){
-        getDataValuesByLatLon(2,3);
-    };
-
     static double roundToHalf(float f) {
         return Math.round(f * 2) / 2.0;
     }

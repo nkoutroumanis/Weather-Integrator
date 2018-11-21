@@ -28,7 +28,7 @@ public final class LRUCacheManager {
     }
 
     //we can get safely the size because list is unmodifiable
-    public int getNumberOfVariables(){
+    public int getNumberOfVariables() {
         return numberOfVariables;
     }
 

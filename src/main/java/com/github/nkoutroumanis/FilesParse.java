@@ -12,23 +12,23 @@ import java.util.stream.Stream;
 
 public interface FilesParse {
 
-    default void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float  latitude){
+    default void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float latitude) {
 
     }
 
-    default void afterLineParse(){
+    default void afterLineParse() {
 
     }
 
-    default void fileParse(Path filePath){
+    default void fileParse(Path filePath) {
 
     }
 
-    default void emptySpatiotemporalInformation(String line){
+    default void emptySpatiotemporalInformation(Path file, String line) {
 
     }
 
-    default void outOfRangeSpatialInformation(String line){
+    default void outOfRangeSpatialInformation(Path file, String line) {
 
     }
 
@@ -48,18 +48,15 @@ public interface FilesParse {
                         float longitude = Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]);
                         float latitude = Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]);
 
-                        if(FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])){
-                            emptySpatiotemporalInformation(line);
+                        if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                            emptySpatiotemporalInformation(path, line);
                             return;
 
-                        }
-                        else if(FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)){
-                            outOfRangeSpatialInformation(line);
+                        } else if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
+                            outOfRangeSpatialInformation(path, line);
                             return;
-                        }
-
-                        else {
-                            lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude,  latitude);
+                        } else {
+                            lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
                         }
                     });
 

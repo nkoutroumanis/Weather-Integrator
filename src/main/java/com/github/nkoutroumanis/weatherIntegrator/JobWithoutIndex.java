@@ -16,7 +16,7 @@ public final class JobWithoutIndex {
             Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
 
             WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                     "/Users/nicholaskoutroumanis/Desktop/grib_files", 7,
+                    "/Users/nicholaskoutroumanis/Desktop/grib_files", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
                     .lruCacheMaxEntries(1).build().integrateData("/Users/nicholaskoutroumanis/Desktop/folder");
 
