@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class PreProcessing {
-    
+
     public static void main(String args[]) throws InterruptedException {
 
         long start = System.currentTimeMillis();
@@ -25,7 +25,7 @@ public final class PreProcessing {
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
-            System.out.println("Elapsed Time: "+ (System.currentTimeMillis() - start)/1000+" sec");
+            System.out.println("Elapsed Time: " + (System.currentTimeMillis() - start) / 1000 + " sec");
         } catch (IOException e) {
             e.printStackTrace();
         }

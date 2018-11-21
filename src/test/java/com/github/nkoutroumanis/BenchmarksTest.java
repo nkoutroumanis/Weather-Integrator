@@ -15,13 +15,12 @@ import java.util.stream.Collectors;
 
 
 @State(Scope.Benchmark)
-public class BenchmarksTest  {
+public class BenchmarksTest {
 
-    private final static String filesPath="/Users/nicholaskoutroumanis/Desktop/csv";
-    private final static String filesExportPath="/Users/nicholaskoutroumanis/Desktop/folder";
-    private final static String gribFilesPath="/Users/nicholaskoutroumanis/Desktop/grib_files";
-    private final static String gribFilesExtension=".grb2";
-
+    private final static String filesPath = "/Users/nicholaskoutroumanis/Desktop/csv";
+    private final static String filesExportPath = "/Users/nicholaskoutroumanis/Desktop/folder";
+    private final static String gribFilesPath = "/Users/nicholaskoutroumanis/Desktop/grib_files";
+    private final static String gribFilesExtension = ".grb2";
 
 
     private List<String> variables;
