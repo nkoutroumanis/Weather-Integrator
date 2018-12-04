@@ -100,7 +100,7 @@ public final class MongoDbDataInsertion implements FilesParse {
     }
 
     @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float latitude) {
+    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         try {
             //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(longitude, latitude)).append("date",df.parse(separatedLine[numberOfColumnDate - 1])));
             Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(longitude, latitude));

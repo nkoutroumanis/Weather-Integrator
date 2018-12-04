@@ -20,8 +20,8 @@ public final class GridPartition implements FilesParse {
 
     private String exportPath;
     private Map<Integer, Integer> map;
-    private float x;
-    private float y;
+    private double x;
+    private double y;
 
     public static class Builder {
 
@@ -101,7 +101,7 @@ public final class GridPartition implements FilesParse {
 
 
     @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float latitude) {
+    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
         int xc = (int) (longitude / x);
 

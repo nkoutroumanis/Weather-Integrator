@@ -2,19 +2,19 @@ package com.github.nkoutroumanis.weatherIntegrator.grib;
 
 public interface GribFile {
 
-    String getDataValuesByLatLon(float lat, float lon);
+    String getDataValuesByLatLon(double lat, double lon);
 
-    static double roundToHalf(float f) {
+    static double roundToHalf(double f) {
         return Math.round(f * 2) / 2.0;
     }
 
-    static int getLatIndex(float fLat) { // lats: 90...-90 per 0.5 (361 values)
+    static int getLatIndex(double fLat) { // lats: 90...-90 per 0.5 (361 values)
         double dLat = roundToHalf(fLat);
         int i = (int) (2 * (90 - dLat));
         return i;
     }
 
-    static int getLonIndex(float fLon) { // lons: 0...359.5, per 0.5  (720 values)
+    static int getLonIndex(double fLon) { // lons: 0...359.5, per 0.5  (720 values)
         double dLon = roundToHalf(fLon);
         int i = (int) (2 * dLon);
         if (i < 0) {

@@ -23,7 +23,7 @@ public final class GribFileWithoutIndex implements GribFile {
 
     public static int i = 0;
 
-    public String getDataValuesByLatLon(float lat, float lon) {
+    public String getDataValuesByLatLon(double lat, double lon) {
         StringBuilder s = new StringBuilder();
 
 

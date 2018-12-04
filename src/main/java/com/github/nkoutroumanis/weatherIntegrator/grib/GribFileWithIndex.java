@@ -38,7 +38,7 @@ public final class GribFileWithIndex implements GribFile {
         return new GribFileWithIndex(path, listOfVariables, separator);
     }
 
-    public String getDataValuesByLatLon(float lat, float lon) {
+    public String getDataValuesByLatLon(double lat, double lon) {
         StringBuilder s = new StringBuilder();
 
         listOfEntries.forEach(e -> {

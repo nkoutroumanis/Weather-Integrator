@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public interface FilesParse {
 
-    default void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, float longitude, float latitude) {
+    default void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
     }
 
@@ -45,8 +45,8 @@ public interface FilesParse {
                     innerStream.forEach(line -> {
 
                         String[] separatedLine = line.split(separator);
-                        float longitude = Float.parseFloat(separatedLine[numberOfColumnLongitude - 1]);
-                        float latitude = Float.parseFloat(separatedLine[numberOfColumnLatitude - 1]);
+                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
                         if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
                             emptySpatiotemporalInformation(path, line);
@@ -73,7 +73,7 @@ public interface FilesParse {
 
     }
 
-    static final Predicate<Float> longitudeOutOfRange = (longitude) -> ((Float.compare(longitude, 180) == 1) || (Float.compare(longitude, -180) == -1));
-    static final Predicate<Float> latitudeOutOfRange = (latitude) -> ((Float.compare(latitude, 90) == 1) || (Float.compare(latitude, -90) == -1));
+    static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
+    static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
     static final Predicate<String> empty = (s1) -> (s1.equals(""));
 }
