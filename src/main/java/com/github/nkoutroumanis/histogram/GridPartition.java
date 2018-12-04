@@ -97,6 +97,17 @@ public final class GridPartition implements FilesParse {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(exportPath + File.separator + "hist-desc.txt", "UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        writer.println(cellsInXAxis + " " + cellsInYAxis);
+        writer.close();
     }
 
 
