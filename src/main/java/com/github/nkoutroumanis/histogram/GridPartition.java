@@ -140,11 +140,12 @@ public final class GridPartition implements FilesParse {
         writer.println(cellsInXAxis + " " + cellsInYAxis);
         writer.close();
 
-        int sum = 0;
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            sum += entry.getValue();
-        }
-        System.out.println(sum);
+        System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
+        System.out.println("Number Of Filled Cells: " + map.size());
+        System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
+        System.out.println("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)));
+        System.out.println("Percentage of Empty Cells: " + ( ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)));
+        System.out.println("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()) );
     }
 
 
@@ -162,15 +163,6 @@ public final class GridPartition implements FilesParse {
         } else {
             map.put(k, 1);
         }
-
-        System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
-        System.out.println("Number Of Filled Cells: " + map.size());
-        System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
-        System.out.println("Percentage of Filled Cells: " + (((double) map.size()) / ((double) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Percentage of Empty Cells: " + ( ((double) map.size()) / ((double) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Empty Cells/Filled Cells: " + ((double) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((double) map.size()) );
-
-
     }
 
 }
