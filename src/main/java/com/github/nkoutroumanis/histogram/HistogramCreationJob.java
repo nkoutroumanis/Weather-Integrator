@@ -6,7 +6,7 @@ public final class HistogramCreationJob {
         Space2D space = Space2D.newSpace2D(-26.64, 0, 121.57, 59.94);
         long t1;
         int j = 1;
-        for(int i = 100000; i<=100000*10;i = i + 100000){
+        for(long i = 100000; i<=100000*10;i = i + 100000){
             t1 = System.currentTimeMillis();
             GridPartition.newGridPartition(space, i, i, "/home/nikolaos/Documents/tambak", 2, 3, 4).build().exportHistogram("/home/nikolaos/Desktop/histograms/"+j);
             System.out.println(j + " folder " + ((System.currentTimeMillis()-t1)/1000) + "sec");

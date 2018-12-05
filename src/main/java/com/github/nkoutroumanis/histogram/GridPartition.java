@@ -13,8 +13,8 @@ import java.util.*;
 public final class GridPartition implements FilesParse {
 
     private final Space2D space2D;
-    private final int cellsInXAxis;
-    private final int cellsInYAxis;
+    private final long cellsInXAxis;
+    private final long cellsInYAxis;
     private final String filesPath;
     private final int numberOfColumnLongitude;
     private final int numberOfColumnLatitude;
@@ -24,15 +24,15 @@ public final class GridPartition implements FilesParse {
     private final String separator;
 
     private String exportPath;
-    private Map<Integer, Integer> map;
+    private Map<Long, Long> map;
     private double x;
     private double y;
 
     public static class Builder {
 
         private final Space2D space2D;
-        private final int cellsInXAxis;
-        private final int cellsInYAxis;
+        private final long cellsInXAxis;
+        private final long cellsInYAxis;
         private final String filesPath;
         private final int numberOfColumnLongitude;
         private final int numberOfColumnLatitude;
@@ -41,7 +41,7 @@ public final class GridPartition implements FilesParse {
         private String filesExtension = ".csv";
         private String separator = ";";
 
-        public Builder(Space2D space2D, int cellsInXAxis, int cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
+        public Builder(Space2D space2D, long cellsInXAxis, long cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
             this.space2D = space2D;
             this.cellsInXAxis = cellsInXAxis;
             this.cellsInYAxis = cellsInYAxis;
@@ -81,7 +81,7 @@ public final class GridPartition implements FilesParse {
     }
 
 
-    public static Builder newGridPartition(Space2D space2D, int cellsInXAxis, int cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
+    public static Builder newGridPartition(Space2D space2D, long cellsInXAxis, long cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
         return new Builder(space2D, cellsInXAxis, cellsInYAxis, filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate);
     }
 
@@ -128,19 +128,9 @@ public final class GridPartition implements FilesParse {
             e.printStackTrace();
         }
 
-
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(exportPath + File.separator + "hist-desc.txt", "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        writer.println(cellsInXAxis + " " + cellsInYAxis);
-        writer.close();
-
         System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
+        System.out.println("Number Of Cells in X Axis: " + cellsInXAxis );
+        System.out.println("Number Of Cells in Y Axis: " + cellsInYAxis);
         System.out.println("Number Of Filled Cells: " + map.size());
         System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
         System.out.println("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)));
@@ -152,16 +142,16 @@ public final class GridPartition implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
-        int xc = (int) (longitude / x);
+        long xc = (int) (longitude / x);
 
-        int yc = (int) (latitude / y);
+        long yc = (int) (latitude / y);
 
-        int k = xc + (yc * cellsInXAxis);
+        long k = xc + (yc * cellsInXAxis);
 
         if (map.containsKey(k)) {
             map.replace(k, map.get(k) + 1);
         } else {
-            map.put(k, 1);
+            map.put(k, 1l);
         }
     }
 
