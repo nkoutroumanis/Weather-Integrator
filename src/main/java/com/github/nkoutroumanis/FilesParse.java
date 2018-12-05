@@ -44,15 +44,19 @@ public interface FilesParse {
                     //for each line
                     innerStream.forEach(line -> {
 
+
                         String[] separatedLine = line.split(separator);
-                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
                         if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
                             emptySpatiotemporalInformation(path, line);
                             return;
 
-                        } else if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
+                        }
+
+                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+                        if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
                             outOfRangeSpatialInformation(path, line);
                             return;
                         } else {

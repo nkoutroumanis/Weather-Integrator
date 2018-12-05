@@ -52,5 +52,6 @@
     <orderEntry type="library" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" name="Maven: edu.ucar:jj2000:5.2" level="project" />
     <orderEntry type="library" name="Maven: org.itadaki:bzip2:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
   </component>
 </module>

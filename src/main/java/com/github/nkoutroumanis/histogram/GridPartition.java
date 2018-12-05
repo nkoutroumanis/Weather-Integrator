@@ -1,8 +1,13 @@
 package com.github.nkoutroumanis.histogram;
 
 import com.github.nkoutroumanis.FilesParse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public final class GridPartition implements FilesParse {
@@ -81,6 +86,18 @@ public final class GridPartition implements FilesParse {
     }
 
     public void exportHistogram(String exportPath) {
+
+        Path path = Paths.get(exportPath);
+        //if directory exists does not exist
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                //fail to create directory
+                e.printStackTrace();
+            }
+        }
+
         this.exportPath = exportPath;
         this.map = new HashMap<>();
 
@@ -98,6 +115,20 @@ public final class GridPartition implements FilesParse {
             e.printStackTrace();
         }
 
+        try (Writer writer = new FileWriter(exportPath + File.separator + "properties.json")) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            Map<String,Object> properties = new HashMap<>();
+            properties.put("space2D",space2D);
+            properties.put("cellsInXAxis", cellsInXAxis);
+            properties.put("cellsInYAxis", cellsInYAxis);
+            gson.toJson(properties, writer);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(exportPath + File.separator + "hist-desc.txt", "UTF-8");
@@ -108,6 +139,12 @@ public final class GridPartition implements FilesParse {
         }
         writer.println(cellsInXAxis + " " + cellsInYAxis);
         writer.close();
+
+        int sum = 0;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            sum += entry.getValue();
+        }
+        System.out.println(sum);
     }
 
 
@@ -125,6 +162,14 @@ public final class GridPartition implements FilesParse {
         } else {
             map.put(k, 1);
         }
+
+        System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
+        System.out.println("Number Of Filled Cells: " + map.size());
+        System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
+        System.out.println("Percentage of Filled Cells: " + (((double) map.size()) / ((double) cellsInXAxis * cellsInYAxis)));
+        System.out.println("Percentage of Empty Cells: " + ( ((double) map.size()) / ((double) cellsInXAxis * cellsInYAxis)));
+        System.out.println("Empty Cells/Filled Cells: " + ((double) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((double) map.size()) );
+
 
     }
 

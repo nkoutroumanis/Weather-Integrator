@@ -3,8 +3,8 @@ package com.github.nkoutroumanis.histogram;
 public final class Space2D {
 
     private final double maxx;
-    private final double maxy;
     private final double minx;
+    private final double maxy;
     private final double miny;
 
     private Space2D(double minx, double miny, double maxx, double maxy) {
