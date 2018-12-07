@@ -21,7 +21,7 @@ public final class JobUsingIndex {
             WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/tambak",
                     "/home/nikolaos/Documents/gb", 2,
                     3, 4, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(5).useIndex().build().integrateData("/home/nikolaos/Documents/eraseItt");
+                    .lruCacheMaxEntries(10).useIndex().build().integrateData("/home/nikolaos/Documents/eraseItt");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

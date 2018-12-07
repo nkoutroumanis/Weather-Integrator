@@ -173,15 +173,20 @@ public final class WeatherIntegrator implements FilesParse {
     @Override
     public void afterLineParse() {
         try {
-            fos.close();
-            osw.close();
+
+            pw.close();
             bw.close();
+            osw.close();
+            fos.close();
+//            fos.close();
+//            osw.close();
+//            bw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        pw.close();
+//        pw.close();
 
     }
 
