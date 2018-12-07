@@ -178,15 +178,10 @@ public final class WeatherIntegrator implements FilesParse {
             bw.close();
             osw.close();
             fos.close();
-//            fos.close();
-//            osw.close();
-//            bw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        pw.close();
 
     }
 
