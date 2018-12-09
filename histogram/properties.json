@@ -1,0 +1,10 @@
+{
+  "cellsInXAxis": 10000,
+  "cellsInYAxis": 10000,
+  "space2D": {
+    "maxx": 122.36,
+    "minx": -26.64,
+    "maxy": 60,
+    "miny": 0.0
+  }
+}
