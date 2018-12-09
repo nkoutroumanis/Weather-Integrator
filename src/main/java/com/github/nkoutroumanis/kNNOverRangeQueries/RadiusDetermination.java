@@ -4,43 +4,43 @@ import java.util.Map;
 
 public class RadiusDetermination {
 
-    private final Map<Integer,Integer> histogram;
+    private final Map<Long,Long> histogram;
 
-    private int numberOfCellsxAxis;
-    private int numberOfCellsyAxis;
+    private long numberOfCellsxAxis;
+    private long numberOfCellsyAxis;
 
     private final double x;
     private final double y;
 
-    private final int minXc;
-    private final int maxXc;
+    private final long minXc;
+    private final long maxXc;
 
-    private final int minYc;
-    private final int maxYc;
+    private final long minYc;
+    private final long maxYc;
 
-    private RadiusDetermination(Map<Integer, Integer> histogram, int numberOfCellsxAxis, int numberOfCellsyAxis,double minx, double miny, double maxx, double maxy) {
+    private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis,double minx, double miny, double maxx, double maxy) {
         this.numberOfCellsxAxis = numberOfCellsxAxis;
         this.numberOfCellsyAxis = numberOfCellsyAxis;
         this.histogram = histogram;
         x = (maxx - minx) / numberOfCellsxAxis;
         y = (maxy - miny) / numberOfCellsyAxis;
 
-        minXc = (int) (minx / x);
+        minXc = (long) (minx / x);
         maxXc = minXc + numberOfCellsxAxis - 1;
 
-        minYc = (int) (miny / y);
+        minYc = (long) (miny / y);
         maxYc = minYc + numberOfCellsyAxis - 1;
     }
 
-    public static RadiusDetermination newRadiusDetermination(Map<Integer, Integer> histogram, int numberOfCellsxAxis, int numberOfCellsyAxis,double minx, double miny, double maxx, double maxy){
+    public static RadiusDetermination newRadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis,double minx, double miny, double maxx, double maxy){
 
         return new RadiusDetermination(histogram,  numberOfCellsxAxis,  numberOfCellsyAxis, minx,  miny,  maxx,  maxy);
     }
 
-    private int getIdCellOfPoint(double x, double y) {
+    private long getIdCellOfPoint(double x, double y) {
 
-        int xc = (int) (x / this.x);
-        int yc = (int) (y / this.y);
+        long xc = (long) (x / this.x);
+        long yc = (long) (y / this.y);
 
         return (xc + (yc * numberOfCellsxAxis));
     }
@@ -62,10 +62,10 @@ public class RadiusDetermination {
         return r * c;
     }
 
-    private double findTheMaxCornerDistance(double x, double y, int id) {
+    private double findTheMaxCornerDistance(double x, double y, long id) {
 
-        int xc = id % numberOfCellsxAxis;
-        int yc = id / numberOfCellsxAxis;
+        long xc = id % numberOfCellsxAxis;
+        long yc = id / numberOfCellsxAxis;
 
         double upperBoundx = (xc + 1) * this.x;
         double upperBoundy = (yc + 1) * this.y;
@@ -100,7 +100,7 @@ public class RadiusDetermination {
 
     }
 
-    private int getNumberOfCell(int cellId) {
+    private long getNumberOfCell(long cellId) {
 
         if (histogram.containsKey(cellId)) {
             return histogram.get(cellId);
@@ -109,15 +109,15 @@ public class RadiusDetermination {
         }
     }
 
-    public double findRadius(double x, double y, int neighboors) {
+    public double findRadius(double x, double y, long neighboors) {
 
-        int xc = (int) (x / this.x);
-        int yc = (int) (y / this.y);
+        long xc = (long) (x / this.x);
+        long yc = (long) (y / this.y);
 
         double distance = Integer.MIN_VALUE;
 
-        int k = 0;
-        int points = 0;
+        long k = 0;
+        long points = 0;
 
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
 
@@ -137,7 +137,7 @@ public class RadiusDetermination {
         while (k > 0) {
 
             if ((xc - k) >= minXc) {
-                for (int i = yc - k; i <= yc + k; i++) {
+                for (long i = yc - k; i <= yc + k; i++) {
                     if (i < minYc || i > maxYc) {
                         continue;
                     }
@@ -147,7 +147,7 @@ public class RadiusDetermination {
 
 
             if ((xc + k) <= maxXc) {
-                for (int i = yc - k; i <= yc + k; i++) {
+                for (long i = yc - k; i <= yc + k; i++) {
                     if (i < minYc || i > maxYc) {
                         continue;
                     }
@@ -156,7 +156,7 @@ public class RadiusDetermination {
             }
 
             if ((yc - k) >= minYc) {
-                for (int i = xc - k + 1; i < xc + k; i++) {
+                for (long i = xc - k + 1; i < xc + k; i++) {
                     if (i < minXc || i > maxXc) {
                         continue;
                     }
@@ -166,7 +166,7 @@ public class RadiusDetermination {
 
 
             if ((yc + k) <= maxYc) {
-                for (int i = xc - k + 1; i < xc + k; i++) {
+                for (long i = xc - k + 1; i < xc + k; i++) {
                     if (i < minXc || i > maxXc) {
                         continue;
                     }
@@ -190,11 +190,11 @@ public class RadiusDetermination {
                 System.out.println("yc-k: " + (yc - k));
                 System.out.println("yc+k: " + (yc + k));
 
-                int MaximumXc = xc + k;
-                int MinimumXc = xc - k;
+                long MaximumXc = xc + k;
+                long MinimumXc = xc - k;
 
-                int MaximumYc = yc + k;
-                int MinimumYc = yc - k;
+                long MaximumYc = yc + k;
+                long MinimumYc = yc - k;
 
                 if (xc + k > maxXc) {
                     MaximumXc = maxXc;

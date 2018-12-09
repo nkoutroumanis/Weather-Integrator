@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class LoadHistogram {
 
-    private final Map<Integer, Integer> histogram;
+    private final Map<Long, Long> histogram;
 
-    private final int numberOfCellsxAxis;
-    private final int numberOfCellsyAxis;
+    private final long numberOfCellsxAxis;
+    private final long numberOfCellsyAxis;
 
     private final double minx;
     private final double miny;
@@ -22,8 +22,8 @@ public class LoadHistogram {
 
         Config conf = ConfigFactory.parseFile(new File(path + File.separator + "properties.json"));
 
-        this.numberOfCellsxAxis = conf.getInt("cellsInXAxis");
-        this.numberOfCellsyAxis = conf.getInt("cellsInYAxis");
+        this.numberOfCellsxAxis = conf.getLong("cellsInXAxis");
+        this.numberOfCellsyAxis = conf.getLong("cellsInYAxis");
         this.minx = conf.getDouble("space2D.minx");
         this.miny = conf.getDouble("space2D.miny");
         this.maxx = conf.getDouble("space2D.maxx");
@@ -31,12 +31,12 @@ public class LoadHistogram {
 
         FileInputStream fis = null;
         ObjectInputStream ois = null;
-        Map<Integer, Integer> histogram = null;
+        Map<Long, Long> histogram = null;
         try {
             fis = new FileInputStream(path + File.separator + "histogram.ser");
             ois = new ObjectInputStream(fis);
 
-            histogram = (Map<Integer, Integer>) ois.readObject();
+            histogram = (Map<Long, Long>) ois.readObject();
             ois.close();
             fis.close();
 
@@ -58,15 +58,15 @@ public class LoadHistogram {
         return new LoadHistogram(path);
     }
 
-    public Map<Integer, Integer> getHistogram() {
+    public Map<Long, Long> getHistogram() {
         return histogram;
     }
 
-    public int getNumberOfCellsxAxis() {
+    public long getNumberOfCellsxAxis() {
         return numberOfCellsxAxis;
     }
 
-    public int getNumberOfCellsyAxis() {
+    public long getNumberOfCellsyAxis() {
         return numberOfCellsyAxis;
     }
 

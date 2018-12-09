@@ -142,9 +142,9 @@ public final class GridPartition implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
-        long xc = (int) (longitude / x);
+        long xc = (long) (longitude / x);
 
-        long yc = (int) (latitude / y);
+        long yc = (long) (latitude / y);
 
         long k = xc + (yc * cellsInXAxis);
 
