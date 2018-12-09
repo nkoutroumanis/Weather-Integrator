@@ -103,7 +103,7 @@ public class RadiusDetermination {
     private long getNumberOfCell(long cellId) {
 
         if (histogram.containsKey(cellId)) {
-            System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
+            //System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
             return histogram.get(cellId);
         } else {
             return 0;
@@ -122,12 +122,12 @@ public class RadiusDetermination {
 
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
 
-        System.out.println(this.y);
-        System.out.println(y);
-        System.out.println(xc);
-        System.out.println((y/this.y));
-        System.out.println(((yc)));
-        System.out.println(((yc*100000)));
+//        System.out.println(this.y);
+//        System.out.println(y);
+//        System.out.println(xc);
+//        System.out.println((y/this.y));
+//        System.out.println(((yc)));
+//        System.out.println(((yc*100000)));
 
         if (points >= neighboors) {
             distance = findTheMaxCornerDistance(x, y, (xc + (yc * numberOfCellsxAxis)));
@@ -184,12 +184,12 @@ public class RadiusDetermination {
 
                 System.out.println("Enough points " + points);
 
-                System.out.println("xc: " + xc);
-                System.out.println("xc-k: " + (xc - k));
-                System.out.println("xc+k: " + (xc + k));
-                System.out.println("yc: " + yc);
-                System.out.println("yc-k: " + (yc - k));
-                System.out.println("yc+k: " + (yc + k));
+//                System.out.println("xc: " + xc);
+//                System.out.println("xc-k: " + (xc - k));
+//                System.out.println("xc+k: " + (xc + k));
+//                System.out.println("yc: " + yc);
+//                System.out.println("yc-k: " + (yc - k));
+//                System.out.println("yc+k: " + (yc + k));
 
                 long MaximumXc = xc + k;
                 long MinimumXc = xc - k;
