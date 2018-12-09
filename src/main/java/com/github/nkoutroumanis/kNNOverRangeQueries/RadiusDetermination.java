@@ -103,6 +103,7 @@ public class RadiusDetermination {
     private long getNumberOfCell(long cellId) {
 
         if (histogram.containsKey(cellId)) {
+            System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
             return histogram.get(cellId);
         } else {
             return 0;
