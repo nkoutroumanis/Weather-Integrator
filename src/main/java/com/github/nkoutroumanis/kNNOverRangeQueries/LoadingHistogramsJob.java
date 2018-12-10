@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.kNNOverRangeQueries;
 
-public class Experiments {
+public class LoadingHistogramsJob {
 
     public static void main(String[] args){
 
