@@ -50,7 +50,7 @@ public class ExperimentsJob {
 
 
                 MongoCursor<Document> cursor = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ determinedRadius +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $count: \"count\" }"))).iterator();
+                        "key: \"location\" ," + "maxDistance: "+ determinedRadius * 1000 +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $count: \"count\" }"))).iterator();
 
 
 //        try {
@@ -68,7 +68,7 @@ public class ExperimentsJob {
 
 
                 cursor = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ determinedRadius  +"," + "num: "+ k +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $group: { _id: null, dist: { $last: \"$distance\" } } }"))).iterator();
+                        "key: \"location\" ," + "maxDistance: "+ determinedRadius * 1000  +"," + "num: "+ k +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $group: { _id: null, dist: { $last: \"$distance\" } } }"))).iterator();
 
 
 
