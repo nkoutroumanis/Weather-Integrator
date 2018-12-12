@@ -24,15 +24,10 @@ public class HistogramCreationJobTest {
         m.put("cellsInXAxis",1234);
         m.put("cellsInYAxis",2347656765l);
 
-//        ArrayList<String> m = new ArrayList<String>();
-//
-//        m.add("str1");
-//        m.add("str2");
-//        m.add("str3");
 
 
 
-        try (Writer writer = new FileWriter("/home/nikolaos/Desktop/properties.json")) {
+        try (Writer writer = new FileWriter("./files_for_test/example.json")) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(m, writer);
         } catch (IOException e) {
