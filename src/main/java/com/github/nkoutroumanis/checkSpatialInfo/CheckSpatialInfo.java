@@ -128,6 +128,7 @@ public final class CheckSpatialInfo implements FilesParse {
 
             pw.write("Files With Errors:" + "\r\n");
             filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
+            pw.write("Number records with errors" +filesWithErrors.size() +"\r\n");
             pw.write("\r\n");
 
             pw.write("Spatial Box" + "\r\n");
