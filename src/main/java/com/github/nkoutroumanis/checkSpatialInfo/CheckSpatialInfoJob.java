@@ -7,7 +7,7 @@ public class CheckSpatialInfoJob {
 //                2, 3).build().exportTxt("/home/nikolaos/Documents/gb");
 
         CheckSpatialInfo.newCheckSpatioTemporalInfo(args[0],
-                Integer.valueOf(args[1]), Integer.valueOf(args[2])).build().exportTxt(args[3]);
+                Integer.valueOf(args[1]), Integer.valueOf(args[2])).separator(args[3]).build().exportTxt(args[4]);
 
 
     }

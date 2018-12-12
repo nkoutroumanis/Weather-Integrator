@@ -40,6 +40,10 @@ public interface FilesParse {
 
     }
 
+    default void lineWithError(Path file, String line){
+
+    }
+
     //SpatioTemporal  Parsing
     default void parse(String filesPath, String separator, String filesExtension, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
 
@@ -53,6 +57,8 @@ public interface FilesParse {
                     //for each line
                     innerStream.forEach(line -> {
 
+
+                        try{
 
                         String[] separatedLine = line.split(separator);
 
@@ -69,6 +75,10 @@ public interface FilesParse {
                             return;
                         } else {
                             lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
+                        }
+
+                        }catch(ArrayIndexOutOfBoundsException e){
+                            lineWithError(path, line);
                         }
                     });
 
@@ -99,6 +109,8 @@ public interface FilesParse {
                     //for each line
                     innerStream.forEach(line -> {
 
+                        try{
+
                         String[] separatedLine = line.split(separator);
 
                         if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
@@ -114,6 +126,10 @@ public interface FilesParse {
                             return;
                         } else {
                             lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, longitude, latitude);
+                        }
+
+                        }catch(ArrayIndexOutOfBoundsException e){
+                            lineWithError(path, line);
                         }
                     });
 
@@ -133,5 +149,6 @@ public interface FilesParse {
 
     static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
     static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
-    static final Predicate<String> empty = (s1) -> (s1.equals(""));
+    //static final Predicate<String> empty = (s1) -> (s1.equals(""));
+    static final Predicate<String> empty = (s1) -> (s1.trim().isEmpty());
 }

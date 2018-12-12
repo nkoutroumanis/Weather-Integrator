@@ -108,6 +108,15 @@ public final class CheckSpatialInfo implements FilesParse {
 
     }
 
+    @Override
+    public void lineWithError(Path file, String line){
+        if (filesWithErrors.contains("Lines with Errors " + file.toString())) {
+            filesWithErrors.add("Lines with Errors " + file.toString());
+        } else {
+            filesWithErrors.add("Lines with Errors " + file.toString());
+        }
+    }
+
 
     public void exportTxt(String txtExportPath) {
 
@@ -128,7 +137,6 @@ public final class CheckSpatialInfo implements FilesParse {
 
             pw.write("Files With Errors:" + "\r\n");
             filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
-            pw.write("Number records with errors" +filesWithErrors.size() +"\r\n");
             pw.write("\r\n");
 
             pw.write("Spatial Box" + "\r\n");

@@ -11,4 +11,5 @@ public class CheckSpatioTemporalInfoJob {
                 Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]),
                 args[4]).build().exportTxt(args[5]);
     }
+
 }
