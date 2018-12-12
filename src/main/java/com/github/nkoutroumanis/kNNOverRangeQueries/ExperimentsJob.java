@@ -29,7 +29,9 @@ public class ExperimentsJob {
 
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
 
-        int k = 34210;
+        //int k = 5;
+         int k = 34210;
+        System.out.println(k);
 //        Random r = new Random();
 //
 //        double randomX = lh.getMinx() + ((lh.getMaxx() - 0.1d) - lh.getMinx()) * r.nextDouble();
@@ -41,48 +43,48 @@ public class ExperimentsJob {
 //            Stream<Path> subfolder = Files.walk(Paths.get(""), 1).filter(Files::isDirectory);
 //            subfolder.forEach(path -> {
 
-                LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/1/");
+                LoadHistogram lh = LoadHistogram.newLoadHistogram("/home/nikolaos/Desktop/histograms-new/1");
                 RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-                double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
+                double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k)) * 1000d;
 
                 System.out.println("determined radius "+ determinedRadius);
 
 
-                MongoCursor<Document> cursor = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ determinedRadius * 1000 +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $count: \"count\" }"))).iterator();
+                MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
+                        "key: \"location\" ," + "maxDistance: "+ determinedRadius +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $count: \"count\" }"))).allowDiskUse(true).iterator();
 
 
+        try {
+            while (cursor1.hasNext()) {
+                System.out.println(cursor1.next().toJson());
+            }
+        } finally {
+            cursor1.close();
+        }
+
+
+
+                //System.out.println("the returned (larger or equal than k) "+cursor.next().getInteger("count"));
+
+
+
+//        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
+//                        "key: \"location\" ," + "maxDistance: "+ determinedRadius * 1000  +"," + "num: "+ k +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $group: { _id: null, dist: { $last: \"$distance\" } } }"))).iterator();
+//
+//
+//
 //        try {
-//            while (cursor.hasNext()) {
-//                System.out.println(cursor.next().toJson());
+//            while (cursor2.hasNext()) {
+//                System.out.println(cursor2.next().toJson());
 //            }
 //        } finally {
-//            cursor.close();
+//            cursor2.close();
 //        }
 
 
 
-                System.out.println("the returned (larger or equal than k) "+cursor.next().getInteger("count"));
-
-
-
-                cursor = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ determinedRadius * 1000  +"," + "num: "+ k +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $group: { _id: null, dist: { $last: \"$distance\" } } }"))).iterator();
-
-
-
-//        try {
-//            while (cursor.hasNext()) {
-//                System.out.println(cursor.next().toJson());
-//            }
-//        } finally {
-//            cursor.close();
-//        }
-
-
-
-                System.out.println("the k distance "+cursor.next().getDouble("dist"));
+                //System.out.println("the k distance "+cursor.next().getDouble("dist"));
 
 
 //            });
