@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.checkspatiotemporalinfo;
+package com.github.nkoutroumanis.checkSpatioTemporalInfo;
 
 import com.github.nkoutroumanis.FilesParse;
 
@@ -24,6 +24,11 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
 
     //private String txtExportPath;
     private Set<String> filesWithErrors;
+
+    private double maxx = Integer.MIN_VALUE;
+    private double minx = Integer.MAX_VALUE;
+    private double maxy = Integer.MIN_VALUE;
+    private double miny = Integer.MAX_VALUE;
 
     public static class Builder {
 
@@ -76,7 +81,7 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
 
 
     @Override
-    public void emptySpatiotemporalInformation(Path file, String line) {
+    public void emptySpatioTemporalInformation(Path file, String line) {
 
         if (filesWithErrors.contains("Empty Spatitemporal Information " + file.toString())) {
             filesWithErrors.add("Empty Spatiotemporal Information " + file.toString());
@@ -95,6 +100,25 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
         }
     }
 
+    @Override
+    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
+
+        if(Double.compare(maxx, longitude) == -1){
+            maxx = longitude;
+        }
+        if(Double.compare(minx, longitude) == 1){
+            minx = longitude;
+        }
+        if(Double.compare(maxy, latitude) == -1){
+            maxy = latitude;
+        }
+        if(Double.compare(miny, latitude) == 1){
+            miny = latitude;
+        }
+
+    }
+
+
     public void exportTxt(String txtExportPath) {
 
         filesWithErrors = new HashSet<>();
@@ -112,7 +136,15 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
         try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "SpatiotemporalFilesInfo.txt", true);
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);) {
 
+            pw.write("Files With Errors:" + "\r\n");
             filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
+            pw.write("\r\n");
+
+            pw.write("Spatial Box" + "\r\n");
+            pw.write("Max Longitude" + maxx + "\r\n");
+            pw.write("Min Longitude" + minx + "\r\n");
+            pw.write("Max Latitude" + maxy + "\r\n");
+            pw.write("Min Latitude" + miny + "\r\n");
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

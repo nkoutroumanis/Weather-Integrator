@@ -16,6 +16,10 @@ public interface FilesParse {
 
     }
 
+    default void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
+
+    }
+
     default void afterLineParse() {
 
     }
@@ -24,7 +28,11 @@ public interface FilesParse {
 
     }
 
-    default void emptySpatiotemporalInformation(Path file, String line) {
+    default void emptySpatioTemporalInformation(Path file, String line) {
+
+    }
+
+    default void emptySpatialInformation(Path file, String line) {
 
     }
 
@@ -32,6 +40,7 @@ public interface FilesParse {
 
     }
 
+    //SpatioTemporal  Parsing
     default void parse(String filesPath, String separator, String filesExtension, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
 
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
@@ -48,9 +57,8 @@ public interface FilesParse {
                         String[] separatedLine = line.split(separator);
 
                         if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
-                            emptySpatiotemporalInformation(path, line);
+                            emptySpatioTemporalInformation(path, line);
                             return;
-
                         }
 
                         double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
@@ -61,6 +69,51 @@ public interface FilesParse {
                             return;
                         } else {
                             lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
+                        }
+                    });
+
+                    afterLineParse();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FilesParse.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            });
+        } catch (
+                IOException ex) {
+            Logger.getLogger(FilesParse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    //Spatial Parsing
+    default void parse(String filesPath, String separator, String filesExtension, int numberOfColumnLongitude, int numberOfColumnLatitude) {
+
+        try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
+
+            stream.forEach((path) -> {
+
+                fileParse(path);
+
+                try (Stream<String> innerStream = Files.lines(path)) {
+                    //for each line
+                    innerStream.forEach(line -> {
+
+                        String[] separatedLine = line.split(separator);
+
+                        if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                            emptySpatialInformation(path, line);
+                            return;
+                        }
+
+                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+                        if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
+                            outOfRangeSpatialInformation(path, line);
+                            return;
+                        } else {
+                            lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, longitude, latitude);
                         }
                     });
 

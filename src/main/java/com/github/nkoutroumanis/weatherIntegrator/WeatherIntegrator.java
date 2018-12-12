@@ -159,7 +159,7 @@ public final class WeatherIntegrator implements FilesParse {
     }
 
     @Override
-    public void emptySpatiotemporalInformation(Path file, String line) {
+    public void emptySpatioTemporalInformation(Path file, String line) {
         pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 
     }
