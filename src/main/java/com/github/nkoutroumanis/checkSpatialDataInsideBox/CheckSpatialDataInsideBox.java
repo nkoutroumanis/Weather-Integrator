@@ -1,6 +1,7 @@
-package com.github.nkoutroumanis.checkSpatialInfo;
+package com.github.nkoutroumanis.checkSpatialDataInsideBox;
 
 import com.github.nkoutroumanis.FilesParse;
+import com.github.nkoutroumanis.histogram.Space2D;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -9,40 +10,38 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class CheckSpatialInfo implements FilesParse {
+public final class CheckSpatialDataInsideBox implements FilesParse {
 
     private final String filesPath;
 
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+    private final Space2D space2D;
 
     private final String filesExtension;
     private final String separator;
 
-    private Set<String> filesWithErrors;
-
     private long numberOfRecords = 0;
-
-    private double maxx = Integer.MIN_VALUE;
-    private double minx = Integer.MAX_VALUE;
-    private double maxy = Integer.MIN_VALUE;
-    private double miny = Integer.MAX_VALUE;
+    private long numberOfRecordsInSpace2D = 0;
 
     public static class Builder {
 
         private final String filesPath;
         private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        private final Space2D space2D;
+
 
         private String filesExtension = ".csv";
         private String separator = ";";
 
 
-        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude) {
+        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, Space2D space2D) {
 
             this.filesPath = filesPath;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.space2D = space2D;
         }
 
         public Builder filesExtension(String filesExtension) {
@@ -55,17 +54,18 @@ public final class CheckSpatialInfo implements FilesParse {
             return this;
         }
 
-        public CheckSpatialInfo build() {
-            return new CheckSpatialInfo(this);
+        public CheckSpatialDataInsideBox build() {
+            return new CheckSpatialDataInsideBox(this);
         }
 
     }
 
-    private CheckSpatialInfo(Builder builder) {
+    private CheckSpatialDataInsideBox(Builder builder) {
         filesPath = builder.filesPath;
 
         numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        space2D = builder.space2D;
 
         filesExtension = builder.filesExtension;
         separator = builder.separator;
@@ -73,57 +73,18 @@ public final class CheckSpatialInfo implements FilesParse {
 
 
     @Override
-    public void emptySpatialInformation(Path file, String line) {
-
-        if (filesWithErrors.contains("Empty Spatial Information " + file.toString())) {
-            filesWithErrors.add("Empty Spatial Information " + file.toString());
-        } else {
-            filesWithErrors.add("Empty Spatial Information " + file.toString());
-        }
-    }
-
-    @Override
-    public void outOfRangeSpatialInformation(Path file, String line) {
-
-        if (filesWithErrors.contains("Out of Range Spatial Information " + file.toString())) {
-            filesWithErrors.add("Out of Range Spatial Information " + file.toString());
-        } else {
-            filesWithErrors.add("Out of Range Spatial Information " + file.toString());
-        }
-    }
-
-    @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
 
-        if(Double.compare(maxx, longitude) == -1){
-            maxx = longitude;
-        }
-        if(Double.compare(minx, longitude) == 1){
-            minx = longitude;
-        }
-        if(Double.compare(maxy, latitude) == -1){
-            maxy = latitude;
-        }
-        if(Double.compare(miny, latitude) == 1){
-            miny = latitude;
+        if((Double.compare(space2D.getMaxx(), longitude) == 1)&&(Double.compare(space2D.getMinx(), longitude) == -1)
+                &&(Double.compare(space2D.getMaxy(), latitude) == 1)&&(Double.compare(space2D.getMiny(), latitude) == -1)){
+            numberOfRecordsInSpace2D++;
         }
 
         numberOfRecords++;
 
     }
 
-    @Override
-    public void lineWithError(Path file, String line){
-        if (filesWithErrors.contains("Lines with Errors " + file.toString())) {
-            filesWithErrors.add("Lines with Errors " + file.toString());
-        } else {
-            filesWithErrors.add("Lines with Errors " + file.toString());
-        }
-    }
-
     public void exportTxt(String txtExportPath) {
-
-        filesWithErrors = new HashSet<>();
 
         parse(filesPath, separator, filesExtension, numberOfColumnLongitude, numberOfColumnLatitude);
 
@@ -135,21 +96,20 @@ public final class CheckSpatialInfo implements FilesParse {
         }
 
 
-        try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "SpatialFilesInfo.txt", true);
+        try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "Spatial_Box_Info.txt", true);
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);) {
 
-            pw.write("Files With Errors:" + "\r\n");
-            filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
-            pw.write("\r\n");
+            pw.write("In the Spatial Box with: " + "\r\n");
+            pw.write("maxLon: " + space2D.getMaxx() + "\r\n");
+            pw.write("minLon: " + space2D.getMinx() + "\r\n");
+            pw.write("maxLat: " + space2D.getMaxy() + "\r\n");
+            pw.write("minLat: " + space2D.getMiny() + "\r\n");
 
-            pw.write("Spatial Box" + "\r\n");
-            pw.write("Max Longitude" + maxx + "\r\n");
-            pw.write("Min Longitude" + minx + "\r\n");
-            pw.write("Max Latitude" + maxy + "\r\n");
-            pw.write("Min Latitude" + miny + "\r\n");
+            pw.write("There are " + numberOfRecordsInSpace2D + " records" + "\r\n");
 
             pw.write("\r\n");
             pw.write("All of the records are " + numberOfRecords + "\r\n");
+
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -161,8 +121,8 @@ public final class CheckSpatialInfo implements FilesParse {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude) {
-        return new CheckSpatialInfo.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude);
+    public static Builder newCheckSpatioTemporalInfo(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, Space2D space2D) {
+        return new CheckSpatialDataInsideBox.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude, space2D);
     }
 
 

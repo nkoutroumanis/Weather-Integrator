@@ -1,123 +1,123 @@
-lat(lat=361)
-lon(lon=720)
-reftime(reftime=1)
-reftime_ISO(reftime=1)
-time(time=1)
-isobaric(isobaric=31)
-height_above_ground_layer(height_above_ground_layer=1)
-height_above_ground_layer_bounds(height_above_ground_layer=1, 2)
-height_above_ground(height_above_ground=1)
-sigma(sigma=1)
-depth_below_surface_layer(depth_below_surface_layer=4)
-depth_below_surface_layer_bounds(depth_below_surface_layer=4, 2)
-pressure_difference_layer(pressure_difference_layer=1)
-pressure_difference_layer_bounds(pressure_difference_layer=1, 2)
-isobaric1(isobaric1=1)
-height_above_ground1(height_above_ground1=2)
-height_above_ground2(height_above_ground2=1)
-isobaric2(isobaric2=21)
-altitude_above_msl(altitude_above_msl=3)
-height_above_ground3(height_above_ground3=3)
-height_above_ground_layer1(height_above_ground_layer1=1)
-height_above_ground_layer1_bounds(height_above_ground_layer1=1, 2)
-pressure_difference_layer1(pressure_difference_layer1=1)
-pressure_difference_layer1_bounds(pressure_difference_layer1=1, 2)
-isobaric3(isobaric3=26)
-pressure_difference_layer2(pressure_difference_layer2=2)
-pressure_difference_layer2_bounds(pressure_difference_layer2=2, 2)
-sigma_layer(sigma_layer=4)
-sigma_layer_bounds(sigma_layer=4, 2)
-height_above_ground4(height_above_ground4=3)
-isobaric4(isobaric4=17)
-potential_vorticity_surface(potential_vorticity_surface=2)
-Absolute_vorticity_isobaric(time=1, isobaric3=26, lat=361, lon=720)
-Apparent_temperature_height_above_ground(time=1, height_above_ground=1, lat=361, lon=720)
-Cloud_mixing_ratio_isobaric(time=1, isobaric2=21, lat=361, lon=720)
-Cloud_water_entire_atmosphere_single_layer(time=1, lat=361, lon=720)
-Convective_available_potential_energy_pressure_difference_layer(time=1, pressure_difference_layer2=2, lat=361, lon=720)
-Convective_available_potential_energy_surface(time=1, lat=361, lon=720)
-Convective_inhibition_pressure_difference_layer(time=1, pressure_difference_layer2=2, lat=361, lon=720)
-Convective_inhibition_surface(time=1, lat=361, lon=720)
-Dewpoint_temperature_height_above_ground(time=1, height_above_ground=1, lat=361, lon=720)
-Geopotential_height_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
-Geopotential_height_surface(time=1, lat=361, lon=720)
-Geopotential_height_tropopause(time=1, lat=361, lon=720)
-Geopotential_height_zeroDegC_isotherm(time=1, lat=361, lon=720)
-Geopotential_height_maximum_wind(time=1, lat=361, lon=720)
-Geopotential_height_isobaric(time=1, isobaric=31, lat=361, lon=720)
-Geopotential_height_highest_tropospheric_freezing(time=1, lat=361, lon=720)
-Haines_Index_surface(time=1, lat=361, lon=720)
-ICAO_Standard_Atmosphere_Reference_Height_tropopause(time=1, lat=361, lon=720)
-ICAO_Standard_Atmosphere_Reference_Height_maximum_wind(time=1, lat=361, lon=720)
-Ice_cover_surface(time=1, lat=361, lon=720)
-Land_cover_0__sea_1__land_surface(time=1, lat=361, lon=720)
-Per_cent_frozen_precipitation_surface(time=1, lat=361, lon=720)
-Potential_temperature_sigma(time=1, sigma=1, lat=361, lon=720)
-Precipitable_water_entire_atmosphere_single_layer(time=1, lat=361, lon=720)
-Pressure_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
-Pressure_surface(time=1, lat=361, lon=720)
-Pressure_tropopause(time=1, lat=361, lon=720)
-Pressure_maximum_wind(time=1, lat=361, lon=720)
-Pressure_height_above_ground(time=1, height_above_ground2=1, lat=361, lon=720)
-Pressure_reduced_to_MSL_msl(time=1, lat=361, lon=720)
-Relative_humidity_sigma(time=1, sigma=1, lat=361, lon=720)
-Relative_humidity_isobaric(time=1, isobaric=31, lat=361, lon=720)
-Relative_humidity_height_above_ground(time=1, height_above_ground=1, lat=361, lon=720)
-Relative_humidity_pressure_difference_layer(time=1, pressure_difference_layer=1, lat=361, lon=720)
-Relative_humidity_highest_tropospheric_freezing(time=1, lat=361, lon=720)
-Relative_humidity_zeroDegC_isotherm(time=1, lat=361, lon=720)
-Relative_humidity_sigma_layer(time=1, sigma_layer=4, lat=361, lon=720)
-Relative_humidity_entire_atmosphere_single_layer(time=1, lat=361, lon=720)
-Snow_depth_surface(time=1, lat=361, lon=720)
-Soil_temperature_depth_below_surface_layer(time=1, depth_below_surface_layer=4, lat=361, lon=720)
-Specific_humidity_height_above_ground(time=1, height_above_ground1=2, lat=361, lon=720)
-Specific_humidity_pressure_difference_layer(time=1, pressure_difference_layer=1, lat=361, lon=720)
-Storm_relative_helicity_height_above_ground_layer(time=1, height_above_ground_layer=1, lat=361, lon=720)
-Temperature_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
-Temperature_height_above_ground(time=1, height_above_ground4=3, lat=361, lon=720)
-Temperature_pressure_difference_layer(time=1, pressure_difference_layer=1, lat=361, lon=720)
-Temperature_isobaric(time=1, isobaric=31, lat=361, lon=720)
-Temperature_altitude_above_msl(time=1, altitude_above_msl=3, lat=361, lon=720)
-Temperature_surface(time=1, lat=361, lon=720)
-Temperature_tropopause(time=1, lat=361, lon=720)
-Temperature_maximum_wind(time=1, lat=361, lon=720)
-Temperature_sigma(time=1, sigma=1, lat=361, lon=720)
-Total_ozone_entire_atmosphere_single_layer(time=1, lat=361, lon=720)
-Ozone_Mixing_Ratio_isobaric(time=1, isobaric4=17, lat=361, lon=720)
-Vertical_Speed_Shear_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
-Vertical_Speed_Shear_tropopause(time=1, lat=361, lon=720)
-U-Component_Storm_Motion_height_above_ground_layer(time=1, height_above_ground_layer1=1, lat=361, lon=720)
-V-Component_Storm_Motion_height_above_ground_layer(time=1, height_above_ground_layer1=1, lat=361, lon=720)
-Ventilation_Rate_planetary_boundary(time=1, lat=361, lon=720)
-MSLP_Eta_model_reduction_msl(time=1, lat=361, lon=720)
-5-Wave_Geopotential_Height_isobaric(time=1, isobaric1=1, lat=361, lon=720)
-Planetary_Boundary_Layer_Height_surface(time=1, lat=361, lon=720)
-Pressure_of_level_from_which_parcel_was_lifted_pressure_difference_layer(time=1, pressure_difference_layer1=1, lat=361, lon=720)
-Sunshine_Duration_surface(time=1, lat=361, lon=720)
-Surface_Lifted_Index_surface(time=1, lat=361, lon=720)
-Best_4_layer_Lifted_Index_surface(time=1, lat=361, lon=720)
-Volumetric_Soil_Moisture_Content_depth_below_surface_layer(time=1, depth_below_surface_layer=4, lat=361, lon=720)
-Wilting_Point_surface(time=1, lat=361, lon=720)
-Field_Capacity_surface(time=1, lat=361, lon=720)
-Vertical_velocity_pressure_sigma(time=1, sigma=1, lat=361, lon=720)
-Vertical_velocity_pressure_isobaric(time=1, isobaric2=21, lat=361, lon=720)
-Water_equivalent_of_accumulated_snow_depth_surface(time=1, lat=361, lon=720)
-Wind_speed_gust_surface(time=1, lat=361, lon=720)
-u-component_of_wind_tropopause(time=1, lat=361, lon=720)
-u-component_of_wind_sigma(time=1, sigma=1, lat=361, lon=720)
-u-component_of_wind_planetary_boundary(time=1, lat=361, lon=720)
-u-component_of_wind_maximum_wind(time=1, lat=361, lon=720)
-u-component_of_wind_height_above_ground(time=1, height_above_ground3=3, lat=361, lon=720)
-u-component_of_wind_isobaric(time=1, isobaric=31, lat=361, lon=720)
-u-component_of_wind_pressure_difference_layer(time=1, pressure_difference_layer=1, lat=361, lon=720)
-u-component_of_wind_altitude_above_msl(time=1, altitude_above_msl=3, lat=361, lon=720)
-u-component_of_wind_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
-v-component_of_wind_tropopause(time=1, lat=361, lon=720)
-v-component_of_wind_planetary_boundary(time=1, lat=361, lon=720)
-v-component_of_wind_sigma(time=1, sigma=1, lat=361, lon=720)
-v-component_of_wind_maximum_wind(time=1, lat=361, lon=720)
-v-component_of_wind_height_above_ground(time=1, height_above_ground3=3, lat=361, lon=720)
-v-component_of_wind_isobaric(time=1, isobaric=31, lat=361, lon=720)
-v-component_of_wind_pressure_difference_layer(time=1, pressure_difference_layer=1, lat=361, lon=720)
-v-component_of_wind_altitude_above_msl(time=1, altitude_above_msl=3, lat=361, lon=720)
-v-component_of_wind_potential_vorticity_surface(time=1, potential_vorticity_surface=2, lat=361, lon=720)
+lat
+lon
+reftime
+reftime_ISO
+time
+isobaric
+height_above_ground_layer
+height_above_ground_layer_bounds
+height_above_ground
+sigma
+depth_below_surface_layer
+depth_below_surface_layer_bounds
+pressure_difference_layer
+pressure_difference_layer_bounds
+isobaric1
+height_above_ground1
+height_above_ground2
+isobaric2
+altitude_above_msl
+height_above_ground3
+height_above_ground_layer1
+height_above_ground_layer1_bounds
+pressure_difference_layer1
+pressure_difference_layer1_bounds
+isobaric3
+pressure_difference_layer2
+pressure_difference_layer2_bounds
+sigma_layer
+sigma_layer_bounds
+height_above_ground4
+isobaric4
+potential_vorticity_surface
+Absolute_vorticity_isobaric
+Apparent_temperature_height_above_ground
+Cloud_mixing_ratio_isobaric
+Cloud_water_entire_atmosphere_single_layer
+Convective_available_potential_energy_pressure_difference_layer
+Convective_available_potential_energy_surface
+Convective_inhibition_pressure_difference_layer
+Convective_inhibition_surface
+Dewpoint_temperature_height_above_ground
+Geopotential_height_potential_vorticity_surface
+Geopotential_height_surface
+Geopotential_height_tropopause
+Geopotential_height_zeroDegC_isotherm
+Geopotential_height_maximum_wind
+Geopotential_height_isobaric
+Geopotential_height_highest_tropospheric_freezing
+Haines_Index_surface
+ICAO_Standard_Atmosphere_Reference_Height_tropopause
+ICAO_Standard_Atmosphere_Reference_Height_maximum_wind
+Ice_cover_surface
+Land_cover_0__sea_1__land_surface
+Per_cent_frozen_precipitation_surface
+Potential_temperature_sigma
+Precipitable_water_entire_atmosphere_single_layer
+Pressure_potential_vorticity_surface
+Pressure_surface
+Pressure_tropopause
+Pressure_maximum_wind
+Pressure_height_above_ground
+Pressure_reduced_to_MSL_msl
+Relative_humidity_sigma
+Relative_humidity_isobaric
+Relative_humidity_height_above_ground
+Relative_humidity_pressure_difference_layer
+Relative_humidity_highest_tropospheric_freezing
+Relative_humidity_zeroDegC_isotherm
+Relative_humidity_sigma_layer
+Relative_humidity_entire_atmosphere_single_layer
+Snow_depth_surface
+Soil_temperature_depth_below_surface_layer
+Specific_humidity_height_above_ground
+Specific_humidity_pressure_difference_layer
+Storm_relative_helicity_height_above_ground_layer
+Temperature_potential_vorticity_surface
+Temperature_height_above_ground
+Temperature_pressure_difference_layer
+Temperature_isobaric
+Temperature_altitude_above_msl
+Temperature_surface
+Temperature_tropopause
+Temperature_maximum_wind
+Temperature_sigma
+Total_ozone_entire_atmosphere_single_layer
+Ozone_Mixing_Ratio_isobaric
+Vertical_Speed_Shear_potential_vorticity_surface
+Vertical_Speed_Shear_tropopause
+U-Component_Storm_Motion_height_above_ground_layer
+V-Component_Storm_Motion_height_above_ground_layer
+Ventilation_Rate_planetary_boundary
+MSLP_Eta_model_reduction_msl
+5-Wave_Geopotential_Height_isobaric
+Planetary_Boundary_Layer_Height_surface
+Pressure_of_level_from_which_parcel_was_lifted_pressure_difference_layer
+Sunshine_Duration_surface
+Surface_Lifted_Index_surface
+Best_4_layer_Lifted_Index_surface
+Volumetric_Soil_Moisture_Content_depth_below_surface_layer
+Wilting_Point_surface
+Field_Capacity_surface
+Vertical_velocity_pressure_sigma
+Vertical_velocity_pressure_isobaric
+Water_equivalent_of_accumulated_snow_depth_surface
+Wind_speed_gust_surface
+u-component_of_wind_tropopause
+u-component_of_wind_sigma
+u-component_of_wind_planetary_boundary
+u-component_of_wind_maximum_wind
+u-component_of_wind_height_above_ground
+u-component_of_wind_isobaric
+u-component_of_wind_pressure_difference_layer
+u-component_of_wind_altitude_above_msl
+u-component_of_wind_potential_vorticity_surface
+v-component_of_wind_tropopause
+v-component_of_wind_planetary_boundary
+v-component_of_wind_sigma
+v-component_of_wind_maximum_wind
+v-component_of_wind_height_above_ground
+v-component_of_wind_isobaric
+v-component_of_wind_pressure_difference_layer
+v-component_of_wind_altitude_above_msl
+v-component_of_wind_potential_vorticity_surface

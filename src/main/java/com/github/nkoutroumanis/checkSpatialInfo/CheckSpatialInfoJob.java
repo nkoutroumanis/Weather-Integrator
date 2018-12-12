@@ -3,7 +3,7 @@ package com.github.nkoutroumanis.checkSpatialInfo;
 public class CheckSpatialInfoJob {
     public  static void main (String args[]){
 
-//        CheckSpatialInfo.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
+//        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
 //                2, 3).build().exportTxt("/home/nikolaos/Documents/gb");
 
         CheckSpatialInfo.newCheckSpatioTemporalInfo(args[0],

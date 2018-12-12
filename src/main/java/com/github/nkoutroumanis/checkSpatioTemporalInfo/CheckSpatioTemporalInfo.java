@@ -25,6 +25,8 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
     //private String txtExportPath;
     private Set<String> filesWithErrors;
 
+    private long numberOfRecords = 0;
+
     private double maxx = Integer.MIN_VALUE;
     private double minx = Integer.MAX_VALUE;
     private double maxy = Integer.MIN_VALUE;
@@ -116,6 +118,8 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
             miny = latitude;
         }
 
+        numberOfRecords++;
+
     }
 
 
@@ -154,6 +158,9 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
             pw.write("Min Longitude" + minx + "\r\n");
             pw.write("Max Latitude" + maxy + "\r\n");
             pw.write("Min Latitude" + miny + "\r\n");
+
+            pw.write("\r\n");
+            pw.write("All of the records are " + numberOfRecords + "\r\n");
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

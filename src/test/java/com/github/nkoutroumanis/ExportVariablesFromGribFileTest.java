@@ -19,7 +19,7 @@ public class ExportVariablesFromGribFileTest {
         PrintWriter writer = new PrintWriter("variables/variables-of-000.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
-            writer.println(var.getNameAndDimensions());
+            writer.println(var.getName());
             System.out.println();
         }
 
@@ -33,7 +33,7 @@ public class ExportVariablesFromGribFileTest {
         PrintWriter writer = new PrintWriter("variables/variables-of-003.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
-            writer.println(var.getNameAndDimensions());
+            writer.println(var.getName());
             System.out.println();
         }
 
@@ -47,7 +47,7 @@ public class ExportVariablesFromGribFileTest {
         PrintWriter writer = new PrintWriter("variables/variables-of-006.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
-            writer.println(var.getNameAndDimensions());
+            writer.println(var.getName());
             System.out.println();
         }
 
@@ -65,19 +65,19 @@ public class ExportVariablesFromGribFileTest {
         ncf =  NetcdfFile.open("./grib_files/gfs_4_20170608_0000_000.grb2");
         List<Variable> v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
-            vars000.add(var.getNameAndDimensions());
+            vars000.add(var.getName());
         }
 
         ncf =  NetcdfFile.open("./grib_files/gfs_4_20160415_0000_003.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
-            vars003.add(var.getNameAndDimensions());
+            vars003.add(var.getName());
         }
 
         ncf =  NetcdfFile.open("./grib_files/gfs_4_20170608_0000_006.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
-            vars006.add(var.getNameAndDimensions());
+            vars006.add(var.getName());
         }
 
         vars000.stream().filter(vars003::contains).collect(Collectors.toList());
