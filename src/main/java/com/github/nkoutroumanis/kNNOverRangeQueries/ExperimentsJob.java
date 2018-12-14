@@ -19,9 +19,6 @@ public class ExperimentsJob {
 
     public static void main(String args[]){
 
-
-
-        final String exportPath = "";
         MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
         MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000).build();
         MongoClient mongoClient = new MongoClient(new ServerAddress("83.212.102.163", 28017), credential, options);
@@ -44,7 +41,7 @@ public class ExperimentsJob {
                     LoadHistogram lh = LoadHistogram.newLoadHistogram(path.toString());
                     RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-                    int k = 100;
+                    int k = 1;
                     int points = 1000;
 
                     List<Long> timeForRadiusDetermination = new ArrayList<>();
