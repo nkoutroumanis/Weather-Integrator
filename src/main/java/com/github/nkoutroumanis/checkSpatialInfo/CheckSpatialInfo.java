@@ -138,15 +138,15 @@ public final class CheckSpatialInfo implements FilesParse {
         try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "SpatialFilesInfo.txt", true);
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);) {
 
-            pw.write("Files With Errors:" + "\r\n");
+            pw.write("Files With Errors: " + "\r\n");
             filesWithErrors.forEach((s) -> pw.write(s + "\r\n"));
             pw.write("\r\n");
 
-            pw.write("Spatial Box" + "\r\n");
-            pw.write("Max Longitude" + maxx + "\r\n");
-            pw.write("Min Longitude" + minx + "\r\n");
-            pw.write("Max Latitude" + maxy + "\r\n");
-            pw.write("Min Latitude" + miny + "\r\n");
+            pw.write("Formed Spatial Box: " + "\r\n");
+            pw.write("Max Longitude: " + maxx + "\r\n");
+            pw.write("Min Longitude: " + minx + "\r\n");
+            pw.write("Max Latitude: " + maxy + "\r\n");
+            pw.write("Min Latitude: " + miny + "\r\n");
 
             pw.write("\r\n");
             pw.write("All of the records are " + numberOfRecords + "\r\n");

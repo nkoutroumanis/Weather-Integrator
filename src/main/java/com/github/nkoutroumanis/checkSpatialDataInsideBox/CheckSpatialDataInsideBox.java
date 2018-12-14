@@ -99,7 +99,7 @@ public final class CheckSpatialDataInsideBox implements FilesParse {
         try (FileOutputStream fos = new FileOutputStream(txtExportPath + File.separator + "Spatial_Box_Info.txt", true);
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true);) {
 
-            pw.write("In the Spatial Box with: " + "\r\n");
+            pw.write("In the Spatial Box with" + "\r\n");
             pw.write("maxLon: " + space2D.getMaxx() + "\r\n");
             pw.write("minLon: " + space2D.getMinx() + "\r\n");
             pw.write("maxLat: " + space2D.getMaxy() + "\r\n");

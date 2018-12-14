@@ -8,7 +8,7 @@ public class CheckSpatialDataInsideBoxJob {
 //        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
 //                2, 3).build().exportTxt("/home/nikolaos/Documents/gb");
 
-        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo(args[0], Integer.valueOf(args[1]), Integer.valueOf(args[2]), Space2D.newSpace2D(-31.2686628, 32.6340432, 46.6703883, 80.8218858)).build().exportTxt(args[3]);
+        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo(args[0], Integer.valueOf(args[1]), Integer.valueOf(args[2]), Space2D.newSpace2D(-106.7282958, -12.5515792, 98.1731682, 82.0)).build().exportTxt(args[3]);
 
 
     }

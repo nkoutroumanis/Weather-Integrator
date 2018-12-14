@@ -30,7 +30,7 @@ public class ExperimentsJob {
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
 
         //int k = 5;
-         int k = 34210;
+         int k = 206514;
         System.out.println(k);
 //        Random r = new Random();
 //
@@ -52,7 +52,8 @@ public class ExperimentsJob {
 
 
                 MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ determinedRadius +" ," + "distanceField: \"distance\" ," + "spherical: true" + "} }"),Document.parse("{ $count: \"count\" }"))).allowDiskUse(true).iterator();
+                        "key: \"location\" ," + "maxDistance: "+ determinedRadius +" ," + "distanceField: \"distance\" ," + "spherical: true, limit:10000000" + "} }"),Document.parse("{ $count: \"count\" }"))).allowDiskUse(true).batchSize(100000000).iterator();
+
 
 
         try {
@@ -84,7 +85,7 @@ public class ExperimentsJob {
 
 
 
-                //System.out.println("the k distance "+cursor.next().getDouble("dist"));
+//                System.out.println("the k distance "+cursor.next().getDouble("dist"));
 
 
 //            });

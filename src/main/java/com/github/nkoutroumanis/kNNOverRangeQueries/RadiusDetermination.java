@@ -122,6 +122,8 @@ public class RadiusDetermination {
 
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
 
+        System.out.println(points);
+
 //        System.out.println(this.y);
 //        System.out.println(y);
 //        System.out.println(xc);
@@ -176,7 +178,7 @@ public class RadiusDetermination {
             }
 
             if (points < neighboors) {
-                //System.out.println("not enough points "+points);
+                System.out.println("not enough points "+points);
                 System.out.println(k);
                 k++;
 
