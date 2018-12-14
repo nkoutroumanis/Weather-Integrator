@@ -48,17 +48,18 @@ public class ExperimentsJob {
                     for(int i = 0; i< points;i++){
 
                         double randomX = lh.getMinx() + ((lh.getMaxx() - 0.1d) - lh.getMinx()) * r.nextDouble();
-                        double randomY = lh.getMiny() + ((lh.getMaxy() - 0.1) - lh.getMiny()) * r.nextDouble();
+                        double randomY = lh.getMiny() + ((lh.getMaxy() - 0.1d) - lh.getMiny()) * r.nextDouble();
 
                         randomX = Double.parseDouble(dec.format(randomX));
                         randomY = Double.parseDouble(dec.format(randomY));
 
+                        System.out.println("Point: "+randomX +"  "+randomY);
 
                         long t1 = System.currentTimeMillis();
                         double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
                         timeForRadiusDetermination.add(System.currentTimeMillis()-t1);
 
-                        System.out.println("Point :"+randomX +"  "+randomY +" Radius"+determinedRadius);
+                        System.out.println("Radius: "+determinedRadius);
 
                         MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse( "{ $match: { location: { $geoWithin : { $centerSphere : [ ["+randomX+", "+randomY+"], "+(determinedRadius/6378.1)+" ] } } } }"),Document.parse("{ $count: \"count\" }"))).iterator();
                         resultsRatio.add(( (double) (cursor1.next().getInteger("count")-k)/k ));//(n' - n)/n
@@ -67,7 +68,7 @@ public class ExperimentsJob {
 
                         if(resultsRatio.get(resultsRatio.size()-1)<0){
                             try {
-                                System.out.println("Error:"+resultsRatio.get(resultsRatio.size()-1));
+                                System.out.println("Error: "+resultsRatio.get(resultsRatio.size()-1));
                                 throw new Exception("Negative numbers are added in the list");
                             } catch (Exception e) {
                                 e.printStackTrace();
