@@ -26,17 +26,11 @@ public class ExperimentsJob {
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
         Random r = new Random();
 
-
-
-                Stream<Path> subfolder = null;
-                try {
-                    subfolder = Files.walk(Paths.get(args[0]), 1).filter(Files::isDirectory);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                List<File> subfolder = Arrays.asList(new File(args[0]).listFiles(File::isDirectory)) ;
 
                 subfolder.forEach(path -> {
+
+                    System.out.println(path);
 
                     LoadHistogram lh = LoadHistogram.newLoadHistogram(path.toString());
                     RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
