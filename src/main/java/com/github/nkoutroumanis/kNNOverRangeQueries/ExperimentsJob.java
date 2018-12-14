@@ -41,7 +41,7 @@ public class ExperimentsJob {
                     LoadHistogram lh = LoadHistogram.newLoadHistogram(path.toString());
                     RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-                    int k = 1;
+                    int k = Integer.valueOf(args[1]);
                     int points = 1000;
 
                     List<Long> timeForRadiusDetermination = new ArrayList<>();
