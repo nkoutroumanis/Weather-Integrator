@@ -122,7 +122,7 @@ public class RadiusDetermination {
 
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
 
-        System.out.println(points);
+        //System.out.println(points);
 
 //        System.out.println(this.y);
 //        System.out.println(y);
