@@ -178,8 +178,8 @@ public class RadiusDetermination {
             }
 
             if (points < neighboors) {
-                //System.out.println("not enough points "+points);
-                //System.out.println(k);
+                System.out.println("not enough points "+points);
+                System.out.println(k);
                 k++;
 
             } else {
