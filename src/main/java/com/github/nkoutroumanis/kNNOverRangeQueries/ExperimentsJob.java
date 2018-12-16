@@ -21,7 +21,7 @@ public class ExperimentsJob {
     public static void main(String args[]){
 
         MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
-        MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000).build();
+        MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(9000000/*90000*/).build();
         MongoClient mongoClient = new MongoClient(new ServerAddress("83.212.102.163", 28017), credential, options);
 
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
@@ -148,5 +148,6 @@ public class ExperimentsJob {
                         e.printStackTrace();
                     }
             });
+        mongoClient.close();
     }
 }
