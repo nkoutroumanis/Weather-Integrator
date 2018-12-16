@@ -14,7 +14,7 @@ public class LoadingHistogramsJob {
         System.out.println(lh.getMaxy());
         System.out.println(lh.getMiny());
 
-        rd.findRadius(54.87,27.45,1);
+        rd.findRadius(57.19,2.81,1);
 
     }
 }
