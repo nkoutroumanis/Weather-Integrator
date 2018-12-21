@@ -148,6 +148,7 @@ public final class WeatherIntegrator implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         try {
+            JobUsingIndex.numberofRows++;
             String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), latitude, longitude);
             pw.write(line + dataToBeIntegrated + "\r\n");
 

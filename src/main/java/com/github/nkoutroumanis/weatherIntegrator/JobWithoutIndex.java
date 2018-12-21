@@ -18,7 +18,7 @@ public final class JobWithoutIndex {
             WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
                     "/Users/nicholaskoutroumanis/Desktop/grib_files", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).build().integrateData("/Users/nicholaskoutroumanis/Desktop/folder");
+                    .lruCacheMaxEntries(10).build().integrateData("/Users/nicholaskoutroumanis/Desktop/folder");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

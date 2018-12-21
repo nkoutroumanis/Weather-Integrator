@@ -5,7 +5,7 @@ public class LoadingHistogramsJob {
     public static void main(String[] args){
 
         //LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/histograms/1/");
-        LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/10/");
+        LoadHistogram lh = LoadHistogram.newLoadHistogram("/home/nikolaos/Documents/histograms-new/10/");
 
         RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
