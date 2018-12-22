@@ -149,22 +149,22 @@ public final class WeatherIntegrator implements FilesParse {
         try {
             JobUsingIndex.numberofRows++;
 
-//            long startTime = System.nanoTime();
+            long startTime = System.nanoTime();
 
             String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), latitude, longitude);
 
-//            long endTime = System.nanoTime();
+            long endTime = System.nanoTime();
 
             pw.write(line + dataToBeIntegrated + "\r\n");
 
-//            if(!(Double.compare(throughtput,0)==0)){
-//                throughtput = (throughtput + (endTime - startTime))/2;
-//
-//            }
-//            else{
-//                System.out.println("ok one eq");
-//                throughtput = (endTime - startTime);
-//            }
+            if(!(Double.compare(throughtput,0)==0)){
+                throughtput = (throughtput + (endTime - startTime))/2;
+
+            }
+            else{
+                System.out.println("ok one eq");
+                throughtput = (endTime - startTime);
+            }
 
 
 
