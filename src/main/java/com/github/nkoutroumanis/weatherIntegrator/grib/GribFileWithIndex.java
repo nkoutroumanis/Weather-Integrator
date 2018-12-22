@@ -53,8 +53,7 @@ public final class GribFileWithIndex implements GribFile {
                     s.append(e.getKey().copy());
                 }
             }
-            WeatherIntegrator.TEMPORARY_POINTER1 = (System.nanoTime() - t1);
-            WeatherIntegrator.TEMPORARY_POINTER2++;
+
         });
 
         return s.toString();

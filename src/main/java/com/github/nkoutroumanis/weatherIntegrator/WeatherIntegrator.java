@@ -39,8 +39,7 @@ public final class WeatherIntegrator implements FilesParse {
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    public static double TEMPORARY_POINTER1 = 0;
-    public static double TEMPORARY_POINTER2 = 0;
+    public static double throughtput = 0;
 
     public static class Builder {
 
@@ -149,8 +148,26 @@ public final class WeatherIntegrator implements FilesParse {
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         try {
             JobUsingIndex.numberofRows++;
+
+//            long startTime = System.nanoTime();
+
             String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), latitude, longitude);
+
+//            long endTime = System.nanoTime();
+
             pw.write(line + dataToBeIntegrated + "\r\n");
+
+//            if(!(Double.compare(throughtput,0)==0)){
+//                throughtput = (throughtput + (endTime - startTime))/2;
+//
+//            }
+//            else{
+//                System.out.println("ok one eq");
+//                throughtput = (endTime - startTime);
+//            }
+
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();

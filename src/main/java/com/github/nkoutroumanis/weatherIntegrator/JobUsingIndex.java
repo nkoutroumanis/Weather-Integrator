@@ -33,6 +33,7 @@ public final class JobUsingIndex {
         System.out.println("Number Of Hits: " + hits);
         System.out.println("Number Of Records: " + numberofRows);
         System.out.println("(Number Of Hits)/(Number Of Records): " + hits / numberofRows);
+        System.out.println("Throughtput (ns): "+WeatherIntegrator.throughtput);
 
 
     }

@@ -21,25 +21,24 @@ public final class GribFileWithoutIndex implements GribFile {
         this.separator = separator;
     }
 
-    public static int i = 0;
-
     public String getDataValuesByLatLon(double lat, double lon) {
         StringBuilder s = new StringBuilder();
-
 
         listOfVariables.forEach(v -> {
             try {
                 s.append(separator);
-                double t1 = System.nanoTime();
                 try {
-                    s.append(String.valueOf(v.read("0,0," + GribFile.getLatIndex(lat) + "," + GribFile.getLonIndex(lon))).replace(" ", ""));
-                } catch (InvalidRangeException i) {
-                    s.append(String.valueOf(v.read()));
+                    s.append(String.valueOf(v.read("0,0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon))).replace(" ", ""));
+                }
+                catch (InvalidRangeException i) {
+                    try{
+                        s.append(String.valueOf(v.read("0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon))).replace(" ", ""));
+                    }
+                    catch(InvalidRangeException k){
+                        s.append(String.valueOf(v.read()));
+                    }
                 }
 
-                i++;
-                WeatherIntegrator.TEMPORARY_POINTER1 = (System.nanoTime() - t1);
-                WeatherIntegrator.TEMPORARY_POINTER2++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
