@@ -15,10 +15,10 @@ public final class JobWithoutIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv",
-                    "/Users/nicholaskoutroumanis/Desktop/grib_files", 7,
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Desktop/csv/",
+                    "/home/nikolaos/Documents/gb-january-2018/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(10).build().integrateData("/Users/nicholaskoutroumanis/Desktop/folder");
+                    .lruCacheMaxEntries(1).build().integrateData("/home/nikolaos/Desktop/eraseItt");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
