@@ -8,19 +8,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ExampleJob {
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
 
 
         MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
@@ -30,7 +22,7 @@ public class ExampleJob {
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
 
         //int k = 5;
-         int k = 103024;
+        int k = 103024;
         System.out.println(k);
 //        Random r = new Random();
 //
@@ -43,19 +35,18 @@ public class ExampleJob {
 //            Stream<Path> subfolder = Files.walk(Paths.get(""), 1).filter(Files::isDirectory);
 //            subfolder.forEach(path -> {
 
-                LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/1/");
-                RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
+        LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/1/");
+        RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-                double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
+        double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
 
-                System.out.println("determined radius in Km "+ determinedRadius);
-            System.out.println("determined radius in m "+ (determinedRadius*1000l));
+        System.out.println("determined radius in Km " + determinedRadius);
+        System.out.println("determined radius in m " + (determinedRadius * 1000l));
 
 
-
-            //WILL BE USED
-        MongoCursor<Document> cursor0 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                        "key: \"location\" ," + "maxDistance: "+ ((( determinedRadius)) *1000l) +" ," + "distanceField: \"distance\" ," + "spherical: true, num:"+k + "} }"),Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
+        //WILL BE USED
+        MongoCursor<Document> cursor0 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
+                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000l) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"), Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
 
         try {
             while (cursor0.hasNext()) {
@@ -65,8 +56,8 @@ public class ExampleJob {
             cursor0.close();
         }
 
-        MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                "key: \"location\" ," + "maxDistance: "+ ((( determinedRadius)) *1000l) +" ," + "distanceField: \"distance\" ," + "spherical: true, num:"+k + "} }"))).iterator();
+        MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
+                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000l) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"))).iterator();
 
         try {
             while (cursor1.hasNext()) {
@@ -79,8 +70,8 @@ public class ExampleJob {
         System.out.println("------");
 
 
-        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                "key: \"location\" ," + "maxDistance: "+ ((( determinedRadius)) *1000l) +" ," + "distanceField: \"distance\" ," + "spherical: true, limit:6"+ "} }"))).iterator();
+        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
+                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000l) + " ," + "distanceField: \"distance\" ," + "spherical: true, limit:6" + "} }"))).iterator();
 
         try {
             while (cursor2.hasNext()) {
@@ -93,8 +84,8 @@ public class ExampleJob {
         System.out.println("------");
 
 
-        MongoCursor<Document> cursor3 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
-                "key: \"location\" ," + "maxDistance: "+ ((( determinedRadius)) *1000l) +" ," + "distanceField: \"distance\" ," + "spherical: true, limit:1000000"+ "} }"),Document.parse("{ $count: \"count\" }"))).iterator();
+        MongoCursor<Document> cursor3 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
+                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000l) + " ," + "distanceField: \"distance\" ," + "spherical: true, limit:1000000" + "} }"), Document.parse("{ $count: \"count\" }"))).iterator();
 
         try {
             while (cursor3.hasNext()) {
@@ -116,9 +107,8 @@ public class ExampleJob {
 //        }
 
 
-
-        MongoCursor<Document> cursor4 = m.aggregate(Arrays.asList(Document.parse( "{ $match: { location: { $geoWithin : { $centerSphere : [ ["+randomX+", "+randomY+"], "+((int)determinedRadius/6378.1)+" ] } } } }"),Document.parse("{ $count: \"count\" }"))).iterator();
-        System.out.println("POINTS RETURNED "+cursor4.next().getInteger("count"));
+        MongoCursor<Document> cursor4 = m.aggregate(Arrays.asList(Document.parse("{ $match: { location: { $geoWithin : { $centerSphere : [ [" + randomX + ", " + randomY + "], " + ((int) determinedRadius / 6378.1) + " ] } } } }"), Document.parse("{ $count: \"count\" }"))).iterator();
+        System.out.println("POINTS RETURNED " + cursor4.next().getInteger("count"));
 
 
 //        try {
@@ -129,7 +119,6 @@ public class ExampleJob {
 //
 //            cursor2.close();
 //        }
-
 
 
 //        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse( "{ $geoNear: { near: {type: \"Point\", coordinates: ["+randomX+", "+randomY+"]}," +
@@ -144,7 +133,6 @@ public class ExampleJob {
 //        } finally {
 //            cursor2.close();
 //        }
-
 
 
 //                System.out.println("the k distance "+cursor.next().getDouble("dist"));

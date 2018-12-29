@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 public final class WeatherIntegrator implements FilesParse {
@@ -39,7 +39,8 @@ public final class WeatherIntegrator implements FilesParse {
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    public static double throughtput = 0;
+    public static long hits = 0;
+    public static long numberofRecords = 0;
 
     public static class Builder {
 
@@ -148,7 +149,7 @@ public final class WeatherIntegrator implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         try {
-            JobUsingIndex.numberofRows++;
+            WeatherIntegrator.numberofRecords++;
 
             long startTime = System.nanoTime();
 
@@ -157,17 +158,6 @@ public final class WeatherIntegrator implements FilesParse {
             long endTime = System.nanoTime();
 
             pw.write(line + dataToBeIntegrated + "\r\n");
-
-            if(!(Double.compare(throughtput,0)==0)){
-                throughtput = (throughtput + (endTime - startTime))/2;
-
-            }
-            else{
-                throughtput = (endTime - startTime);
-            }
-
-
-
 
         } catch (ParseException e) {
             e.printStackTrace();

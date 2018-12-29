@@ -95,16 +95,16 @@ public final class CheckSpatialInfo implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
 
-        if(Double.compare(maxx, longitude) == -1){
+        if (Double.compare(maxx, longitude) == -1) {
             maxx = longitude;
         }
-        if(Double.compare(minx, longitude) == 1){
+        if (Double.compare(minx, longitude) == 1) {
             minx = longitude;
         }
-        if(Double.compare(maxy, latitude) == -1){
+        if (Double.compare(maxy, latitude) == -1) {
             maxy = latitude;
         }
-        if(Double.compare(miny, latitude) == 1){
+        if (Double.compare(miny, latitude) == 1) {
             miny = latitude;
         }
 
@@ -113,7 +113,7 @@ public final class CheckSpatialInfo implements FilesParse {
     }
 
     @Override
-    public void lineWithError(Path file, String line){
+    public void lineWithError(Path file, String line) {
         if (filesWithErrors.contains("Lines with Errors " + file.toString())) {
             filesWithErrors.add("Lines with Errors " + file.toString());
         } else {

@@ -8,7 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class CheckSpatioTemporalInfo implements FilesParse {
 
@@ -105,16 +106,16 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
-        if(Double.compare(maxx, longitude) == -1){
+        if (Double.compare(maxx, longitude) == -1) {
             maxx = longitude;
         }
-        if(Double.compare(minx, longitude) == 1){
+        if (Double.compare(minx, longitude) == 1) {
             minx = longitude;
         }
-        if(Double.compare(maxy, latitude) == -1){
+        if (Double.compare(maxy, latitude) == -1) {
             maxy = latitude;
         }
-        if(Double.compare(miny, latitude) == 1){
+        if (Double.compare(miny, latitude) == 1) {
             miny = latitude;
         }
 
@@ -124,7 +125,7 @@ public final class CheckSpatioTemporalInfo implements FilesParse {
 
 
     @Override
-    public void lineWithError(Path file, String line){
+    public void lineWithError(Path file, String line) {
         if (filesWithErrors.contains("Lines with Errors " + file.toString())) {
             filesWithErrors.add("Lines with Errors " + file.toString());
         } else {

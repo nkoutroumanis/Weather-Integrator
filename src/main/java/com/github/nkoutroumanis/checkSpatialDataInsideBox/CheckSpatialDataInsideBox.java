@@ -5,10 +5,7 @@ import com.github.nkoutroumanis.histogram.Space2D;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
 
 public final class CheckSpatialDataInsideBox implements FilesParse {
 
@@ -75,8 +72,8 @@ public final class CheckSpatialDataInsideBox implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
 
-        if((Double.compare(space2D.getMaxx(), longitude) == 1)&&(Double.compare(space2D.getMinx(), longitude) == -1)
-                &&(Double.compare(space2D.getMaxy(), latitude) == 1)&&(Double.compare(space2D.getMiny(), latitude) == -1)){
+        if ((Double.compare(space2D.getMaxx(), longitude) == 1) && (Double.compare(space2D.getMinx(), longitude) == -1)
+                && (Double.compare(space2D.getMaxy(), latitude) == 1) && (Double.compare(space2D.getMiny(), latitude) == -1)) {
             numberOfRecordsInSpace2D++;
         }
 

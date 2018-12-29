@@ -6,12 +6,12 @@ public final class HistogramCreationJob {
         Space2D space = Space2D.newSpace2D(-26.64, 0, 121.57, 59.94);
         long t1;
         int j = 1;
-        for(long i = 1000000; i<=1000000*10;i = i + 1000000){
+        for (long i = 1000000; i <= 1000000 * 10; i = i + 1000000) {
             t1 = System.currentTimeMillis();
 
-            GridPartition.newGridPartition(space, i, i, "/home/nikolaos/Documents/tambak", 2, 3, 4).build().exportHistogram("/home/nikolaos/Desktop/histograms-new-new/"+j);
+            GridPartition.newGridPartition(space, i, i, "/home/nikolaos/Documents/tambak", 2, 3, 4).build().exportHistogram("/home/nikolaos/Desktop/histograms-new-new/" + j);
 
-            System.out.println(j + " folder " + ((System.currentTimeMillis()-t1)/1000) + "sec");
+            System.out.println(j + " folder " + ((System.currentTimeMillis() - t1) / 1000) + "sec");
             j++;
             System.out.println("------------------");
 

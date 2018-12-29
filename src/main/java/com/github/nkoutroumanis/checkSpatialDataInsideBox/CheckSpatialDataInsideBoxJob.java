@@ -3,7 +3,7 @@ package com.github.nkoutroumanis.checkSpatialDataInsideBox;
 import com.github.nkoutroumanis.histogram.Space2D;
 
 public class CheckSpatialDataInsideBoxJob {
-    public  static void main (String args[]){
+    public static void main(String args[]) {
 
 //        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
 //                2, 3).build().exportTxt("/home/nikolaos/Documents/gb");

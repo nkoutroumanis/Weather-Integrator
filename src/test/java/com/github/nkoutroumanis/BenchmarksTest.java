@@ -1,9 +1,9 @@
 package com.github.nkoutroumanis;
 
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
@@ -35,13 +35,13 @@ public class BenchmarksTest {
     }
 
     private final WeatherIntegrator wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-             gribFilesPath, 7,
+            gribFilesPath, 7,
             8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
             .lruCacheMaxEntries(1).useIndex().build();
 
     private final WeatherIntegrator wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
-             gribFilesPath, 7,
+            gribFilesPath, 7,
             8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
             .lruCacheMaxEntries(1).build();

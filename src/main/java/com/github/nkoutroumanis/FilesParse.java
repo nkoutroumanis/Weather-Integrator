@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +39,7 @@ public interface FilesParse {
 
     }
 
-    default void lineWithError(Path file, String line){
+    default void lineWithError(Path file, String line) {
 
     }
 
@@ -57,26 +56,26 @@ public interface FilesParse {
                     innerStream.forEach(line -> {
 
 
-                        try{
+                        try {
 
-                        String[] separatedLine = line.split(separator);
+                            String[] separatedLine = line.split(separator);
 
-                        if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
-                            emptySpatioTemporalInformation(path, line);
-                            return;
-                        }
+                            if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                                emptySpatioTemporalInformation(path, line);
+                                return;
+                            }
 
-                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+                            double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                            double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
-                        if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
-                            outOfRangeSpatialInformation(path, line);
-                            return;
-                        } else {
-                            lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
-                        }
+                            if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
+                                outOfRangeSpatialInformation(path, line);
+                                return;
+                            } else {
+                                lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
+                            }
 
-                        }catch(ArrayIndexOutOfBoundsException e){
+                        } catch (ArrayIndexOutOfBoundsException e) {
                             lineWithError(path, line);
                         }
                     });
@@ -108,26 +107,26 @@ public interface FilesParse {
                     //for each line
                     innerStream.forEach(line -> {
 
-                        try{
+                        try {
 
-                        String[] separatedLine = line.split(separator);
+                            String[] separatedLine = line.split(separator);
 
-                        if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
-                            emptySpatialInformation(path, line);
-                            return;
-                        }
+                            if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                                emptySpatialInformation(path, line);
+                                return;
+                            }
 
-                        double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                        double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+                            double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                            double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
-                        if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
-                            outOfRangeSpatialInformation(path, line);
-                            return;
-                        } else {
-                            lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, longitude, latitude);
-                        }
+                            if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
+                                outOfRangeSpatialInformation(path, line);
+                                return;
+                            } else {
+                                lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, longitude, latitude);
+                            }
 
-                        }catch(ArrayIndexOutOfBoundsException e){
+                        } catch (ArrayIndexOutOfBoundsException e) {
                             lineWithError(path, line);
                         }
                     });

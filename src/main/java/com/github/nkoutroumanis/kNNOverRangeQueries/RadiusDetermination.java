@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class RadiusDetermination {
 
-    private final Map<Long,Long> histogram;
+    private final Map<Long, Long> histogram;
 
     private long numberOfCellsxAxis;
     private long numberOfCellsyAxis;
@@ -18,7 +18,7 @@ public class RadiusDetermination {
     private final long minYc;
     private final long maxYc;
 
-    private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis,double minx, double miny, double maxx, double maxy) {
+    private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
         this.numberOfCellsxAxis = numberOfCellsxAxis;
         this.numberOfCellsyAxis = numberOfCellsyAxis;
         this.histogram = histogram;
@@ -32,9 +32,9 @@ public class RadiusDetermination {
         maxYc = minYc + numberOfCellsyAxis - 1;
     }
 
-    public static RadiusDetermination newRadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis,double minx, double miny, double maxx, double maxy){
+    public static RadiusDetermination newRadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
 
-        return new RadiusDetermination(histogram,  numberOfCellsxAxis,  numberOfCellsyAxis, minx,  miny,  maxx,  maxy);
+        return new RadiusDetermination(histogram, numberOfCellsxAxis, numberOfCellsyAxis, minx, miny, maxx, maxy);
     }
 
     private long getIdCellOfPoint(double x, double y) {

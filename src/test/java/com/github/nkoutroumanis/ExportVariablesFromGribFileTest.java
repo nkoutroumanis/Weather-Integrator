@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis;
 
-import com.mchange.v1.db.sql.ConnectionUtils;
 import org.junit.Test;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -62,19 +61,19 @@ public class ExportVariablesFromGribFileTest {
         List<String> vars003 = new ArrayList<>();
         List<String> vars006 = new ArrayList<>();
 
-        ncf =  NetcdfFile.open("./grib_files/gfs_4_20170608_0000_000.grb2");
+        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_000.grb2");
         List<Variable> v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars000.add(var.getName());
         }
 
-        ncf =  NetcdfFile.open("./grib_files/gfs_4_20160415_0000_003.grb2");
+        ncf = NetcdfFile.open("./grib_files/gfs_4_20160415_0000_003.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars003.add(var.getName());
         }
 
-        ncf =  NetcdfFile.open("./grib_files/gfs_4_20170608_0000_006.grb2");
+        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_006.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars006.add(var.getName());

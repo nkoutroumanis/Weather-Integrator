@@ -22,8 +22,14 @@ public final class JobWithoutIndex {
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
-            System.out.println("Elapsed Time: " + (System.currentTimeMillis() - start) / 1000 + " sec");
-            System.out.println("Throughtput (ns): "+WeatherIntegrator.throughtput);
+
+            long elapsedTime = (System.currentTimeMillis() - start) / 1000;
+            System.out.println("Elapsed Time: " + elapsedTime + " sec");
+
+            System.out.println("Number Of Records: " + WeatherIntegrator.numberofRecords);
+            System.out.println("Number Of Hits: " + WeatherIntegrator.hits);
+            System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
+            System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / elapsedTime));
 
         } catch (IOException e) {
             e.printStackTrace();

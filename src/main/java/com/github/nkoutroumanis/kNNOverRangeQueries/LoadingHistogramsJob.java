@@ -2,7 +2,7 @@ package com.github.nkoutroumanis.kNNOverRangeQueries;
 
 public class LoadingHistogramsJob {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //LoadHistogram lh = LoadHistogram.newLoadHistogram("/Users/nicholaskoutroumanis/Downloads/histograms/1/");
         LoadHistogram lh = LoadHistogram.newLoadHistogram("/home/nikolaos/Documents/histograms-new/10/");
@@ -14,7 +14,7 @@ public class LoadingHistogramsJob {
         System.out.println(lh.getMaxy());
         System.out.println(lh.getMiny());
 
-        rd.findRadius(57.19,2.81,1);
+        rd.findRadius(57.19, 2.81, 1);
 
     }
 }

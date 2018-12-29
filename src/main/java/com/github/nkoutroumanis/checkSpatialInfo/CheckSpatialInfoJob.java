@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.checkSpatialInfo;
 
 public class CheckSpatialInfoJob {
-    public  static void main (String args[]){
+    public static void main(String args[]) {
 
 //        CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
 //                2, 3).build().exportTxt("/home/nikolaos/Documents/gb");

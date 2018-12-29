@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.weatherIntegrator.grib;
 
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 import ucar.nc2.NetcdfFile;

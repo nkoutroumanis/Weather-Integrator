@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.checkSpatioTemporalInfo;
 
 public class CheckSpatioTemporalInfoJob {
-    public  static void main (String args[]){
+    public static void main(String args[]) {
 
 //        CheckSpatioTemporalInfo.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
 //                2, 3, 4,

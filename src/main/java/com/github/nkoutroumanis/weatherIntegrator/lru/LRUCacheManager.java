@@ -1,7 +1,10 @@
 package com.github.nkoutroumanis.weatherIntegrator.lru;
 
-import com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex;
-import com.github.nkoutroumanis.weatherIntegrator.grib.*;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFile;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithIndex;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithoutIndex;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -43,7 +46,7 @@ public final class LRUCacheManager {
                 cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
             }
         } else {
-            JobUsingIndex.hits++;
+            WeatherIntegrator.hits++;
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);

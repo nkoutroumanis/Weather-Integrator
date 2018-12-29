@@ -8,7 +8,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class GridPartition implements FilesParse {
 
@@ -118,8 +119,8 @@ public final class GridPartition implements FilesParse {
         try (Writer writer = new FileWriter(exportPath + File.separator + "properties.json")) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-            Map<String,Object> properties = new HashMap<>();
-            properties.put("space2D",space2D);
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("space2D", space2D);
             properties.put("cellsInXAxis", cellsInXAxis);
             properties.put("cellsInYAxis", cellsInYAxis);
             gson.toJson(properties, writer);
@@ -129,13 +130,13 @@ public final class GridPartition implements FilesParse {
         }
 
         System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
-        System.out.println("Number Of Cells in X Axis: " + cellsInXAxis );
+        System.out.println("Number Of Cells in X Axis: " + cellsInXAxis);
         System.out.println("Number Of Cells in Y Axis: " + cellsInYAxis);
         System.out.println("Number Of Filled Cells: " + map.size());
         System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
         System.out.println("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Percentage of Empty Cells: " + ( ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()) );
+        System.out.println("Percentage of Empty Cells: " + (((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)));
+        System.out.println("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()));
     }
 
 

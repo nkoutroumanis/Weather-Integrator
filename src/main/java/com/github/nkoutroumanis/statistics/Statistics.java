@@ -8,9 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
 import java.util.stream.Stream;
 
 public final class Statistics implements FilesParse {
@@ -92,22 +93,22 @@ public final class Statistics implements FilesParse {
         separator = builder.separator;
 
         maxOfColumnsPerFile = new ArrayList<>();
-        for(int i : columns){
+        for (int i : columns) {
             maxOfColumnsPerFile.add((double) Long.MIN_VALUE);
         }
 
         minOfColumnsPerFile = new ArrayList<>();
-        for(int i : columns){
+        for (int i : columns) {
             minOfColumnsPerFile.add((double) Long.MAX_VALUE);
         }
 
         averageOfColumnsPerFile = new ArrayList<>();
-        for(int i =0;i<columns.length;i++){
+        for (int i = 0; i < columns.length; i++) {
             averageOfColumnsPerFile.add(new ArrayList<>());
         }
 
         stdOfColumnsPerFile = new ArrayList<>();
-        for(int i =0;i<columns.length;i++){
+        for (int i = 0; i < columns.length; i++) {
             stdOfColumnsPerFile.add(new ArrayList<>());
         }
     }
@@ -124,7 +125,7 @@ public final class Statistics implements FilesParse {
 
         columnsInFile = new ArrayList<>();
 
-        for(int i : columns){
+        for (int i : columns) {
             columnsInFile.add(new ArrayList<>());
         }
     }
@@ -132,7 +133,7 @@ public final class Statistics implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         JobUsingIndex.numberofRows++;
-        for(int i = 0; i<columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             columnsInFile.get(i).add(Double.parseDouble(separatedLine[columns[i] - 1]));
         }
 
@@ -142,26 +143,26 @@ public final class Statistics implements FilesParse {
     @Override
     public void afterLineParse() {
 
-        for(int i = 0; i<columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             DoubleSummaryStatistics dss = columnsInFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics();
 
             averageOfColumnsPerFile.get(i).add(dss.getAverage());
 
-            if(Double.compare(dss.getMax(),maxOfColumnsPerFile.get(i))==1){
-                maxOfColumnsPerFile.set(i,dss.getMax());
+            if (Double.compare(dss.getMax(), maxOfColumnsPerFile.get(i)) == 1) {
+                maxOfColumnsPerFile.set(i, dss.getMax());
             }
 
-            if(Double.compare(dss.getMin(),minOfColumnsPerFile.get(i))==-1){
-                minOfColumnsPerFile.set(i,dss.getMin());
+            if (Double.compare(dss.getMin(), minOfColumnsPerFile.get(i)) == -1) {
+                minOfColumnsPerFile.set(i, dss.getMin());
             }
 
 
             double sum = 0;
-            for(Double e:columnsInFile.get(i)){
-                sum = sum + Math.pow(e - dss.getAverage(),2);
+            for (Double e : columnsInFile.get(i)) {
+                sum = sum + Math.pow(e - dss.getAverage(), 2);
             }
 
-            double ressStd = Math.sqrt(sum/(columnsInFile.get(i).size()-1));
+            double ressStd = Math.sqrt(sum / (columnsInFile.get(i).size() - 1));
             stdOfColumnsPerFile.get(i).add(ressStd);
 
         }
@@ -187,11 +188,11 @@ public final class Statistics implements FilesParse {
         try (FileOutputStream fos = new FileOutputStream(filesExportPath + File.separator + "Statistics.txt", true);
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
 
-            for(int i = 0 ; i< columns.length;i++){
+            for (int i = 0; i < columns.length; i++) {
                 averageOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage();
                 stdOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage();
 
-                pw.write("Column Number " + columns[i] +": Average: " + averageOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage() + ", ");
+                pw.write("Column Number " + columns[i] + ": Average: " + averageOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage() + ", ");
                 pw.write("Max: " + maxOfColumnsPerFile.get(i) + ", ");
                 pw.write("Min: " + minOfColumnsPerFile.get(i) + ", ");
                 pw.write("Std: " + stdOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage() + "\r\n");
