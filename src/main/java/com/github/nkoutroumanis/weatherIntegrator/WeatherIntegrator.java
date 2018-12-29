@@ -129,7 +129,8 @@ public final class WeatherIntegrator implements FilesParse {
     public void fileParse(Path filePath) {
 
         try {
-            fos = new FileOutputStream(filesExportPath + File.separator + filePath.toString().substring(filesPath.length() + 1), true);
+            fos = new FileOutputStream(filesExportPath + File.separator + filePath.toString().substring(filesPath.length()), true);
+            //fos = new FileOutputStream(filesExportPath + File.separator + filePath.toString().substring(filesPath.length() + 1), true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -162,7 +163,6 @@ public final class WeatherIntegrator implements FilesParse {
 
             }
             else{
-                System.out.println("ok one eq");
                 throughtput = (endTime - startTime);
             }
 

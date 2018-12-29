@@ -1,6 +1,7 @@
 package com.github.nkoutroumanis.statistics;
 
 import com.github.nkoutroumanis.FilesParse;
+import com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -130,7 +131,7 @@ public final class Statistics implements FilesParse {
 
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
-
+        JobUsingIndex.numberofRows++;
         for(int i = 0; i<columns.length; i++){
             columnsInFile.get(i).add(Double.parseDouble(separatedLine[columns[i] - 1]));
         }

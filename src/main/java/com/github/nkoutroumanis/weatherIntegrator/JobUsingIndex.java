@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public final class JobUsingIndex {
 
     public static float hits = 0;
-    public static float numberofRows = 0;
+    public static long numberofRows = 0;
 
     public static void main(String args[]) throws InterruptedException {
 
@@ -18,10 +18,10 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Desktop/random/",
-                    "/home/nikolaos/Documents/gb-january-2018/", 7,
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/chcsv/",
+                    "/home/nikolaos/Documents/grib-files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                   .lruCacheMaxEntries(Integer.parseInt(args[0])).useIndex().build().integrateData("/home/nikolaos/Desktop/eraseItt/");
+                   .lruCacheMaxEntries(1).useIndex().build().integrateData("/home/nikolaos/Documents/theNew/");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

@@ -46,7 +46,6 @@ public interface FilesParse {
 
     //SpatioTemporal  Parsing
     default void parse(String filesPath, String separator, String filesExtension, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
-
         try (Stream<Path> stream = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension))) {
 
             stream.forEach((path) -> {
