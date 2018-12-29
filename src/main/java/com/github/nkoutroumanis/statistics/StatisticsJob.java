@@ -17,7 +17,7 @@ public final class StatisticsJob {
         System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
         System.out.println("Elapsed Time: " + (System.currentTimeMillis() - start) / 1000 + " sec");
 
-        System.out.println("(Number Of Hits)/(Number Of Records): " + JobUsingIndex.numberofRows);
+        System.out.println("(Number Of Hits)/(Number Of Records): " + Statistics.numberofRecords);
 
     }
 

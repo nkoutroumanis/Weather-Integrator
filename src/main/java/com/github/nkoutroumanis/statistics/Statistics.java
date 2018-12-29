@@ -40,8 +40,7 @@ public final class Statistics implements FilesParse {
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    public static double TEMPORARY_POINTER1 = 0;
-    public static double TEMPORARY_POINTER2 = 0;
+    public static long numberofRecords = 0;
 
     public static class Builder {
 
@@ -132,7 +131,7 @@ public final class Statistics implements FilesParse {
 
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
-        JobUsingIndex.numberofRows++;
+        Statistics.numberofRecords++;
         for (int i = 0; i < columns.length; i++) {
             columnsInFile.get(i).add(Double.parseDouble(separatedLine[columns[i] - 1]));
         }
