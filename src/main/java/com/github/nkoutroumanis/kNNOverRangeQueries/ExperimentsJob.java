@@ -34,8 +34,11 @@ public class ExperimentsJob {
             LoadHistogram lh = LoadHistogram.newLoadHistogram(path.toString());
             RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-            final int k = Integer.valueOf(args[1]);
-            int points = 10;
+
+            for(int ki = 10; ki<= 200; ki = ki + 10){
+                final int k = ki;
+
+            int points = 1000;
 
             List<Long> timeForRadiusDetermination = new ArrayList<>();
             List<Double> resultsRatio = new ArrayList<>();
@@ -56,18 +59,18 @@ public class ExperimentsJob {
                 randomX = Double.parseDouble(dec.format(randomX));
                 randomY = Double.parseDouble(dec.format(randomY));
 
-                System.out.println("Point: " + randomX + "  " + randomY);
+                //System.out.println("Point: " + randomX + "  " + randomY);
 
-                long t1 = System.currentTimeMillis();
+                long t1 = System.nanoTime();
                 double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
-                timeForRadiusDetermination.add(System.currentTimeMillis() - t1);
+                timeForRadiusDetermination.add(System.nanoTime() - t1);
 
-                System.out.println("Radius: " + determinedRadius);
+                //System.out.println("Radius: " + determinedRadius);
 
                 MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse("{ $match: { location: { $geoWithin : { $centerSphere : [ [" + randomX + ", " + randomY + "], " + (determinedRadius / 6378.1) + " ] } } } }"), Document.parse("{ $count: \"count\" }"))).iterator();
                 resultsRatio.add(((double) (cursor1.next().getInteger("count") - k) / k));//(n' - n)/n
                 cursor1.close();
-                System.out.println(resultsRatio.size() + " Count Finished");
+                //System.out.println(resultsRatio.size() + " Count Finished");
 
                 if (resultsRatio.get(resultsRatio.size() - 1) < 0) {
                     try {
@@ -85,7 +88,7 @@ public class ExperimentsJob {
 
                 radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
                 cursor2.close();
-                System.out.println("Radius Finished");
+                //System.out.println("Radius Finished");
 
                 if (radiusRatio.get(radiusRatio.size() - 1) < 0) {
                     try {
@@ -124,9 +127,9 @@ public class ExperimentsJob {
 
                 pw.write("For k=" + k + " of Histogram " + path + "\r\n");
                 pw.write("\r\n");
-                pw.write("Determination of Radius Average Time (ms): " + tss.getAverage() + "\r\n");
-                pw.write("Determination of Radius Max Time (ms): " + tss.getMax() + "\r\n");
-                pw.write("Determination of Radius Min Time (ms): " + tss.getMin() + "\r\n");
+                pw.write("Determination of Radius Average Time (ns): " + tss.getAverage() + "\r\n");
+                pw.write("Determination of Radius Max Time (ns): " + tss.getMax() + "\r\n");
+                pw.write("Determination of Radius Min Time (ns): " + tss.getMin() + "\r\n");
                 pw.write("Determination of Radius Std of Time: " + tssStd + "\r\n");
                 pw.write("\r\n");
 
@@ -150,6 +153,9 @@ public class ExperimentsJob {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        }
+
         });
         mongoClient.close();
     }

@@ -184,7 +184,7 @@ public class RadiusDetermination {
 
             } else {
 
-                System.out.println("Enough points " + points);
+                //System.out.println("Enough points " + points);
 
 //                System.out.println("xc: " + xc);
 //                System.out.println("xc-k: " + (xc - k));
@@ -236,7 +236,7 @@ public class RadiusDetermination {
                     distance = d4;
                 }
 
-                System.out.println("final k: " + k);
+                //System.out.println("final k: " + k);
                 k = -1;
             }
         }
