@@ -43,8 +43,15 @@ public class ExperimentsJob {
 
             for (int i = 0; i < points; i++) {
 
-                double randomX = lh.getMinx() + ((lh.getMaxx() - 0.1d) - lh.getMinx()) * r.nextDouble();
-                double randomY = lh.getMiny() + ((lh.getMaxy() - 0.1d) - lh.getMiny()) * r.nextDouble();
+
+                //Greece
+                //(20.1500159034, 34.9199876979) (26.6041955909, 41.8269046087)
+
+//                double randomX = lh.getMinx() + ((lh.getMaxx() - 0.1d) - lh.getMinx()) * r.nextDouble();
+//                double randomY = lh.getMiny() + ((lh.getMaxy() - 0.1d) - lh.getMiny()) * r.nextDouble();
+
+                double randomX = 20.1500159034 + ((26.6041955909 - 0.1d) - 20.1500159034) * r.nextDouble();
+                double randomY = 34.9199876979 + ((41.8269046087 - 0.1d) - 34.9199876979) * r.nextDouble();
 
                 randomX = Double.parseDouble(dec.format(randomX));
                 randomY = Double.parseDouble(dec.format(randomY));
