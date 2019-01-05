@@ -1,5 +1,6 @@
 package com.github.nkoutroumanis.kNNOverRangeQueries;
 
+import com.github.nkoutroumanis.FilesParse;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -9,23 +10,42 @@ import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class ExperimentsJob {
+public class ExperimentsDhJob {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
         MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
-        MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(9000000/*90000*/).build();
+        MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000000/*90000*/).build();
         MongoClient mongoClient = new MongoClient(new ServerAddress("83.212.102.163", 28017), credential, options);
 
         MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
         Random r = new Random();
 
-        DecimalFormat dec = new DecimalFormat("#0.00");
+        final double dh = Double.parseDouble(args[2]);//0.5d;
+        final String filesPath = args[1];//"/Users/nicholaskoutroumanis/Desktop/csv/";
+        final String histogramsPath = args[0];//"/Users/nicholaskoutroumanis/Desktop/untitled/";
+        final String filesExtension = ".csv";
+        final String separator = ";";
+        final int numberOfColumnLongitude = 7;
+        final int numberOfColumnLatitude = 8;
+        final int numberOfColumnDate = 3;
 
-        List<File> subfolder = Arrays.asList(new File(args[0]/*"/Users/nicholaskoutroumanis/Desktop/untitled/"*/).listFiles(File::isDirectory));
+
+        List<Path> files = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).collect(Collectors.toList());
+        final int numberOfFiles = files.size();
+
+        System.out.println("files path loaded");
+
+        List<File> subfolder = Arrays.asList(new File(histogramsPath).listFiles(File::isDirectory));
 
         subfolder.forEach(path -> {
 
@@ -35,10 +55,9 @@ public class ExperimentsJob {
             RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
 
-            for (int ki = 10; ki <= 200; ki = ki + 10) {
+            for (int ki = 5; ki <= 30; ki = ki + 5) {
 
                 final int k = ki;
-
                 int points = 1000;
 
                 List<Long> timeForRadiusDetermination = new ArrayList<>();
@@ -48,17 +67,71 @@ public class ExperimentsJob {
                 for (int i = 0; i < points; i++) {
 
 
-                    //Greece
-                    //(20.1500159034, 34.9199876979) (26.6041955909, 41.8269046087)
+                    double longitude = -1000;
+                    double latitude = -1000;
 
-//                double randomX = lh.getMinx() + ((lh.getMaxx() - 0.1d) - lh.getMinx()) * r.nextDouble();
-//                double randomY = lh.getMiny() + ((lh.getMaxy() - 0.1d) - lh.getMiny()) * r.nextDouble();
+                    int b = 0;
+                    while(b==0){
 
-                    double randomX = 20.1500159034 + ((26.6041955909 - 0.1d) - 20.1500159034) * r.nextDouble();
-                    double randomY = 34.9199876979 + ((41.8269046087 - 0.1d) - 34.9199876979) * r.nextDouble();
+                        try {
+                        int randomFile = r.nextInt(numberOfFiles);
+                        List<String> lines = Files.lines(files.get(randomFile)).collect(Collectors.toList());
+                        int randomLine = r.nextInt(lines.size());
+                        String line = lines.get(randomLine);
 
-                    randomX = Double.parseDouble(dec.format(randomX));
-                    randomY = Double.parseDouble(dec.format(randomY));
+                            String[] separatedLine = line.split(separator);
+
+                            if (FilesParse.empty.test(separatedLine[numberOfColumnLongitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnLatitude - 1]) || FilesParse.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                                continue;
+                            }
+
+                            longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                            latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+                            if (!(longitudeInGreekRegion.test(longitude) && latitudeInGreekRegion.test(latitude))) {
+                                b = 1;
+                            }
+
+                        } catch (ArrayIndexOutOfBoundsException | IOException e) {
+                            System.out.println("Exeption while generating random point ");
+                            System.out.println(e);
+                            System.out.println("Repeating the generation");
+                        }
+                    }
+
+                    double randomX;
+                    double randomY;
+
+                    if(r.nextInt(2)==1){
+                        randomX = (longitude + dh);
+                    }
+                    else{
+                        randomX = (longitude - dh);
+                    }
+
+                    if(r.nextInt(2)==1){
+                        randomY = (latitude + dh);
+                    }
+                    else{
+                        randomY = (latitude - dh);
+                    }
+
+                    //System.out.println("formed point ("+ randomX +", " + randomY+")");
+
+//        if(r.nextInt(1)==1){
+//            randomX = (longitude - dh) + ((longitude + dh) - (longitude - dh)) * r.nextDouble();
+//        }
+//        else{
+//            randomX = (longitude - dh) + ((longitude + dh) - (longitude - dh)) * r.nextDouble();
+//        }
+//
+//        if(r.nextInt(1)==1){
+//            randomY = (latitude - dh) + ((latitude + dh) - (latitude - dh)) * r.nextDouble();
+//        }
+//        else{
+//            randomY = (latitude - dh) + ((latitude + dh) - (latitude - dh)) * r.nextDouble();
+//        }
+
 
                     //System.out.println("Point: " + randomX + "  " + randomY);
 
@@ -123,7 +196,7 @@ public class ExperimentsJob {
                 }
                 double rassStd = Math.sqrt(rasum / (radiusRatio.size() - 1));
 
-                try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "+.txt", true);
+                try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "_dh_"+dh+ "+.txt", true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
 
                     pw.write("For k=" + k + " of Histogram " + path + "\r\n");
@@ -160,4 +233,8 @@ public class ExperimentsJob {
         });
         mongoClient.close();
     }
+
+    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == 1) || (Double.compare(longitude, 20.1500159034) == -1));
+    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == 1) || (Double.compare(latitude, 34.9199876979) == -1));
+
 }
