@@ -31,8 +31,8 @@ public class ExperimentsDhJob {
         Random r = new Random();
 
         //final double dh = Double.parseDouble(args[2]);//0.5d;
-        final String filesPath = "/Users/nicholaskoutroumanis/Desktop/csv/";
-        final String histogramsPath = "/Users/nicholaskoutroumanis/Desktop/untitled/";
+        final String filesPath = args[1];//"/Users/nicholaskoutroumanis/Desktop/csv/";
+        final String histogramsPath = args[0];//"/Users/nicholaskoutroumanis/Desktop/untitled/";
         final String filesExtension = ".csv";
         final String separator = ";";
         final int numberOfColumnLongitude = 7;
@@ -57,7 +57,7 @@ public class ExperimentsDhJob {
 
             Stream.of(800, 500, 100, 50, 10).forEach(ki -> {
 
-                Stream.of(0.1, 0.08, 0.06, 0.04, 0.02).forEach(dh->{
+                Stream.of(0.1, 0.05, 0.01, 0.005, 0.001).forEach(dh->{
 
                 final int k = ki;
                 int points = 1000;
@@ -118,7 +118,7 @@ public class ExperimentsDhJob {
                         randomY = (latitude - dh);
                     }
 
-                    //System.out.println("formed point ("+ randomX +", " + randomY+")");
+                    System.out.println("formed point ("+ randomX +", " + randomY+")");
 
 //        if(r.nextInt(1)==1){
 //            randomX = (longitude - dh) + ((longitude + dh) - (longitude - dh)) * r.nextDouble();
@@ -164,7 +164,7 @@ public class ExperimentsDhJob {
 
                     radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
                     cursor2.close();
-                    System.out.println("Radius Finished");
+                    //System.out.println("Radius Finished");
 
                     if (radiusRatio.get(radiusRatio.size() - 1) < 0) {
                         try {
