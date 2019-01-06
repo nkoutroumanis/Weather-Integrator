@@ -45,7 +45,7 @@ public class RadiusDetermination {
         return (xc + (yc * numberOfCellsxAxis));
     }
 
-    private double harvesine(double lon1, double lat1, double lon2, double lat2) {
+    public static double harvesine(double lon1, double lat1, double lon2, double lat2) {
 
         double r = 6378.1;
 
