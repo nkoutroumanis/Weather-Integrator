@@ -153,6 +153,12 @@ public class RangeQueriesExperimentsJob {
                     double ressStd = Math.sqrt(resum / (results.size() - 1));
 
 
+                    try {
+                        Files.createDirectories(Paths.get(exportPath + File.separator + xNumberOfCells +"_" + yNumberOfCells));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
 
                     try (FileOutputStream fos = new FileOutputStream(exportPath + File.separator + xNumberOfCells +"_" + yNumberOfCells + File.separator + "Percentage_" + percentage + ".txt", true);
                          OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
