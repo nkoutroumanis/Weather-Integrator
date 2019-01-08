@@ -41,9 +41,9 @@ public class RangeQueriesExperimentsJob {
         final String filesPath = args[0];
         final String filesExtension = ".csv";
         final String separator = ";";
-        final int numberOfColumnLongitude = 7;
-        final int numberOfColumnLatitude = 8;
-        final int numberOfColumnDate = 3;
+        final int numberOfColumnLongitude = 2;
+        final int numberOfColumnLatitude = 3;
+        final int numberOfColumnDate = 4;
 
 
         final double radius = Math.sqrt( Math.pow(((maxx-minx)/xNumberOfCells),2)  + Math.pow(((maxy-miny)/yNumberOfCells),2));

@@ -15,10 +15,10 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/chcsv/",
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Documents/zelitron-2/",
                     "/home/nikolaos/Documents/grib-files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateData("/home/nikolaos/Documents/theNew/");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateData("/home/nikolaos/Documents/zelitron-2-integrated/");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

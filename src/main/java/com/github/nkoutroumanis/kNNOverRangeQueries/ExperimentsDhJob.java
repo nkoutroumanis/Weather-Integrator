@@ -35,9 +35,9 @@ public class ExperimentsDhJob {
         final String histogramsPath = args[0];//"/Users/nicholaskoutroumanis/Desktop/untitled/";
         final String filesExtension = ".csv";
         final String separator = ";";
-        final int numberOfColumnLongitude = 7;
-        final int numberOfColumnLatitude = 8;
-        final int numberOfColumnDate = 3;
+        final int numberOfColumnLongitude = 2;
+        final int numberOfColumnLatitude = 3;
+        final int numberOfColumnDate = 4;
 
 
         List<Path> files = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).collect(Collectors.toList());
@@ -55,9 +55,9 @@ public class ExperimentsDhJob {
             RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
 
-            Stream.of(800, 500, 100, 50, 10).forEach(ki -> {
+            Stream.of(/*800, 500, 100, 50, 10*/100).forEach(ki -> {
 
-                Stream.of(0.1, 0.05, 0.01, 0.005, 0.001).forEach(dh->{
+                Stream.of(/*0.1, 0.05, 0.01, 0.005, 0.001*/0).forEach(dh->{
 
                 final int k = ki;
                 int points = 1000;
@@ -90,8 +90,32 @@ public class ExperimentsDhJob {
                             longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
                             latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
-                            if (!(longitudeInGreekRegion.test(longitude) && latitudeInGreekRegion.test(latitude))) {
-                                b = 1;
+                            if (longitudeInGreekRegion.test(longitude) && latitudeInGreekRegion.test(latitude)) {
+                                //this block had only b = 1;
+
+                                double x = (lh.getMaxx() - lh.getMinx()) / lh.getNumberOfCellsxAxis();
+                                double y = (lh.getMaxy() - lh.getMiny()) / lh.getNumberOfCellsyAxis();
+
+                                long xc = (long) (longitude / x);
+                                long yc = (long) (latitude / y);
+
+                                if (lh.getHistogram().containsKey(xc + (yc * lh.getNumberOfCellsxAxis()))) {
+                                    //System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
+                                    if(lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis()))<k){
+                                        System.out.println("cell has "+lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis())) +"points");
+                                        b = 1;
+                                    }
+                                    else{
+                                        System.out.println("Repeating Point Generation");
+                                    }
+                                } else {
+                                    try {
+                                        throw new Exception("the histogam cell does not exist");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
                             }
 
                         } catch (ArrayIndexOutOfBoundsException | IOException e) {
@@ -237,7 +261,11 @@ public class ExperimentsDhJob {
         mongoClient.close();
     }
 
-    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == 1) || (Double.compare(longitude, 20.1500159034) == -1));
-    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == 1) || (Double.compare(latitude, 34.9199876979) == -1));
+    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == -1) && (Double.compare(longitude, 20.1500159034) == 1));
+    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == -1) && (Double.compare(latitude, 34.9199876979) == 1));
+
+
+//    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == 1) || (Double.compare(longitude, 20.1500159034) == -1));
+//    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == 1) || (Double.compare(latitude, 34.9199876979) == -1));
 
 }
