@@ -63,8 +63,13 @@ public class ExperimentsDhJob {
                 int points = 1000;
 
                 List<Long> timeForRadiusDetermination = new ArrayList<>();
+
                 List<Double> resultsRatio = new ArrayList<>();
                 List<Double> radiusRatio = new ArrayList<>();
+
+                List<Long> timeOfCountQuery = new ArrayList<>();
+                List<Long> timeOfRealRadius = new ArrayList<>();
+
 
                 for (int i = 0; i < points; i++) {
 
@@ -167,8 +172,10 @@ public class ExperimentsDhJob {
 
                     //System.out.println("Radius: " + determinedRadius);
 
+                    long t2 = System.nanoTime();
                     MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse("{ $match: { location: { $geoWithin : { $centerSphere : [ [" + randomX + ", " + randomY + "], " + (determinedRadius / 6378.1) + " ] } } } }"), Document.parse("{ $count: \"count\" }"))).iterator();
                     resultsRatio.add(((double) (cursor1.next().getInteger("count") - k) / k));//(n' - n)/n
+                    timeOfCountQuery.add(System.nanoTime() - t2);
                     cursor1.close();
                     //System.out.println(resultsRatio.size() + " Count Finished");
 
@@ -181,11 +188,11 @@ public class ExperimentsDhJob {
                         }
                     }
 
+                    long t3 = System.nanoTime();
                     MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
                             "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"), Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
-
                     double realRadius = cursor2.next().getDouble("theLast");
-
+                    timeOfRealRadius.add(System.nanoTime() - t3);
                     radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
                     cursor2.close();
                     //System.out.println("Radius Finished");
@@ -222,7 +229,24 @@ public class ExperimentsDhJob {
                 }
                 double rassStd = Math.sqrt(rasum / (radiusRatio.size() - 1));
 
-                try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "_dh_"+dh+ "+.txt", true);
+
+                LongSummaryStatistics tss1 = timeOfCountQuery.stream().mapToLong(Long::valueOf).summaryStatistics();
+                double t1sum = 0;
+                for (Long e : timeOfCountQuery) {
+                    t1sum = t1sum + Math.pow(e.doubleValue() - tss1.getAverage(), 2);
+                }
+                double tss1Std = Math.sqrt(t1sum / (timeOfCountQuery.size() - 1));
+
+
+                LongSummaryStatistics tss2 = timeOfRealRadius.stream().mapToLong(Long::valueOf).summaryStatistics();
+                double t2sum = 0;
+                for (Long e : timeOfRealRadius) {
+                    t2sum = t2sum + Math.pow(e.doubleValue() - tss2.getAverage(), 2);
+                }
+                double tss2Std = Math.sqrt(t2sum / (timeOfRealRadius.size() - 1));
+
+
+                    try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "_dh_"+dh+ "+.txt", true);
                      OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
 
                     pw.write("For k=" + k + " of Histogram " + path + "\r\n");
@@ -231,6 +255,18 @@ public class ExperimentsDhJob {
                     pw.write("Determination of Radius Max Time (ns): " + tss.getMax() + "\r\n");
                     pw.write("Determination of Radius Min Time (ns): " + tss.getMin() + "\r\n");
                     pw.write("Determination of Radius Std of Time: " + tssStd + "\r\n");
+                    pw.write("\r\n");
+
+                    pw.write("Count Query Average Time (ns): " + tss1.getAverage() + "\r\n");
+                    pw.write("Count Query Max Time (ns): " + tss1.getMax() + "\r\n");
+                    pw.write("Count Query Min Time (ns): " + tss1.getMin() + "\r\n");
+                    pw.write("Count Query Std of Time: " + tss1Std + "\r\n");
+                    pw.write("\r\n");
+
+                    pw.write("Query for Real Radius Average Time (ns): " + tss2.getAverage() + "\r\n");
+                    pw.write("Query for Real Radius Max Time (ns): " + tss2.getMax() + "\r\n");
+                    pw.write("Query for Real Radius Min Time (ns): " + tss2.getMin() + "\r\n");
+                    pw.write("Query for Real Radius Std of Time: " + tss2Std + "\r\n");
                     pw.write("\r\n");
 
                     pw.write("Average Results Ratio: " + ress.getAverage() + "\r\n");
