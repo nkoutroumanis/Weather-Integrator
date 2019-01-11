@@ -86,7 +86,7 @@ public class RangeQueriesExperimentsJob {
                                 longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
                                 latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
-                                if (!(longitudeInGreekRegion.test(longitude) && latitudeInGreekRegion.test(latitude))) {
+                                if (FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude)) {
                                     b = 1;
                                 }
 
@@ -192,6 +192,4 @@ public class RangeQueriesExperimentsJob {
         mongoClient.close();
     }
 
-    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == 1) || (Double.compare(longitude, 20.1500159034) == -1));
-    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == 1) || (Double.compare(latitude, 34.9199876979) == -1));
 }

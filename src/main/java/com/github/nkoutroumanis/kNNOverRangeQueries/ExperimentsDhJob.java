@@ -55,7 +55,7 @@ public class ExperimentsDhJob {
             RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
 
-            Stream.of(/*800, 500, 100, 50, 10*/100).forEach(ki -> {
+            Stream.of(500, 100, 50, 10).forEach(ki -> {
 
                 Stream.of(/*0.1, 0.05, 0.01, 0.005, 0.001*/0).forEach(dh->{
 
@@ -95,7 +95,7 @@ public class ExperimentsDhJob {
                             longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
                             latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
-                            if (longitudeInGreekRegion.test(longitude) && latitudeInGreekRegion.test(latitude)) {
+                            if (FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude)) {
                                 //this block had only b = 1;
 
                                 double x = (lh.getMaxx() - lh.getMinx()) / lh.getNumberOfCellsxAxis();
@@ -111,7 +111,7 @@ public class ExperimentsDhJob {
                                         b = 1;
                                     }
                                     else{
-                                        System.out.println("Repeating Point Generation");
+                                        //System.out.println("Repeating Point Generation");
                                     }
                                 } else {
                                     try {
@@ -296,12 +296,5 @@ public class ExperimentsDhJob {
         });
         mongoClient.close();
     }
-
-    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == -1) && (Double.compare(longitude, 20.1500159034) == 1));
-    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == -1) && (Double.compare(latitude, 34.9199876979) == 1));
-
-
-//    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == 1) || (Double.compare(longitude, 20.1500159034) == -1));
-//    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == 1) || (Double.compare(latitude, 34.9199876979) == -1));
 
 }

@@ -71,7 +71,14 @@ public interface FilesParse {
                             if (FilesParse.longitudeOutOfRange.test(longitude) || FilesParse.latitudeOutOfRange.test(latitude)) {
                                 outOfRangeSpatialInformation(path, line);
                                 return;
-                            } else {
+                            }
+
+//                            if (!(FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude))) {
+//                                outOfRangeSpatialInformation(path, line);
+//                                return;
+//                            }
+
+                            else {
                                 lineParse(line, separatedLine, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, longitude, latitude);
                             }
 
@@ -147,6 +154,9 @@ public interface FilesParse {
 
     static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
     static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
-    //static final Predicate<String> empty = (s1) -> (s1.equals(""));
+
+    static final Predicate<Double> longitudeInGreekRegion = (longitude) -> ((Double.compare(longitude, 26.6041955909) == -1) && (Double.compare(longitude, 20.1500159034) == 1));
+    static final Predicate<Double> latitudeInGreekRegion = (latitude) -> ((Double.compare(latitude, 41.8269046087) == -1) && (Double.compare(latitude, 34.9199876979) == 1));
+
     static final Predicate<String> empty = (s1) -> (s1.trim().isEmpty());
 }

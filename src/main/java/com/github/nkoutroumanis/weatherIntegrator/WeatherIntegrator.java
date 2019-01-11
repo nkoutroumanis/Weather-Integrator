@@ -144,20 +144,23 @@ public final class WeatherIntegrator implements FilesParse {
 
         bw = new BufferedWriter(osw);
         pw = new PrintWriter(bw, true);
+
+        //pw.write("company;vehicle;localDate;engineStatus;driver;driverEvent;longitude;latitude;altitude;angle;speed;odometer;satellites;fuelLevelLt;countryCode;rpm;levelType;fuelTankSize;vehicleOdometer;fuelConsumed;engineHours;closeToGasStation;deviceType;VehicleType;fuelRawValue;Per_cent_frozen_precipitation_surface;Precipitable_water_entire_atmosphere_single_layer;Precipitation_rate_surface_3_Hour_Average;Storm_relative_helicity_height_above_ground_layer;Total_precipitation_surface_3_Hour_Accumulation;Categorical_Rain_surface_3_Hour_Average;Categorical_Freezing_Rain_surface_3_Hour_Average;Categorical_Ice_Pellets_surface_3_Hour_Average;Categorical_Snow_surface_3_Hour_Average;Convective_Precipitation_Rate_surface_3_Hour_Average;Convective_precipitation_surface_3_Hour_Accumulation;U-Component_Storm_Motion_height_above_ground_layer;V-Component_Storm_Motion_height_above_ground_layer;" + "\r\n");
+
     }
 
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
         try {
-            WeatherIntegrator.numberofRecords++;
+                WeatherIntegrator.numberofRecords++;
 
-            long startTime = System.nanoTime();
+                long startTime = System.nanoTime();
 
-            String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), latitude, longitude);
+                String dataToBeIntegrated = lruCacheManager.getData(dateFormat.parse(separatedLine[numberOfColumnDate - 1]), latitude, longitude);
 
-            long endTime = System.nanoTime();
+                long endTime = System.nanoTime();
 
-            pw.write(line + dataToBeIntegrated + "\r\n");
+                pw.write(line + dataToBeIntegrated + "\r\n");
 
         } catch (ParseException e) {
             e.printStackTrace();
