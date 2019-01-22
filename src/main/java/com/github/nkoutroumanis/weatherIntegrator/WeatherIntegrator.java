@@ -160,7 +160,10 @@ public final class WeatherIntegrator implements FilesParse {
 
                 long endTime = System.nanoTime();
 
-                pw.write(line + dataToBeIntegrated + "\r\n");
+                //pw.write(line  + dataToBeIntegrated + "\r\n");
+
+                pw.write(line.substring(0, line.length() - 1) + dataToBeIntegrated + "\r\n");
+
 
         } catch (ParseException e) {
             e.printStackTrace();

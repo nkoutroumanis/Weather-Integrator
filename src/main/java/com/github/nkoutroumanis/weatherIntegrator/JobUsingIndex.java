@@ -10,15 +10,25 @@ public final class JobUsingIndex {
 
     public static void main(String args[]) throws InterruptedException {
 
+        /*------------------
+        *
+        * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
+        * it works only for the case of having the semicolumn on the last column.
+        *
+        *
+        * ------------------
+        * */
+
+
         long start = System.currentTimeMillis();
 
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Desktop/oneWeek/",
+            WeatherIntegrator.newWeatherIntegrator(args[0],
                     "/home/nikolaos/Documents/grib-files/", 7,
-                    8, 3, "yyyy-MM-dd'T'HH:mm:ss.SSS", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateData("/home/nikolaos/Desktop/oneWeek-integrated/");
+                    8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
+                    .lruCacheMaxEntries(1).useIndex().build().integrateData(args[1]);
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
