@@ -30,8 +30,8 @@ public final class Statistics implements FilesParse {
 
     private final List<Double> maxOfColumnsPerFile;
     private final List<Double> minOfColumnsPerFile;
-    private final List<List<Double>> averageOfColumnsPerFile;
-    private final List<List<Double>> stdOfColumnsPerFile;
+    private final List<Double> sumOfColumnsPerFile;
+    private final List<Double> stdOfColumnsPerFile;
     private List<List<Double>> columnsInFile;
 
 
@@ -101,15 +101,15 @@ public final class Statistics implements FilesParse {
             minOfColumnsPerFile.add((double) Long.MAX_VALUE);
         }
 
-        averageOfColumnsPerFile = new ArrayList<>();
+        sumOfColumnsPerFile = new ArrayList<>();
         for (int i = 0; i < columns.length; i++) {
-            averageOfColumnsPerFile.add(new ArrayList<>());
+            sumOfColumnsPerFile.add(0d);
         }
 
         stdOfColumnsPerFile = new ArrayList<>();
-        for (int i = 0; i < columns.length; i++) {
-            stdOfColumnsPerFile.add(new ArrayList<>());
-        }
+//        for (int i = 0; i < columns.length; i++) {
+//            stdOfColumnsPerFile.add(0d);
+//        }
     }
 
     private void clearExportingDirectory() {
@@ -145,7 +145,7 @@ public final class Statistics implements FilesParse {
         for (int i = 0; i < columns.length; i++) {
             DoubleSummaryStatistics dss = columnsInFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics();
 
-            averageOfColumnsPerFile.get(i).add(dss.getAverage());
+            sumOfColumnsPerFile.set(i, sumOfColumnsPerFile.get(i) + dss.getSum());
 
             if (Double.compare(dss.getMax(), maxOfColumnsPerFile.get(i)) == 1) {
                 maxOfColumnsPerFile.set(i, dss.getMax());
@@ -162,8 +162,13 @@ public final class Statistics implements FilesParse {
             }
 
             double ressStd = Math.sqrt(sum / (columnsInFile.get(i).size() - 1));
-            stdOfColumnsPerFile.get(i).add(ressStd);
 
+            if(stdOfColumnsPerFile.size() == columns.length){
+                stdOfColumnsPerFile.set(i, (stdOfColumnsPerFile.get(i) + ressStd)/2);
+            }
+            else{//list initialization
+                stdOfColumnsPerFile.add(ressStd);
+            }
         }
 
     }
@@ -188,13 +193,11 @@ public final class Statistics implements FilesParse {
              OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
 
             for (int i = 0; i < columns.length; i++) {
-                averageOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage();
-                stdOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage();
 
-                pw.write("Column Number " + columns[i] + ": Average: " + averageOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage() + ", ");
+                pw.write("Column Number " + columns[i] + ": Average: " + (sumOfColumnsPerFile.get(i)/numberofRecords) + ", ");
                 pw.write("Max: " + maxOfColumnsPerFile.get(i) + ", ");
                 pw.write("Min: " + minOfColumnsPerFile.get(i) + ", ");
-                pw.write("Std: " + stdOfColumnsPerFile.get(i).stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage() + "\r\n");
+                pw.write("Std: " + stdOfColumnsPerFile.get(i) + "\r\n");
             }
 
         } catch (UnsupportedEncodingException e) {
