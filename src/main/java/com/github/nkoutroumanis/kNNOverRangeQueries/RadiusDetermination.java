@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis.kNNOverRangeQueries;
 
+import com.github.nkoutroumanis.FilesParse;
+
 import java.util.Map;
 
 public class RadiusDetermination {
@@ -45,23 +47,6 @@ public class RadiusDetermination {
         return (xc + (yc * numberOfCellsxAxis));
     }
 
-    public static double harvesine(double lon1, double lat1, double lon2, double lat2) {
-
-        double r = 6378.1;
-
-        double f1 = Math.toRadians(lat1);
-        double f2 = Math.toRadians(lat2);
-
-        double df = Math.toRadians(lat2 - lat1);
-        double dl = Math.toRadians(lon2 - lon1);
-
-        double a = Math.sin(df / 2) * Math.sin(df / 2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl / 2) * Math.sin(dl / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return r * c;
-    }
-
     private double findTheMaxCornerDistance(double x, double y, long id) {
 
         long xc = id % numberOfCellsxAxis;
@@ -75,22 +60,22 @@ public class RadiusDetermination {
 
         double distance;
 
-        double d1 = harvesine(x, y, upperBoundx, upperBoundy);
+        double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
         distance = d1;
 
-        double d2 = harvesine(x, y, lowerBoundx, lowerBoundy);
+        double d2 = FilesParse.harvesine(x, y, lowerBoundx, lowerBoundy);
 
         if (Double.compare(d2, distance) == 1) {
             distance = d2;
         }
 
-        double d3 = harvesine(x, y, upperBoundx, lowerBoundy);
+        double d3 = FilesParse.harvesine(x, y, upperBoundx, lowerBoundy);
 
         if (Double.compare(d3, distance) == 1) {
             distance = d3;
         }
 
-        double d4 = harvesine(x, y, lowerBoundx, upperBoundy);
+        double d4 = FilesParse.harvesine(x, y, lowerBoundx, upperBoundy);
 
         if (Double.compare(d4, distance) == 1) {
             distance = d4;

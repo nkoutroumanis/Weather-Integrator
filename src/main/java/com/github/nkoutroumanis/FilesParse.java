@@ -152,6 +152,23 @@ public interface FilesParse {
 
     }
 
+    public static double harvesine(double lon1, double lat1, double lon2, double lat2) {
+
+        double r = 6378.1;
+
+        double f1 = Math.toRadians(lat1);
+        double f2 = Math.toRadians(lat2);
+
+        double df = Math.toRadians(lat2 - lat1);
+        double dl = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(df / 2) * Math.sin(df / 2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl / 2) * Math.sin(dl / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return r * c;
+    }
+
     static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
     static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
 

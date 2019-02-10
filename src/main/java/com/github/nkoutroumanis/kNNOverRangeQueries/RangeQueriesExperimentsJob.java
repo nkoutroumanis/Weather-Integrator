@@ -114,7 +114,7 @@ public class RangeQueriesExperimentsJob {
                             randomY = (latitude - dh);
                         }
 
-                        double km = (RadiusDetermination.harvesine(randomX, randomY,randomX + (radius*percentage), randomY) + RadiusDetermination.harvesine(randomX, randomY, randomX, randomY + (radius*percentage)))/2;
+                        double km = (FilesParse.harvesine(randomX, randomY,randomX + (radius*percentage), randomY) + FilesParse.harvesine(randomX, randomY, randomX, randomY + (radius*percentage)))/2;
                         System.out.println("formed km " + km);
 
 //        if(r.nextInt(1)==1){
