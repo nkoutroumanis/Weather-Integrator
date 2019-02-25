@@ -66,7 +66,7 @@ public class ExperimentsDhJob {
         final MongoCollection m = m1;
         final String histogramsPath = histogramsPath1;
 
-        if(histogramsPath==null)
+        if(histogramsPath.equals(""))
         {
             System.out.println("histogramsPath is Null");
         }
