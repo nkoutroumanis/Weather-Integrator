@@ -26,7 +26,7 @@ public class ExperimentsDhJob {
         MongoCollection m1 =null;
 
         String filesPath="";
-        String histogramsPath="";
+        String histogramsPath1="";
         final String filesExtension = ".csv";
         final String separator = ";";
         final int numberOfColumnLongitude = 2;
@@ -40,7 +40,7 @@ public class ExperimentsDhJob {
             m1 = mongoClient.getDatabase("real").getCollection("geoPoints");
 
             filesPath = "/home/nikolaos/Documents/thesis-dataset/";
-            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/thesis-dataset/";
+            histogramsPath1 = "/Users/nicholaskoutroumanis/Documents/greek-hist/thesis-dataset/";
         }
 
         if(Integer.valueOf(args[0])==1){
@@ -50,7 +50,7 @@ public class ExperimentsDhJob {
             m1 = mongoClient.getDatabase("synthetic1").getCollection("geoPoints");
 
             filesPath = "/home/nikolaos/Documents/synthetic-dataset1/";
-            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/";
+            histogramsPath1 = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/";
         }
 
         if(Integer.valueOf(args[0])==2){
@@ -60,10 +60,11 @@ public class ExperimentsDhJob {
             m1 = mongoClient.getDatabase("synthetic2").getCollection("geoPoints");
 
             filesPath = "/home/nikolaos/Documents/synthetic-dataset2/";
-            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/";
+            histogramsPath1 = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/";
         }
 
         final MongoCollection m = m1;
+        final String histogramsPath = histogramsPath1;
 
         Random r = new Random();
 
