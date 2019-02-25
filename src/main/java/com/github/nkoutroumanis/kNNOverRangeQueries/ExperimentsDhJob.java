@@ -23,21 +23,49 @@ public class ExperimentsDhJob {
 
     public static void main(String args[]) throws IOException {
 
-        MongoCredential credential = MongoCredential.createCredential("myUserAdmin", "test", "abc123".toCharArray());
-        MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000000/*90000*/).build();
-        MongoClient mongoClient = new MongoClient(new ServerAddress("83.212.102.163", 28017), credential, options);
+        MongoCollection m1 =null;
 
-        MongoCollection m = mongoClient.getDatabase("test").getCollection("geoPoints");
-        Random r = new Random();
-
-        //final double dh = Double.parseDouble(args[2]);//0.5d;
-        final String filesPath = args[1];//"/Users/nicholaskoutroumanis/Desktop/csv/";
-        final String histogramsPath = args[0];//"/Users/nicholaskoutroumanis/Desktop/untitled/";
+        String filesPath="";
+        String histogramsPath="";
         final String filesExtension = ".csv";
         final String separator = ";";
         final int numberOfColumnLongitude = 2;
         final int numberOfColumnLatitude = 3;
         final int numberOfColumnDate = 4;
+
+        if(Integer.valueOf(args[0])==0){
+            MongoCredential credential = MongoCredential.createCredential("real", "real", "real".toCharArray());
+            MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000000/*90000*/).build();
+            MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", 27017), credential, options);
+            m1 = mongoClient.getDatabase("real").getCollection("geoPoints");
+
+            filesPath = "/home/nikolaos/Documents/thesis-dataset/";
+            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/thesis-dataset/";
+        }
+
+        if(Integer.valueOf(args[0])==1){
+            MongoCredential credential = MongoCredential.createCredential("synthetic1", "synthetic1", "synthetic1".toCharArray());
+            MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000000/*90000*/).build();
+            MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", 27017), credential, options);
+            m1 = mongoClient.getDatabase("synthetic1").getCollection("geoPoints");
+
+            filesPath = "/home/nikolaos/Documents/synthetic-dataset1/";
+            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/";
+        }
+
+        if(Integer.valueOf(args[0])==2){
+            MongoCredential credential = MongoCredential.createCredential("synthetic2", "synthetic2", "synthetic2".toCharArray());
+            MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000000/*90000*/).build();
+            MongoClient mongoClient = new MongoClient(new ServerAddress("localhost", 27017), credential, options);
+            m1 = mongoClient.getDatabase("synthetic2").getCollection("geoPoints");
+
+            filesPath = "/home/nikolaos/Documents/synthetic-dataset2/";
+            histogramsPath = "/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/";
+        }
+
+        final MongoCollection m = m1;
+
+        Random r = new Random();
 
 
         List<Path> files = Files.walk(Paths.get(filesPath)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).collect(Collectors.toList());
@@ -55,7 +83,7 @@ public class ExperimentsDhJob {
             RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
 
-            Stream.of(500, 100, 50, 10).forEach(ki -> {
+            Stream.of(300, 100, 50, 10).forEach(ki -> {
 
                 Stream.of(/*0.1, 0.05, 0.01, 0.005, 0.001*/0).forEach(dh->{
 
@@ -98,28 +126,28 @@ public class ExperimentsDhJob {
                             if (FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude)) {
                                 //this block had only b = 1;
 
-                                double x = (lh.getMaxx() - lh.getMinx()) / lh.getNumberOfCellsxAxis();
-                                double y = (lh.getMaxy() - lh.getMiny()) / lh.getNumberOfCellsyAxis();
-
-                                long xc = (long) (longitude / x);
-                                long yc = (long) (latitude / y);
-
-                                if (lh.getHistogram().containsKey(xc + (yc * lh.getNumberOfCellsxAxis()))) {
-                                    //System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
-                                    if(lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis()))<k){
-                                        System.out.println("cell has "+lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis())) +"points");
-                                        b = 1;
-                                    }
-                                    else{
-                                        //System.out.println("Repeating Point Generation");
-                                    }
-                                } else {
-                                    try {
-                                        throw new Exception("the histogam cell does not exist");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
+                                b =1;
+//                                double x = (lh.getMaxx() - lh.getMinx()) / lh.getNumberOfCellsxAxis();
+//                                double y = (lh.getMaxy() - lh.getMiny()) / lh.getNumberOfCellsyAxis();
+//
+//                                long xc = (long) (longitude / x);
+//                                long yc = (long) (latitude / y);
+//
+//                                if (lh.getHistogram().containsKey(xc + (yc * lh.getNumberOfCellsxAxis()))) {
+//                                    if(lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis()))<k){
+//                                        System.out.println("cell has "+lh.getHistogram().get(xc + (yc * lh.getNumberOfCellsxAxis())) +"points");
+//                                        b = 1;
+//                                    }
+//                                    else{
+//                                        //System.out.println("Repeating Point Generation");
+//                                    }
+//                                } else {
+//                                    try {
+//                                        throw new Exception("the histogam cell does not exist");
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
 
                             }
 
@@ -294,7 +322,7 @@ public class ExperimentsDhJob {
             });
 
         });
-        mongoClient.close();
+        //mongoClient.close();
     }
 
 }

@@ -30,6 +30,7 @@ public final class HistogramCreationJob {
         //x for longitude, y for latitude - the max values of lon and lat should be increased a little in order to include the whole data in histogram
         Space2D space = Space2D.newSpace2D(20.15, 34.91, 26.61, 41.83);
 
+
         GridPartition.newGridPartition(space, 200, 200, "/home/nikolaos/Documents/thesis-dataset", 2, 3, 4).build().exportHistogram("/home/nikolaos/Documents/greek-hist/thesis-dataset");
         System.out.println("------------------");
 
