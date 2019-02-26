@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SyntheticDatasetJob {
 
-    private static final String path = "/Users/nicholaskoutroumanis/Desktop/ran/";
+    private static final String path = "/home/nikolaos/Documents/synthetic-dataset2/";
 
     private static final double maxLongitude = 26.6041955909;
     private static final double minLongitude = 20.1500159034;
@@ -22,10 +22,10 @@ public class SyntheticDatasetJob {
 
     public static void main(String args[]) throws ParseException, FileNotFoundException {
 
-        final SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-        final Date maxDate = sd.parse("2018-06-30 23:59:59");
-        final Date minDate = sd.parse("2017-06-01 00:00:00");
+        final Date maxDate = sd.parse("2018-06-30 23:59:59.999");
+        final Date minDate = sd.parse("2017-06-29 00:00:00.000");
 
         double lonDiff = maxLongitude - minLongitude;
         double latDiff = maxLatitude - minLatitude;
@@ -34,19 +34,19 @@ public class SyntheticDatasetJob {
         PrintWriter pw;
 
 
-        for(int i=0;i<77885;i++){
+        for(int i=10328;i<(10328*2)+1;i++){
             pw= new PrintWriter(path+ File.separator+i+".csv");
 
-            for(int j=0;j<3412;j++){
-                pw.write((r.nextInt(50000)+1)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
+            for(int j=0;j<3448;j++){
+                pw.write((r.nextInt(899)+100)+"_"+(r.nextInt(899)+100)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
             }
             pw.close();
         }
 
-            pw= new PrintWriter(path+ File.separator+77885+".csv");
+            pw= new PrintWriter(path+ File.separator+20656+".csv");
 
-            for(int j=0;j<8182;j++){
-                pw.write((r.nextInt(50000)+1)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
+            for(int j=0;j<903;j++){
+                pw.write((r.nextInt(899)+100)+"_"+(r.nextInt(899)+100)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
             }
             pw.close();
 

@@ -99,6 +99,7 @@ public final class MongoDbDataInsertion implements FilesParse {
     @Override
     public void fileParse(Path filePath) {
         docs = new ArrayList<>();
+        //System.out.println(filePath);
     }
 
     @Override
@@ -107,6 +108,10 @@ public final class MongoDbDataInsertion implements FilesParse {
             //docs.add( new Document("objectId", separatedLine[0]).append("coordinates", Arrays.asList(longitude, latitude)).append("date",df.parse(separatedLine[numberOfColumnDate - 1])));
             Document embeddedDoc = new Document("type", "Point").append("coordinates", Arrays.asList(longitude, latitude));
             docs.add(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
+            //Document doc = new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1]));
+
+            //System.out.println(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
+            //mongoCollection.insertOne(docs);
         } catch (ParseException e) {
             e.printStackTrace();
         }

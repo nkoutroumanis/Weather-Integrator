@@ -145,7 +145,7 @@ public final class WeatherIntegrator implements FilesParse {
         bw = new BufferedWriter(osw);
         pw = new PrintWriter(bw, true);
 
-        pw.write("company;vehicle;localDate;engineStatus;driver;driverEvent;longitude;latitude;altitude;angle;speed;odometer;satellites;fuelLevelLt;countryCode;rpm;levelType;fuelTankSize;vehicleOdometer;fuelConsumed;engineHours;closeToGasStation;deviceType;VehicleType;fuelRawValue;Per_cent_frozen_precipitation_surface;Precipitable_water_entire_atmosphere_single_layer;Precipitation_rate_surface_3_Hour_Average;Storm_relative_helicity_height_above_ground_layer;Total_precipitation_surface_3_Hour_Accumulation;Categorical_Rain_surface_3_Hour_Average;Categorical_Freezing_Rain_surface_3_Hour_Average;Categorical_Ice_Pellets_surface_3_Hour_Average;Categorical_Snow_surface_3_Hour_Average;Convective_Precipitation_Rate_surface_3_Hour_Average;Convective_precipitation_surface_3_Hour_Accumulation;U-Component_Storm_Motion_height_above_ground_layer;V-Component_Storm_Motion_height_above_ground_layer" + "\r\n");
+        pw.write("company;vehicle;localDate;engineStatus;driver;driverEvent;longitude;latitude;altitude;angle;speed;odometer;satellites;fuelLevelLt;countryCode;rpm;levelType;fuelTankSize;vehicleOdometer;fuelConsumed;engineHours;closeToGasStation;deviceType;VehicleType;fuelRawValue;Per_cent_frozen_precipitation_surface;Precipitable_water_entire_atmosphere_single_layer;Precipitation_rate_surface_3_Hour_Average;Storm_relative_helicity_height_above_ground_layer;Total_precipitation_surface_3_Hour_Accumulation;Categorical_Rain_surface_3_Hour_Average;Categorical_Freezing_Rain_surface_3_Hour_Average;Categorical_Ice_Pellets_surface_3_Hour_Average;Categorical_Snow_surface_3_Hour_Average;Convective_Precipitation_Rate_surface_3_Hour_Average;Convective_precipitation_surface_3_Hour_Accumulation;U-Component_Storm_Motion_height_above_ground_layer;V-Component_Storm_Motion_height_above_ground_layer;Geopotential_height_highest_tropospheric_freezing;Relative_humidity_highest_tropospheric_freezing;Ice_cover_surface;Snow_depth_surface;Water_equivalent_of_accumulated_snow_depth_surface;Wind_speed_gust_surface;u-component_of_wind_maximum_wind;u-component_of_wind_height_above_ground;v-component_of_wind_maximum_wind;v-component_of_wind_height_above_ground;Total_cloud_cover_low_cloud_3_Hour_Average" + "\r\n");
 
     }
 
@@ -174,13 +174,13 @@ public final class WeatherIntegrator implements FilesParse {
 
     @Override
     public void emptySpatioTemporalInformation(Path file, String line) {
-        pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
+        //pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 
     }
 
     @Override
     public void outOfRangeSpatialInformation(Path file, String line) {
-        pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
+        //pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 
     }
 
