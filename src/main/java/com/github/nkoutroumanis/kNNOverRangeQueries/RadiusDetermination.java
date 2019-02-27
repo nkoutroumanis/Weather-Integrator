@@ -116,7 +116,7 @@ public class RadiusDetermination {
         long xc = (long) (x / this.x);
         long yc = (long) (y / this.y);
 
-        System.out.println("xc-"+xc);
+        System.out.println("xc-"+(long) (x - minx / this.x));
         System.out.println("yc-"+yc);
         System.out.println("id-"+ xc + (yc * numberOfCellsxAxis));
 
