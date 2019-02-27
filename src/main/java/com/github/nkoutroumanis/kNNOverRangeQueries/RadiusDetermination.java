@@ -21,7 +21,7 @@ public class RadiusDetermination {
     private final long maxYc;
 
     private final double minx;
-    private final double miny  ;
+    private final double miny;
 
 
     private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
@@ -119,15 +119,6 @@ public class RadiusDetermination {
         long points = 0;
 
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
-
-        //System.out.println(points);
-
-//        System.out.println(this.y);
-//        System.out.println(y);
-//        System.out.println(xc);
-//        System.out.println((y/this.y));
-//        System.out.println(((yc)));
-//        System.out.println(((yc*100000)));
 
         if (points >= neighboors) {
             distance = findTheMaxCornerDistance(x, y, (xc + (yc * numberOfCellsxAxis)));
