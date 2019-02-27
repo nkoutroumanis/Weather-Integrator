@@ -60,7 +60,7 @@ public class RadiusDetermination {
         long yc = id / numberOfCellsxAxis;
 
         double upperBoundx = ((xc + 1) * this.x) + minx;
-        double upperBoundy = ((yc + 1) * this.y) ;
+        double upperBoundy = ((yc + 1) * this.y);
 
         double lowerBoundx = (xc * this.x) +  minx;
         double lowerBoundy = (yc * this.y);
