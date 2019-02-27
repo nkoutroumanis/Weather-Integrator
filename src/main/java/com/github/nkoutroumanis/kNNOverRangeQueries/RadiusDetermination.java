@@ -68,6 +68,9 @@ public class RadiusDetermination {
         double distance;
 
         System.out.println("x,y"+ x +" " +y);
+        System.out.println("xc"+ xc);
+        System.out.println("yc"+ yc);
+        System.out.println("id"+ id);
 
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
         System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
@@ -112,6 +115,10 @@ public class RadiusDetermination {
 
         long xc = (long) (x / this.x);
         long yc = (long) (y / this.y);
+
+        System.out.println("xc-"+xc);
+        System.out.println("yc-"+yc);
+        System.out.println("id-"+ xc + (yc * numberOfCellsxAxis));
 
         double distance = Integer.MIN_VALUE;
 
