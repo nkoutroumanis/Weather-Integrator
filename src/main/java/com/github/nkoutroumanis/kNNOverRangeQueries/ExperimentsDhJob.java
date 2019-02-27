@@ -23,17 +23,17 @@ public class ExperimentsDhJob {
 
     public static void main(String args[]) throws IOException {
 
-        if(Integer.valueOf(args[0])==0){
+//        if(Integer.valueOf(args[0])==0){
             doOperations("real","/home/nikolaos/Documents/thesis-dataset/","/home/nikolaos/Documents/greek-hist/thesis-dataset/",200);
-        }
-
-        if(Integer.valueOf(args[0])==1){
-            doOperations("synthetic1","/home/nikolaos/Documents/synthetic-dataset1/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/", 50);
-        }
-
-        if(Integer.valueOf(args[0])==2){
-            doOperations("synthetic2","/home/nikolaos/Documents/synthetic-dataset2/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/", 50);
-        }
+//        }
+//
+//        if(Integer.valueOf(args[0])==1){
+//            doOperations("synthetic1","/home/nikolaos/Documents/synthetic-dataset1/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/", 50);
+//        }
+//
+//        if(Integer.valueOf(args[0])==2){
+//            doOperations("synthetic2","/home/nikolaos/Documents/synthetic-dataset2/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/", 50);
+//        }
 
 
     }
@@ -316,5 +316,9 @@ public class ExperimentsDhJob {
         });
         mongoClient.close();
     }
+//
+//    public static double findStdOfList(Stream<Double> stream){
+//
+//    }
 
 }

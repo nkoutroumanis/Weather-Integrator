@@ -20,6 +20,10 @@ public class RadiusDetermination {
     private final long minYc;
     private final long maxYc;
 
+    private final double minx;
+    private final double miny  ;
+
+
     private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
         this.numberOfCellsxAxis = numberOfCellsxAxis;
         this.numberOfCellsyAxis = numberOfCellsyAxis;
@@ -32,6 +36,9 @@ public class RadiusDetermination {
 
         minYc = (long) (miny / y);
         maxYc = minYc + numberOfCellsyAxis - 1;
+
+        this.minx=minx;
+        this.miny=miny;
     }
 
     public static RadiusDetermination newRadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
@@ -52,30 +59,36 @@ public class RadiusDetermination {
         long xc = id % numberOfCellsxAxis;
         long yc = id / numberOfCellsxAxis;
 
-        double upperBoundx = (xc + 1) * this.x;
-        double upperBoundy = (yc + 1) * this.y;
+        double upperBoundx = ((xc + 1) * this.x) + minx;
+        double upperBoundy = ((yc + 1) * this.y) ;
 
-        double lowerBoundx = xc * this.x;
-        double lowerBoundy = yc * this.y;
+        double lowerBoundx = (xc * this.x) +  minx;
+        double lowerBoundy = (yc * this.y);
 
         double distance;
 
+        System.out.println("x,y"+ x +" " +y);
+
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
+        System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
         distance = d1;
 
         double d2 = FilesParse.harvesine(x, y, lowerBoundx, lowerBoundy);
+        System.out.println("coordinates " + lowerBoundx +" - "+ lowerBoundy);
 
         if (Double.compare(d2, distance) == 1) {
             distance = d2;
         }
 
         double d3 = FilesParse.harvesine(x, y, upperBoundx, lowerBoundy);
+        System.out.println("coordinates " + upperBoundx +" - "+ lowerBoundy);
 
         if (Double.compare(d3, distance) == 1) {
             distance = d3;
         }
 
         double d4 = FilesParse.harvesine(x, y, lowerBoundx, upperBoundy);
+        System.out.println("coordinates " + lowerBoundx +" - "+ upperBoundy);
 
         if (Double.compare(d4, distance) == 1) {
             distance = d4;
