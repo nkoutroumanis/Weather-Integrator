@@ -213,9 +213,10 @@ public class ExperimentsDhJob {
                         MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
                                 "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"), Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
                         double realRadius = cursor2.next().getDouble("theLast");
-                        System.out.println("The last: "+ realRadius);
+
                         timeOfRealRadius.add(System.nanoTime() - t3);
                         radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
+                        System.out.println("The last: "+ realRadius + "The ratio "+ (((determinedRadius * 1000) - realRadius) / realRadius));
                         cursor2.close();
                         //System.out.println("Radius Finished");
 
