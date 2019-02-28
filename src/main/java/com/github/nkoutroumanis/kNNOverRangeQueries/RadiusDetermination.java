@@ -68,8 +68,8 @@ public class RadiusDetermination {
         double distance;
 
         System.out.println("x,y"+ x +" " +y);
-        System.out.println("xc"+ (xc + minXc));
-        System.out.println("yc"+ (yc +minYc));
+        System.out.println("xc"+ xc);
+        System.out.println("yc"+ yc);
         System.out.println("id"+ id);
 
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
