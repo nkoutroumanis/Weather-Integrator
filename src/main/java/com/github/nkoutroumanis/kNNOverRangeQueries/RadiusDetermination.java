@@ -54,10 +54,10 @@ public class RadiusDetermination {
         return (xc + (yc * numberOfCellsxAxis));
     }
 
-    private double findTheMaxCornerDistance(double x, double y, long id) {
+    private double findTheMaxCornerDistance(double x, double y, long xc, long yc/*, long id*/) {
 
-        long xc = (id % numberOfCellsxAxis) + minXc;
-        long yc = (id / numberOfCellsxAxis) - 1;
+//        long xc = (id % numberOfCellsxAxis) + minXc;
+//        long yc = (id / numberOfCellsxAxis) - 1;
 
         double upperBoundx = ((xc + 1) * this.x);
         double upperBoundy = ((yc + 1) * this.y);
@@ -70,7 +70,7 @@ public class RadiusDetermination {
         System.out.println("x,y"+ x +" " +y);
         System.out.println("xc"+ xc);
         System.out.println("yc"+ yc);
-        System.out.println("id"+ id);
+        //System.out.println("id"+ id);
 
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
         System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
@@ -128,7 +128,8 @@ public class RadiusDetermination {
         points = getNumberOfCell(xc + (yc * numberOfCellsxAxis));
 
         if (points >= neighboors) {
-            distance = findTheMaxCornerDistance(x, y, (xc + (yc * numberOfCellsxAxis)));
+            distance = findTheMaxCornerDistance(x, y, xc, yc);
+            //distance = findTheMaxCornerDistance(x, y, (xc + (yc * numberOfCellsxAxis)));
         } else {
             k++;
         }
@@ -208,25 +209,29 @@ public class RadiusDetermination {
                     MinimumYc = minYc;
                 }
 
-                double d1 = findTheMaxCornerDistance(x, y, (MinimumXc + (MinimumYc * numberOfCellsxAxis)));
+                //double d1 = findTheMaxCornerDistance(x, y, (MinimumXc + (MinimumYc * numberOfCellsxAxis)));
+                double d1 = findTheMaxCornerDistance(x, y, MinimumXc, MinimumYc);
 
                 if (distance < d1) {
                     distance = d1;
                 }
 
-                double d2 = findTheMaxCornerDistance(x, y, (MaximumXc + (MaximumYc * numberOfCellsxAxis)));
+                //double d2 = findTheMaxCornerDistance(x, y, (MaximumXc + (MaximumYc * numberOfCellsxAxis)));
+                double d2 = findTheMaxCornerDistance(x, y, MaximumXc, MaximumYc);
 
                 if (distance < d2) {
                     distance = d2;
                 }
 
-                double d3 = findTheMaxCornerDistance(x, y, (MaximumXc + (MinimumYc * numberOfCellsxAxis)));
+                //double d3 = findTheMaxCornerDistance(x, y, (MaximumXc + (MinimumYc * numberOfCellsxAxis)));
+                double d3 = findTheMaxCornerDistance(x, y, MaximumXc, MinimumYc);
 
                 if (distance < d3) {
                     distance = d3;
                 }
 
-                double d4 = findTheMaxCornerDistance(x, y, (MinimumXc + (MaximumYc * numberOfCellsxAxis)));
+                //double d4 = findTheMaxCornerDistance(x, y, (MinimumXc + (MaximumYc * numberOfCellsxAxis)));
+                double d4 = findTheMaxCornerDistance(x, y, MinimumXc, MaximumYc );
 
                 if (distance < d4) {
                     distance = d4;
