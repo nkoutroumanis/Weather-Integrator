@@ -191,38 +191,41 @@ public class ExperimentsDhJob {
                         timeForRadiusDetermination.add(System.nanoTime() - t1);
                         System.out.println("formed point ("+ randomX +", " + randomY+"), km= "+determinedRadius+", i="+i);
 
-                        //System.out.println("Radius: " + determinedRadius);
 
-                        long t2 = System.nanoTime();
-                        MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse("{ $match: { location: { $geoWithin : { $centerSphere : [ [" + randomX + ", " + randomY + "], " + (determinedRadius / 6378.1) + " ] } } } }"), Document.parse("{ $count: \"count\" }"))).iterator();
-                        resultsRatio.add(((double) (cursor1.next().getInteger("count") - k) / k));//(n' - n)/n
-                        timeOfCountQuery.add(System.nanoTime() - t2);
-                        cursor1.close();
-                        //System.out.println(resultsRatio.size() + " Count Finished");
+                        long t3 = System.nanoTime();
+                        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
+                                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"), Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
+                        double realRadius = cursor2.next().getDouble("theLast");
+                        timeOfRealRadius.add(System.nanoTime() - t3);
 
-                        if (resultsRatio.get(resultsRatio.size() - 1) < 0) {
+                        if(Double.isInfinite(((determinedRadius * 1000) - realRadius) / realRadius)){
+                            i--;
+                            continue;
+                        }
+
+                        radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
+                        System.out.println("The last: "+ realRadius + "The ratio "+ (((determinedRadius * 1000) - realRadius) / realRadius));
+                        cursor2.close();
+
+                        if (radiusRatio.get(radiusRatio.size() - 1) < 0) {
                             try {
-                                System.out.println("Error: " + resultsRatio.get(resultsRatio.size() - 1));
+                                System.out.println("Error: " + radiusRatio.get(resultsRatio.size() - 1));
                                 throw new Exception("Negative numbers are added in the list");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        long t3 = System.nanoTime();
-                        MongoCursor<Document> cursor2 = m.aggregate(Arrays.asList(Document.parse("{ $geoNear: { near: {type: \"Point\", coordinates: [" + randomX + ", " + randomY + "]}," +
-                                "key: \"location\" ," + "maxDistance: " + (((determinedRadius)) * 1000) + " ," + "distanceField: \"distance\" ," + "spherical: true, num:" + k + "} }"), Document.parse("{ $group: { _id:null, theLast:{ $last:\"$distance\" } } }"))).iterator();
-                        double realRadius = cursor2.next().getDouble("theLast");
 
-                        timeOfRealRadius.add(System.nanoTime() - t3);
-                        radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
-                        System.out.println("The last: "+ realRadius + "The ratio "+ (((determinedRadius * 1000) - realRadius) / realRadius));
-                        cursor2.close();
-                        //System.out.println("Radius Finished");
+                        long t2 = System.nanoTime();
+                        MongoCursor<Document> cursor1 = m.aggregate(Arrays.asList(Document.parse("{ $match: { location: { $geoWithin : { $centerSphere : [ [" + randomX + ", " + randomY + "], " + (determinedRadius / 6378.1) + " ] } } } }"), Document.parse("{ $count: \"count\" }"))).iterator();
+                        resultsRatio.add(((double) (cursor1.next().getInteger("count") - k) / k));//(n' - n)/n
+                        timeOfCountQuery.add(System.nanoTime() - t2);
+                        cursor1.close();
 
-                        if (radiusRatio.get(radiusRatio.size() - 1) < 0) {
+                        if (resultsRatio.get(resultsRatio.size() - 1) < 0) {
                             try {
-                                System.out.println("Error: " + radiusRatio.get(resultsRatio.size() - 1));
+                                System.out.println("Error: " + resultsRatio.get(resultsRatio.size() - 1));
                                 throw new Exception("Negative numbers are added in the list");
                             } catch (Exception e) {
                                 e.printStackTrace();
