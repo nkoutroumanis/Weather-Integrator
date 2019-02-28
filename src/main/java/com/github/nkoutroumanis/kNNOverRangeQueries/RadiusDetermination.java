@@ -228,6 +228,8 @@ public class RadiusDetermination {
                     distance = d4;
                 }
 
+                System.out.println("k= "+k);
+
                 k = -1;
             }
         }
