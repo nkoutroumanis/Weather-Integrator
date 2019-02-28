@@ -167,7 +167,7 @@ public class ExperimentsDhJob {
                             randomY = (latitude - dh);
                         }
 
-                        System.out.println("formed point ("+ randomX +", " + randomY+"), i="+i);
+
 
 //        if(r.nextInt(1)==1){
 //            randomX = (longitude - dh) + ((longitude + dh) - (longitude - dh)) * r.nextDouble();
@@ -188,6 +188,7 @@ public class ExperimentsDhJob {
 
                         long t1 = System.nanoTime();
                         double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
+                        System.out.println("formed point ("+ randomX +", " + randomY+"), km= "+determinedRadius+", i="+i);
                         timeForRadiusDetermination.add(System.nanoTime() - t1);
 
                         //System.out.println("Radius: " + determinedRadius);
