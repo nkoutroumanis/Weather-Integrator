@@ -118,7 +118,7 @@ public class RadiusDetermination {
 
         System.out.println("xc-"+xc);
         System.out.println("yc-"+yc);
-        System.out.println("id-"+ xc + (yc * numberOfCellsxAxis));
+        System.out.println("id-"+ (xc + (yc * numberOfCellsxAxis)));
 
         double distance = Integer.MIN_VALUE;
 
