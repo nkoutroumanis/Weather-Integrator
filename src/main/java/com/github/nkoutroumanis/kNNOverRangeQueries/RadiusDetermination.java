@@ -56,13 +56,13 @@ public class RadiusDetermination {
 
     private double findTheMaxCornerDistance(double x, double y, long id) {
 
-        long xc = id % numberOfCellsxAxis;
-        long yc = id / numberOfCellsxAxis;
+        long xc = (id % numberOfCellsxAxis) + minXc;
+        long yc = (id / numberOfCellsxAxis) - 1;
 
-        double upperBoundx = ((xc + 1) * this.x) + minx;
+        double upperBoundx = ((xc + 1) * this.x);
         double upperBoundy = ((yc + 1) * this.y);
 
-        double lowerBoundx = (xc * this.x) +  minx;
+        double lowerBoundx = (xc * this.x);
         double lowerBoundy = (yc * this.y);
 
         double distance;
