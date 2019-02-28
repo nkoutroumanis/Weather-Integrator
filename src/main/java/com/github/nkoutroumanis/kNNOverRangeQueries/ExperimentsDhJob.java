@@ -28,11 +28,11 @@ public class ExperimentsDhJob {
         }
 
         if(Integer.valueOf(args[0])==1){
-            doOperations("synthetic1","/home/nikolaos/Documents/synthetic-dataset1/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset1/", 50);
+            doOperations("synthetic1","/home/nikolaos/Documents/synthetic-dataset1/","/home/nikolaos/Documents/greek-hist/synthetic-dataset1/", 50);
         }
 
         if(Integer.valueOf(args[0])==2){
-            doOperations("synthetic2","/home/nikolaos/Documents/synthetic-dataset2/","/Users/nicholaskoutroumanis/Documents/greek-hist/synthetic-dataset2/", 50);
+            doOperations("synthetic2","/home/nikolaos/Documents/synthetic-dataset2/","/home/nikolaos/Documents/greek-hist/synthetic-dataset2/", 50);
         }
 
 
