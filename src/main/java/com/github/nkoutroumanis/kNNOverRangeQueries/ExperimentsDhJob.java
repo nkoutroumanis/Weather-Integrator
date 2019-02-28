@@ -188,8 +188,8 @@ public class ExperimentsDhJob {
 
                         long t1 = System.nanoTime();
                         double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
-                        System.out.println("formed point ("+ randomX +", " + randomY+"), km= "+determinedRadius+", i="+i);
                         timeForRadiusDetermination.add(System.nanoTime() - t1);
+                        System.out.println("formed point ("+ randomX +", " + randomY+"), km= "+determinedRadius+", i="+i);
 
                         //System.out.println("Radius: " + determinedRadius);
 
