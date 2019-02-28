@@ -56,8 +56,8 @@ public class RadiusDetermination {
 
     private double findTheMaxCornerDistance(double x, double y, long xc, long yc/*, long id*/) {
 
-//        long xc = (id % numberOfCellsxAxis) + minXc;
-//        long yc = (id / numberOfCellsxAxis) - 1;
+//        long xc = (id % numberOfCellsxAxis);
+//        long yc = (id / numberOfCellsxAxis);
 
         double upperBoundx = ((xc + 1) * this.x);
         double upperBoundy = ((yc + 1) * this.y);
@@ -67,31 +67,30 @@ public class RadiusDetermination {
 
         double distance;
 
-        System.out.println("x,y"+ x +" " +y);
-        System.out.println("xc"+ xc);
-        System.out.println("yc"+ yc);
-        //System.out.println("id"+ id);
+//        System.out.println("x,y"+ x +" " +y);
+//        System.out.println("xc"+ xc);
+//        System.out.println("yc"+ yc);
 
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
-        System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
+        //System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
         distance = d1;
 
         double d2 = FilesParse.harvesine(x, y, lowerBoundx, lowerBoundy);
-        System.out.println("coordinates " + lowerBoundx +" - "+ lowerBoundy);
+        //System.out.println("coordinates " + lowerBoundx +" - "+ lowerBoundy);
 
         if (Double.compare(d2, distance) == 1) {
             distance = d2;
         }
 
         double d3 = FilesParse.harvesine(x, y, upperBoundx, lowerBoundy);
-        System.out.println("coordinates " + upperBoundx +" - "+ lowerBoundy);
+        //System.out.println("coordinates " + upperBoundx +" - "+ lowerBoundy);
 
         if (Double.compare(d3, distance) == 1) {
             distance = d3;
         }
 
         double d4 = FilesParse.harvesine(x, y, lowerBoundx, upperBoundy);
-        System.out.println("coordinates " + lowerBoundx +" - "+ upperBoundy);
+        //System.out.println("coordinates " + lowerBoundx +" - "+ upperBoundy);
 
         if (Double.compare(d4, distance) == 1) {
             distance = d4;
@@ -104,7 +103,7 @@ public class RadiusDetermination {
     private long getNumberOfCell(long cellId) {
 
         if (histogram.containsKey(cellId)) {
-            System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
+            //System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
             return histogram.get(cellId);
         } else {
             return 0;
@@ -116,9 +115,9 @@ public class RadiusDetermination {
         long xc = (long) (x / this.x);
         long yc = (long) (y / this.y);
 
-        System.out.println("xc-"+xc);
-        System.out.println("yc-"+yc);
-        System.out.println("id-"+ (xc + (yc * numberOfCellsxAxis)));
+//        System.out.println("xc-"+xc);
+//        System.out.println("yc-"+yc);
+//        System.out.println("id-"+ (xc + (yc * numberOfCellsxAxis)));
 
         double distance = Integer.MIN_VALUE;
 
