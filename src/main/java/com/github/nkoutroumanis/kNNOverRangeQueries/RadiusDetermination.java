@@ -181,14 +181,6 @@ public class RadiusDetermination {
 
             } else {
 
-                //System.out.println("Enough points " + points);
-
-//                System.out.println("xc: " + xc);
-//                System.out.println("xc-k: " + (xc - k));
-//                System.out.println("xc+k: " + (xc + k));
-//                System.out.println("yc: " + yc);
-//                System.out.println("yc-k: " + (yc - k));
-//                System.out.println("yc+k: " + (yc + k));
 
                 long MaximumXc = xc + k;
                 long MinimumXc = xc - k;
