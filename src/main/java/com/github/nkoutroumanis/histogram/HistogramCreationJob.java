@@ -29,7 +29,8 @@ public final class HistogramCreationJob {
 
         //x for longitude, y for latitude - the max values of lon and lat should be increased a little in order to include the whole data in histogram
         //Space2D space = Space2D.newSpace2D(20.15, 34.91, 26.61, 41.83);
-        Space2D space = Space2D.newSpace2D(20.1500159034, 34.9199876979, 26.604196, 41.826905);
+        //Space2D space = Space2D.newSpace2D(20.1500159034, 34.9199876979, 26.604196, 41.826905);
+        Space2D space = Space2D.newSpace2D(20, 34.9199876979, 27, 41.826905);
         GridPartition.newGridPartition(space, 2, 2, "/home/nikolaos/Documents/synthetic-dataset2", 2, 3, 4).build().exportHistogram("/home/nikolaos/Documents/hist/synthetic-dataset2/");
         System.out.println("------------------");
 

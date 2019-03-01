@@ -171,7 +171,7 @@ public final class GridPartition implements FilesParse {
 
         long xc1 = (long) ((longitude - space2D.getMinx()) / x);
 
-        if(Long.compare(xc1,xc-6l)==0){
+        if(Long.compare(xc1,xc+2l)==0){
 
             System.out.println("its OK "+ "xc "+ xc+ " xc1 "+ xc1);
         }
