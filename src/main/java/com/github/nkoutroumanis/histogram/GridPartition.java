@@ -177,7 +177,7 @@ public final class GridPartition implements FilesParse {
         }
         else{
 
-            System.out.println("long "+ longitude + " x "  + x + " xc "+xc + " xc-624="+(xc-6l));
+            System.out.println("long "+ longitude + " x "  + x + " xc "+xc + " xc-2="+(xc-2l));
             System.out.println("long "+ longitude + " x "  + x + " xc1 "+xc1);
 
 
