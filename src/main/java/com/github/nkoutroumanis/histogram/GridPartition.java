@@ -149,8 +149,8 @@ public final class GridPartition implements FilesParse {
     @Override
     public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 
-        long xc = (long) (longitude / x);
-        long yc = (long) (latitude / y);
+        long xc = (long) ((longitude - space2D.getMinx()) / x);
+        long yc = (long) ((latitude - space2D.getMiny()) / y);
 
         long k = xc + (yc * cellsInXAxis);
 
@@ -159,44 +159,6 @@ public final class GridPartition implements FilesParse {
         } else {
             map.put(k, 1l);
         }
-
-//        if(Double.compare(longitude,26.604197)==1 || Double.compare(longitude,20.150010)==-1){
-//            System.out.println("Out of margins");
-//        }
-//
-//        if(Double.compare(latitude, 41.826906)==1 || Double.compare(latitude,34.919987)==-1){
-//            System.out.println("Out of margins");
-//        }
-
-
-        long xc1 = (long) ((longitude - space2D.getMinx()) / x);
-
-        if(Long.compare(xc1,xc-6l)==0){
-
-            System.out.println("its OK "+ "xc "+ xc+ " xc1 "+ xc1);
-        }
-        else{
-
-            System.out.println("long "+ longitude + " x "  + x + " xc "+xc + " xc-2="+(xc-2l));
-            System.out.println("long "+ longitude + " x "  + x + " xc1 "+xc1);
-
-
-            System.out.println("its not ok");
-        }
-
-//        if(k1==0){
-//            if(k1==(k-202824)){
-//                System.out.println("the zero is ok");
-//            }
-//            else{
-//                System.out.println("the zero is not ok");
-//                System.out.println(k);
-//            }
-//        }
-
-//        if(k>(202824l+39999l)){
-//            System.out.println(k);
-//        }
 
     }
 
