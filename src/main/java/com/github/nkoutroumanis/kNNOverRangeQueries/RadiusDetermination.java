@@ -31,11 +31,17 @@ public class RadiusDetermination {
         x = (maxx - minx) / numberOfCellsxAxis;
         y = (maxy - miny) / numberOfCellsyAxis;
 
-        minXc = (long) (minx / x);
-        maxXc = minXc + numberOfCellsxAxis - 1;
+        minXc = 0l;
+        maxXc = numberOfCellsxAxis - 1l;
 
-        minYc = (long) (miny / y);
-        maxYc = minYc + numberOfCellsyAxis - 1;
+        minYc = 0l;
+        maxYc = numberOfCellsyAxis - 1l;
+
+//        minXc = (long) (minx / x);
+//        maxXc = minXc + numberOfCellsxAxis - 1;
+//
+//        minYc = (long) (miny / y);
+//        maxYc = minYc + numberOfCellsyAxis - 1;
 
         this.minx=minx;
         this.miny=miny;
@@ -48,8 +54,11 @@ public class RadiusDetermination {
 
     private long getIdCellOfPoint(double x, double y) {
 
-        long xc = (long) (x / this.x);
-        long yc = (long) (y / this.y);
+//        long xc = (long) (x / this.x);
+//        long yc = (long) (y / this.y);
+
+        long xc = (long) ((x - minx) / this.x);
+        long yc = (long) ((y - miny) / this.y);
 
         return (xc + (yc * numberOfCellsxAxis));
     }
@@ -59,17 +68,19 @@ public class RadiusDetermination {
 //        long xc = (id % numberOfCellsxAxis);
 //        long yc = (id / numberOfCellsxAxis);
 
-        double upperBoundx = ((xc + 1) * this.x);
-        double upperBoundy = ((yc + 1) * this.y);
+//        double upperBoundx = ((xc + 1) * this.x);
+//        double upperBoundy = ((yc + 1) * this.y);
+//
+//        double lowerBoundx = (xc * this.x);
+//        double lowerBoundy = (yc * this.y);
 
-        double lowerBoundx = (xc * this.x);
-        double lowerBoundy = (yc * this.y);
+        double upperBoundx = ((xc + 1) * this.x) + minx;
+        double upperBoundy = ((yc + 1) * this.y) + miny;
+
+        double lowerBoundx = (xc * this.x) + minx;
+        double lowerBoundy = (yc * this.y) + miny;
 
         double distance;
-
-//        System.out.println("x,y"+ x +" " +y);
-//        System.out.println("xc"+ xc);
-//        System.out.println("yc"+ yc);
 
         double d1 = FilesParse.harvesine(x, y, upperBoundx, upperBoundy);
         //System.out.println("coordinates " + upperBoundx +" - "+ upperBoundy);
@@ -103,7 +114,6 @@ public class RadiusDetermination {
     private long getNumberOfCell(long cellId) {
 
         if (histogram.containsKey(cellId)) {
-            //System.out.println("IN CELL "+cellId +" there are "+histogram.get(cellId));
             return histogram.get(cellId);
         } else {
             return 0;
@@ -112,12 +122,11 @@ public class RadiusDetermination {
 
     public double findRadius(double x, double y, long neighboors) {
 
-        long xc = (long) (x / this.x);
-        long yc = (long) (y / this.y);
+//        long xc = (long) (x / this.x);
+//        long yc = (long) (y / this.y);
 
-//        System.out.println("xc-"+xc);
-//        System.out.println("yc-"+yc);
-//        System.out.println("id-"+ (xc + (yc * numberOfCellsxAxis)));
+        long xc = (long) ((x-minx) / this.x);
+        long yc = (long) ((y-miny) / this.y);
 
         double distance = Integer.MIN_VALUE;
 
@@ -174,8 +183,6 @@ public class RadiusDetermination {
             }
 
             if (points < neighboors) {
-                //System.out.println("not enough points "+points);
-                //System.out.println(k);
                 k++;
 
             } else {
