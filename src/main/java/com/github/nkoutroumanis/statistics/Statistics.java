@@ -1,7 +1,6 @@
 package com.github.nkoutroumanis.statistics;
 
 import com.github.nkoutroumanis.FilesParse;
-import com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex;
 
 import java.io.*;
 import java.nio.file.Files;

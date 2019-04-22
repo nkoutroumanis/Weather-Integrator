@@ -1,7 +1,5 @@
 package com.github.nkoutroumanis.statistics;
 
-import com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex;
-
 public final class StatisticsJob {
 
 

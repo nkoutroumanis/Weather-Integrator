@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.weatherIntegrator.grib;
+package com.github.nkoutroumanis.integrator.weatherIntegrator.grib;
 
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;

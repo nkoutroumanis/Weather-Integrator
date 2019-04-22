@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.weatherIntegrator.lru;
+package com.github.nkoutroumanis.integrator.weatherIntegrator.lru;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

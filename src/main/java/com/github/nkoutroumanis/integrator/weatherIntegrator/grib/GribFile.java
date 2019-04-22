@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.weatherIntegrator.grib;
+package com.github.nkoutroumanis.integrator.weatherIntegrator.grib;
 
 public interface GribFile {
 

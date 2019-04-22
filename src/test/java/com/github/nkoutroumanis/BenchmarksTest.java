@@ -1,9 +1,9 @@
 package com.github.nkoutroumanis;
 
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
-import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
-import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
-import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFilesTree;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCache;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCacheManager;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;

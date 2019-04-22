@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.weatherIntegrator;
+package com.github.nkoutroumanis.integrator.weatherIntegrator;
 
 import java.io.IOException;
 import java.nio.file.Files;
