@@ -1,8 +1,10 @@
 package com.github.nkoutroumanis.integrator.weatherIntegrator.grib;
 
+import java.util.List;
+
 public interface GribFile {
 
-    String getDataValuesByLatLon(double lat, double lon);
+    List<String> getDataValuesByLatLon(double lat, double lon);
 
     static double roundToHalf(double f) {
         return Math.round(f * 2) / 2.0;

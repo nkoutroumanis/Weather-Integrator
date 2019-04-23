@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.integrator.weatherIntegrator.lru;
 
-import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherDataObtainer;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFile;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFileWithIndex;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFileWithoutIndex;
@@ -17,15 +17,13 @@ public final class LRUCacheManager {
     private final LRUCache cache;
     private final boolean useIndex;
     private final List<String> variables;
-    private final String separator;
     private final int numberOfVariables;
 
-    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator) {
+    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
         this.tree = tree;
         this.cache = cache;
         this.useIndex = useIndex;
         this.variables = Collections.unmodifiableList(variables);
-        this.separator = separator;
 
         this.numberOfVariables = variables.size();
     }
@@ -35,18 +33,18 @@ public final class LRUCacheManager {
         return numberOfVariables;
     }
 
-    public String getData(Date date, double lat, double lon) throws IOException {
+    public List<String> getData(Date date, double lat, double lon) throws IOException {
 
         String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime() / 1000L);
 
         if (!isGribFileContainedInCache(choosenGribFilePath)) {
             if (useIndex) {
-                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables, separator));
+                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables));
             } else {
-                cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, separator));
+                cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables));
             }
         } else {
-            WeatherIntegrator.hits++;
+            //WeatherDataObtainer.hits++;
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
@@ -58,8 +56,8 @@ public final class LRUCacheManager {
         return cache.containsKey(filePath);
     }
 
-    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, String separator) {
-        return new LRUCacheManager(tree, cache, useIndex, variables, separator);
+    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
+        return new LRUCacheManager(tree, cache, useIndex, variables);
     }
 
 

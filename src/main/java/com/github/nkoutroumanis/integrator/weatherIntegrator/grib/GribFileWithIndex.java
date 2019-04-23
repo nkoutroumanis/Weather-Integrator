@@ -6,6 +6,7 @@ import ucar.nc2.NetcdfFile;
 
 import java.io.IOException;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,9 +14,8 @@ import java.util.stream.Collectors;
 public final class GribFileWithIndex implements GribFile {
 
     private final List<Map.Entry<Array, Index>> listOfEntries;
-    private final String separator;
 
-    private GribFileWithIndex(String path, List<String> listOfVariables, String separator) throws IOException {
+    private GribFileWithIndex(String path, List<String> listOfVariables) throws IOException {
 
         NetcdfFile ncf = NetcdfFile.open(path);
 
@@ -29,32 +29,30 @@ public final class GribFileWithIndex implements GribFile {
             return new AbstractMap.SimpleEntry<>(array, array.getIndex());
         }).collect(Collectors.toList());
 
-        this.separator = separator;
-
     }
 
-    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables, String separator) throws IOException {
-        return new GribFileWithIndex(path, listOfVariables, separator);
+    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables) throws IOException {
+        return new GribFileWithIndex(path, listOfVariables);
     }
 
-    public String getDataValuesByLatLon(double lat, double lon) {
-        StringBuilder s = new StringBuilder();
+    public List<String> getDataValuesByLatLon(double lat, double lon) {
+
+        List<String> values = new ArrayList();
 
         listOfEntries.forEach(e -> {
-            s.append(separator);
             double t1 = System.nanoTime();
             try {
-                s.append(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))));
+                values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))).toString());
             } catch (ArrayIndexOutOfBoundsException k) {
                 try {
-                    s.append(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))));
+                    values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))).toString());
                 } catch (ArrayIndexOutOfBoundsException j) {
-                    s.append(e.getKey().copy());
+                    values.add(e.getKey().copy().toString());
                 }
             }
 
         });
 
-        return s.toString();
+        return values;
     }
 }

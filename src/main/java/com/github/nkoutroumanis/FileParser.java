@@ -31,8 +31,6 @@ public class FileParser implements Parser {
 
     private String filePath;
 
-
-
     @Override
     public Map.Entry<String,String> nextLine() {
 

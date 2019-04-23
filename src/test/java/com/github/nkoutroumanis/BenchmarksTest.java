@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis;
 
-import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherDataObtainer;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCache;
 import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCacheManager;
@@ -34,13 +34,13 @@ public class BenchmarksTest {
         }
     }
 
-    private final WeatherIntegrator wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
+    private final WeatherDataObtainer wiWithIndex = WeatherDataObtainer.newWeatherIntegrator(filesPath,
             gribFilesPath, 7,
             8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
             .lruCacheMaxEntries(1).useIndex().build();
 
-    private final WeatherIntegrator wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath,
+    private final WeatherDataObtainer wiWithoutIndex = WeatherDataObtainer.newWeatherIntegrator(filesPath,
             gribFilesPath, 7,
             8, 3, "yyyy-MM-dd HH:mm:ss",
             variables)
