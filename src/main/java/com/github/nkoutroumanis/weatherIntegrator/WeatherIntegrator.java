@@ -46,6 +46,7 @@ public final class WeatherIntegrator {
 
         public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
 
+            System.out.println(filesExtension);
             parser = new FileParser(filesPath, filesExtension);
             this.gribFilesFolderPath = gribFilesFolderPath;
             this.numberOfColumnLongitude = numberOfColumnLongitude;

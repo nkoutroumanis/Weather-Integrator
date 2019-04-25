@@ -26,8 +26,8 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv/", "csv",
-                    "./grib_files/", 7,
+            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv",
+                    "/Users/nicholaskoutroumanis/Desktop/grib/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
                     .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory("/Users/nicholaskoutroumanis/Desktop/myNewFolder/");
 
