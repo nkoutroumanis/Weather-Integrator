@@ -3,12 +3,13 @@ package com.github.nkoutroumanis.integrator.weatherIntegrator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class JobUsingIndex {
 
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) {
 
         /*------------------
         *
@@ -25,10 +26,10 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherDataObtainer.newWeatherIntegrator("/home/nikolaos/Desktop/dokimastiko/",
+            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Desktop/dokimastiko/", "csv",
                     "/home/nikolaos/Documents/grib-files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateData("/home/nikolaos/Desktop/apotelesmata/");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory("/home/nikolaos/Desktop/apotelesmata/");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
@@ -36,12 +37,12 @@ public final class JobUsingIndex {
             long elapsedTime = (System.currentTimeMillis() - start) / 1000;
             System.out.println("Elapsed Time: " + elapsedTime + " sec");
 
-            System.out.println("Number Of Records: " + WeatherDataObtainer.numberofRecords);
-            System.out.println("Number Of Hits: " + WeatherDataObtainer.hits);
-            System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherDataObtainer.hits / WeatherDataObtainer.numberofRecords));
-            System.out.println("Throughput (records/sec): " + ((double) WeatherDataObtainer.numberofRecords / elapsedTime));
+            System.out.println("Number Of Records: " + WeatherIntegrator.numberofRecords);
+            System.out.println("Number Of Hits: " + WeatherIntegrator.hits);
+            System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
+            System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / elapsedTime));
 
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

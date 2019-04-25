@@ -1,5 +1,6 @@
 package com.github.nkoutroumanis;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +14,11 @@ public class FileParser implements Parser {
 
     public FileParser(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
+
+        if(!directoryName.substring(directoryName.length()-1).equals(File.separator)){
+            directoryName = directoryName + File.separator;
+        }
+
         filesStream = Files.walk(Paths.get(directoryName)).filter(path -> path.getFileName().toString().endsWith(filesExtension));
         filesIter = filesStream.iterator();
 
@@ -23,7 +29,7 @@ public class FileParser implements Parser {
         linesIter = linesStream.iterator();
     }
 
-    private String directoryName;
+    private final String directoryName;
     private Stream<Path> filesStream;
     private Iterator<Path> filesIter;
     private Stream<String> linesStream;
@@ -32,9 +38,10 @@ public class FileParser implements Parser {
     private String filePath;
 
     @Override
-    public Map.Entry<String,String> nextLine() {
+    public String[] nextLine() {
 
-        return new AbstractMap.SimpleEntry(filePath, linesIter.next());
+        return new String[] {linesIter.next(), filePath.substring(filePath.length() - directoryName.length())};
+        //return new AbstractMap.SimpleEntry(filePath, linesIter.next());
     }
 
     @Override

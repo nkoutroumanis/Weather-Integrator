@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public final class PreProcessing {
 
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) {
 
         long start = System.currentTimeMillis();
 
@@ -21,7 +21,7 @@ public final class PreProcessing {
             Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
 
             LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("/home/nikolaos/Documents/grib-files/", ".grb2"),
-                    LRUCache.newLRUCache(1), true, Collections.unmodifiableList(stream.collect(Collectors.toList())), ";");
+                    LRUCache.newLRUCache(1), true, Collections.unmodifiableList(stream.collect(Collectors.toList())));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
