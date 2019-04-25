@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class FileOutput implements Output{
+public final class FileOutput implements Output{
 
     private final String directory;
 
@@ -53,6 +53,9 @@ public class FileOutput implements Output{
 
             try {
 
+                System.out.println("create directory on "+directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) +1));
+                Files.createDirectories(Paths.get(directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) +1)));
+
                 fos = new FileOutputStream(directory + lineMeta, true);
                 osw = new OutputStreamWriter(fos, "utf-8");
                 bw = new BufferedWriter(osw);
@@ -61,8 +64,6 @@ public class FileOutput implements Output{
                 filePath = lineMeta;
 
                 System.out.println("line meta:"+lineMeta);
-                Files.createDirectories(Paths.get(directory + lineMeta));
-
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

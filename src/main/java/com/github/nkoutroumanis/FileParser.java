@@ -39,8 +39,7 @@ public class FileParser implements Parser {
 
     @Override
     public String[] nextLine() {
-
-        return new String[] {linesIter.next(), filePath.substring(filePath.length() - directoryName.length())};
+        return new String[] {linesIter.next(), filePath.substring(directoryName.length())};
         //return new AbstractMap.SimpleEntry(filePath, linesIter.next());
     }
 
