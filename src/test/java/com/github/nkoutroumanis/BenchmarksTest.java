@@ -1,14 +1,16 @@
 package com.github.nkoutroumanis;
 
-import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherDataObtainer;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFilesTree;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCache;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCacheManager;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherDataObtainer;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
+import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
+import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,30 +36,61 @@ public class BenchmarksTest {
         }
     }
 
-    private final WeatherDataObtainer wiWithIndex = WeatherDataObtainer.newWeatherIntegrator(filesPath,
-            gribFilesPath, 7,
-            8, 3, "yyyy-MM-dd HH:mm:ss",
-            variables)
-            .lruCacheMaxEntries(1).useIndex().build();
+    private WeatherIntegrator wiWithIndex;
 
-    private final WeatherDataObtainer wiWithoutIndex = WeatherDataObtainer.newWeatherIntegrator(filesPath,
-            gribFilesPath, 7,
-            8, 3, "yyyy-MM-dd HH:mm:ss",
-            variables)
-            .lruCacheMaxEntries(1).build();
+    {
+        try {
+            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath, "csv",
+                        gribFilesPath, 7,
+                        8, 3, "yyyy-MM-dd HH:mm:ss",
+                        variables)
+                        .lruCacheMaxEntries(1).useIndex().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private WeatherIntegrator wiWithoutIndex;
+
+    {
+        try {
+            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath, "csv",
+                        gribFilesPath, 7,
+                        8, 3, "yyyy-MM-dd HH:mm:ss",
+                        variables)
+                        .lruCacheMaxEntries(1).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BenchmarksTest() {
+    }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.MINUTES)
-    public void integrateDataUsingIndex() {
-        wiWithIndex.integrateData(filesExportPath);
+    public void integrateDataUsingIndex()  {
+        try {
+            wiWithIndex.integrateAndOutputToDirectory(filesExportPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.HOURS)
-    public void integrateDataWithoutIndex() {
-        wiWithoutIndex.integrateData(filesExportPath);
+    public void integrateDataWithoutIndex()  {
+        try {
+            wiWithoutIndex.integrateAndOutputToDirectory(filesExportPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Benchmark
@@ -65,7 +98,7 @@ public class BenchmarksTest {
     @OutputTimeUnit(TimeUnit.SECONDS)
     public LRUCacheManager preProcessing() {
         return LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesPath, gribFilesExtension),
-                LRUCache.newLRUCache(4), true, Collections.unmodifiableList(variables), ";");
+                LRUCache.newLRUCache(4), true, Collections.unmodifiableList(variables));
     }
 
 }

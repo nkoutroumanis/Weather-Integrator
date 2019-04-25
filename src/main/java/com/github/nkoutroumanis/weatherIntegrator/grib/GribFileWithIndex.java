@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator.grib;
+package com.github.nkoutroumanis.weatherIntegrator.grib;
 
 import ucar.ma2.Array;
 import ucar.ma2.Index;

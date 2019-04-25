@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator;
+package com.github.nkoutroumanis.weatherIntegrator;
 
 import com.github.nkoutroumanis.*;
 
@@ -9,10 +9,8 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class WeatherIntegrator {
@@ -20,9 +18,10 @@ public final class WeatherIntegrator {
     private final Parser parser;
     private final WeatherDataObtainer wdo;
 
-    private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
+    private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
+
     private final DateFormat dateFormat;
 
     private final String separator;
@@ -32,9 +31,11 @@ public final class WeatherIntegrator {
         private final Parser parser;
 
         private final String gribFilesFolderPath;
-        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
+
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
+        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
+
         private final DateFormat dateFormat;
         private final List<String> variables;
 
@@ -43,16 +44,15 @@ public final class WeatherIntegrator {
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
-        public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnDate, int numberOfColumnLatitude, int numberOfColumnLongitude, String dateFormat, List<String> variables) throws IOException {
+        public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
 
             parser = new FileParser(filesPath, filesExtension);
             this.gribFilesFolderPath = gribFilesFolderPath;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.numberOfColumnLatitude = numberOfColumnLatitude;
+            this.numberOfColumnDate = numberOfColumnDate;
             this.dateFormat = new SimpleDateFormat(dateFormat);
             this.variables = variables;
-
         }
 
         public Builder gribFilesExtension(String gribFilesExtension) {
@@ -75,7 +75,6 @@ public final class WeatherIntegrator {
             return this;
         }
 
-
         public WeatherIntegrator build() throws IOException {
             return new WeatherIntegrator(this);
         }
@@ -86,9 +85,9 @@ public final class WeatherIntegrator {
 
         parser = builder.parser;
 
-        numberOfColumnDate = builder.numberOfColumnDate;
-        numberOfColumnLatitude = builder.numberOfColumnLatitude;
         numberOfColumnLongitude = builder.numberOfColumnLongitude;
+        numberOfColumnLatitude = builder.numberOfColumnLatitude;
+        numberOfColumnDate = builder.numberOfColumnDate;
         dateFormat = builder.dateFormat;
 
         separator = builder.separator;
@@ -147,8 +146,8 @@ public final class WeatherIntegrator {
 
     }
 
-    public static WeatherIntegrator.Builder newWeatherIntegrator(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnDate, int numberOfColumnLatitude, int numberOfColumnLongitude, String dateFormat, List<String> variables) throws IOException {
-        return new WeatherIntegrator.Builder(filesPath, filesExtension, gribFilesFolderPath, numberOfColumnDate, numberOfColumnLatitude, numberOfColumnLongitude, dateFormat, variables);
+    public static WeatherIntegrator.Builder newWeatherIntegrator(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+        return new WeatherIntegrator.Builder(filesPath, filesExtension, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
     }
 
 //    public void startIntegration() throws IOException {

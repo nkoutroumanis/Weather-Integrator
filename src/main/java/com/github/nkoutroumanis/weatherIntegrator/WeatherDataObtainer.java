@@ -1,20 +1,12 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator;
+package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.FilesParse;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFilesTree;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCache;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.lru.LRUCacheManager;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
+import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
+import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class WeatherDataObtainer {
 

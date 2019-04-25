@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator.grib;
+package com.github.nkoutroumanis.weatherIntegrator.grib;
 
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;

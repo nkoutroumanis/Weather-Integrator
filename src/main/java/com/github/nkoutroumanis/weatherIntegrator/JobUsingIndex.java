@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator;
+package com.github.nkoutroumanis.weatherIntegrator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,19 +7,29 @@ import java.text.ParseException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class JobWithoutIndex {
+public final class JobUsingIndex {
 
     public static void main(String args[]) {
+
+        /*------------------
+        *
+        * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
+        * it works only for the case of having the semicolumn on the last column.
+        *
+        *
+        * ------------------
+        * */
+
 
         long start = System.currentTimeMillis();
 
         try {
-            Stream<String> stream = Files.lines(Paths.get("variables/weather-variables.txt"));
+            Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/home/nikolaos/Desktop/csv/", "csv",
-                    "/home/nikolaos/Documents/gb-january-2018/", 7,
+            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv/", "csv",
+                    "./grib_files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).build().integrateAndOutputToDirectory("/home/nikolaos/Desktop/eraseItt/");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory("/Users/nicholaskoutroumanis/Desktop/myNewFolder/");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
@@ -32,9 +42,7 @@ public final class JobWithoutIndex {
             System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
             System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / elapsedTime));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

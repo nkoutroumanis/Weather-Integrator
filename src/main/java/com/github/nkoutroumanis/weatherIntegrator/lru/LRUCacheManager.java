@@ -1,11 +1,10 @@
-package com.github.nkoutroumanis.integrator.weatherIntegrator.lru;
+package com.github.nkoutroumanis.weatherIntegrator.lru;
 
-import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherDataObtainer;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.WeatherIntegrator;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFile;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFileWithIndex;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFileWithoutIndex;
-import com.github.nkoutroumanis.integrator.weatherIntegrator.grib.GribFilesTree;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFile;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithIndex;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithoutIndex;
+import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 
 import java.io.IOException;
 import java.util.Collections;

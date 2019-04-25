@@ -1,6 +1,8 @@
 package com.github.nkoutroumanis;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileOutput implements Output{
 
@@ -18,6 +20,13 @@ public class FileOutput implements Output{
 
         if(!directory.substring(directory.length()-1).equals(File.separator)){
             directory = directory + File.separator;
+        }
+
+        //create Export Directory
+        try {
+            Files.createDirectories(Paths.get(directory));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,10 +59,17 @@ public class FileOutput implements Output{
                 pw = new PrintWriter(bw, true);
 
                 filePath = lineMeta;
+
+                System.out.println("line meta:"+lineMeta);
+                Files.createDirectories(Paths.get(directory + lineMeta));
+
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
