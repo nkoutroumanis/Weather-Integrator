@@ -39,17 +39,7 @@ public final class FileOutput implements Output{
 
         if(!lineMeta.equals(filePath)){
 
-            if(fos != null) {
-
-                try {
-                    pw.close();
-                    bw.close();
-                    osw.close();
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
 
             try {
 
@@ -79,4 +69,21 @@ public final class FileOutput implements Output{
         pw.write(line + "\r\n");
 
     }
+
+    @Override
+    public void close() {
+        if(fos != null) {
+
+            try {
+                pw.close();
+                bw.close();
+                osw.close();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

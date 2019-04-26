@@ -54,5 +54,9 @@
     <orderEntry type="library" name="Maven: org.itadaki:bzip2:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe:config:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.luben:zstd-jni:1.3.8-1" level="project" />
+    <orderEntry type="library" name="Maven: org.lz4:lz4-java:1.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.xerial.snappy:snappy-java:1.1.7.2" level="project" />
   </component>
 </module>

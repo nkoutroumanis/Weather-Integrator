@@ -5,10 +5,12 @@ import com.github.nkoutroumanis.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -97,20 +99,46 @@ public final class WeatherIntegrator {
 
     }
 
-    private void clearExportingDirectory(String filesExportPath) {
-        //delete existing exported files on the export path
-        if (Files.exists(Paths.get(filesExportPath))) {
-            Stream.of(new File(filesExportPath).listFiles())/*.filter((file -> file.toString().endsWith(filesExtension)))*/.forEach(File::delete);
+//    private void clearExportingDirectory(String filesExportPath) throws IOException {
+//
+//        if(!filesExportPath.substring(filesExportPath.length()-1).equals(File.separator)){
+//            filesExportPath = filesExportPath + File.separator;
+//        }
+//
+//        //delete existing exported files on the export path
+//        if (Files.exists(Paths.get(filesExportPath))) {
+//
+//            Stream.of(new File(filesExportPath).listFiles()).forEach(File::delete);
+//
+//
+//            //System.out.println(dirPath.toFile().delete());
+//
+//        }
+//    }
+
+    boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
         }
+        return directoryToBeDeleted.delete();
     }
 
+
     public void integrateAndOutputToDirectory(String directory) throws IOException, ParseException {
-        clearExportingDirectory(directory);
+
+        if(!directory.substring(directory.length()-1).equals(File.separator)){
+            directory = directory + File.separator;
+        }
+
+        deleteDirectory(new File(directory));
         integrate(FileOutput.newFileOutput(directory));
     }
 
 //    public void integrateAndOutputToKafkaTopic(){
-//        integrate(Output output)
+//        integrate(KafkaOutput.newKafkaOutput());
 //    }
 
     private void integrate(Output output) throws IOException, ParseException {
@@ -141,9 +169,11 @@ public final class WeatherIntegrator {
 
             values.forEach(s -> sb.append(separator + s));
 
-            output.out(sb + "\r\n", a[1]);
+            output.out(sb.toString() , a[1]);
 
         }
+
+            output.close();
 
     }
 
