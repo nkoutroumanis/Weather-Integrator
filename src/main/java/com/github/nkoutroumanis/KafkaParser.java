@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -17,20 +19,23 @@ public class KafkaParser implements Parser {
     private final KafkaConsumer<String, String> consumer;
     private Iterator<ConsumerRecord<String, String>> consumerIter;
 
+    private final String propertiesFile;
     private final String topicName;
-    private final String servers;
+    private final long poll;
 
-    private KafkaParser(String topicName, String servers){
+    private KafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
+        this.propertiesFile = propertiesFile;
         this.topicName = topicName;
-        this.servers = servers;
+        this.poll = poll;
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
-        props.put("group.id", "test");
-        props.put("enable.auto.commit", "true");
-        props.put("auto.commit.interval.ms", "1000");
-        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.load(new FileInputStream(propertiesFile));
+//        props.put("bootstrap.servers", "localhost:9092");
+//        props.put("group.id", "test");
+//        props.put("enable.auto.commit", "true");
+//        props.put("auto.commit.interval.ms", "1000");
+//        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
         this.consumer = new KafkaConsumer<>(props);
 
@@ -45,8 +50,8 @@ public class KafkaParser implements Parser {
 
     }
 
-    public static KafkaParser newKafkaParser(String topicName, String servers){
-        return new KafkaParser(topicName, servers);
+    public static KafkaParser newKafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
+        return new KafkaParser(propertiesFile, topicName, poll);
     }
 
 
