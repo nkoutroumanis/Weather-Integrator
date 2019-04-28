@@ -48,8 +48,18 @@ public final class WeatherIntegrator {
 
         public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
 
-            System.out.println(filesExtension);
-            parser = new FileParser(filesPath, filesExtension);
+            parser = FileParser.newFileParser(filesPath, filesExtension);
+            this.gribFilesFolderPath = gribFilesFolderPath;
+            this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.numberOfColumnLatitude = numberOfColumnLatitude;
+            this.numberOfColumnDate = numberOfColumnDate;
+            this.dateFormat = new SimpleDateFormat(dateFormat);
+            this.variables = variables;
+        }
+
+        public Builder(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+
+            parser = KafkaParser.newKafkaParser(propertiesFile, topicName, poll);
             this.gribFilesFolderPath = gribFilesFolderPath;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
@@ -126,6 +136,9 @@ public final class WeatherIntegrator {
         return directoryToBeDeleted.delete();
     }
 
+    public void integrateAndOutputToKafkaTopic(String properties, String topicName) throws IOException, ParseException {
+        integrate(KafkaOutput.newKafkaOutput(properties, topicName));
+    }
 
     public void integrateAndOutputToDirectory(String directory) throws IOException, ParseException {
 
@@ -179,6 +192,10 @@ public final class WeatherIntegrator {
 
     public static WeatherIntegrator.Builder newWeatherIntegrator(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
         return new WeatherIntegrator.Builder(filesPath, filesExtension, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
+    }
+
+    public static WeatherIntegrator.Builder newWeatherIntegrator(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+        return new WeatherIntegrator.Builder(propertiesFile, topicName, poll, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
     }
 
 //    public void startIntegration() throws IOException {

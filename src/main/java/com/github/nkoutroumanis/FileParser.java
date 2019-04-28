@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class FileParser implements Parser {
 
-    public FileParser(String directoryName, String filesExtension) throws IOException {
+    private FileParser(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
 
         if(!directoryName.substring(directoryName.length()-1).equals(File.separator)){
@@ -36,6 +36,10 @@ public class FileParser implements Parser {
     private Iterator<String> linesIter;
 
     private String filePath;
+
+    public static FileParser newFileParser(String directoryName, String filesExtension) throws IOException {
+        return new FileParser(directoryName, filesExtension);
+    }
 
     @Override
     public String[] nextLine() {
