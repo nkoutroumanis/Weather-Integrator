@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
@@ -30,17 +31,17 @@ public class KafkaParser implements Parser {
 
         Properties props = new Properties();
         props.load(new FileInputStream(propertiesFile));
-//        props.put("bootstrap.servers", "localhost:9092");
-//        props.put("group.id", "test");
-//        props.put("enable.auto.commit", "true");
-//        props.put("auto.commit.interval.ms", "1000");
-//        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-//        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
         this.consumer = new KafkaConsumer<>(props);
 
         consumer.subscribe(Arrays.asList(topicName));
-        this.consumerIter = consumer.poll(Duration.ofMinutes(5)).iterator();
+        try{
+            this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
+        }
+        catch(KafkaException k){
+            System.out.println(k);
+            consumer.close();
+        }
 
 //        while (true) {
 //            ConsumerRecords<String, String> records = consumer.poll(100).;
@@ -62,11 +63,20 @@ public class KafkaParser implements Parser {
     }
 
     @Override
-    public boolean hasNextLine() throws IOException {
+    public boolean hasNextLine() {
         if(consumerIter.hasNext()){
-            return consumerIter.hasNext();
+            return true;
         }
-        consumer.close();
-        return false;
+        else{
+            try{
+                this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
+            }
+            catch(KafkaException k){
+                System.out.println(k);
+                consumer.close();
+                return false;
+            }
+        }
+        return true;
     }
 }
