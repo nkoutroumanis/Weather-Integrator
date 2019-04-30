@@ -35,19 +35,8 @@ public class KafkaParser implements Parser {
         this.consumer = new KafkaConsumer<>(props);
 
         consumer.subscribe(Arrays.asList(topicName));
-        try{
-            this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
-        }
-        catch(KafkaException k){
-            System.out.println(k);
-            consumer.close();
-        }
 
-//        while (true) {
-//            ConsumerRecords<String, String> records = consumer.poll(100).;
-//            for (ConsumerRecord<String, String> record : records)
-//                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-//        }
+        this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
 
     }
 
@@ -64,19 +53,22 @@ public class KafkaParser implements Parser {
 
     @Override
     public boolean hasNextLine() {
+
+        System.out.println("hasNext(): "+consumerIter.hasNext());
+
         if(consumerIter.hasNext()){
             return true;
         }
         else{
-            try{
-                this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
+
+            this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
+
+            if(consumerIter.hasNext()){
+                System.out.println("poll runs again");
+                return true;
             }
-            catch(KafkaException k){
-                System.out.println(k);
-                consumer.close();
-                return false;
-            }
+            consumer.close();
+            return false;
         }
-        return true;
     }
 }

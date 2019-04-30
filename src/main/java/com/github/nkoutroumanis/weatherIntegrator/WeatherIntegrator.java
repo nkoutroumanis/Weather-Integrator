@@ -156,7 +156,11 @@ public final class WeatherIntegrator {
 
     private void integrate(Output output) throws IOException, ParseException {
 
+
+
         while (parser.hasNextLine()){
+
+            System.out.println("PASSED");
 
             String[] a = parser.nextLine();
 
