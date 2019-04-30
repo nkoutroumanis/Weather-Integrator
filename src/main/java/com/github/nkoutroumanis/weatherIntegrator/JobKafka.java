@@ -26,10 +26,10 @@ public final class JobKafka {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/home/wp3user01/client.properties", "vfi-batch-sample", 1,
+            WeatherIntegrator.newWeatherIntegrator("./client.properties", "vfi-batch-sample", 1,
                     "/home/wp3user01/grib-files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic("/home/wp3user01/client.properties","nikos-trial");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic("./producer.properties","nikos-trial");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
