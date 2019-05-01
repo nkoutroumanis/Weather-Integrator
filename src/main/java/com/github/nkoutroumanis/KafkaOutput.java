@@ -27,7 +27,7 @@ public class KafkaOutput implements Output {
         Properties props = new Properties();
         props.load(new FileInputStream(propertiesFile));
 
-        producer = new KafkaProducer<String, String>(props);
+        producer = new KafkaProducer<>(props);
     }
 
     public static KafkaOutput newKafkaOutput(String propertiesFile, String topicName) throws IOException {

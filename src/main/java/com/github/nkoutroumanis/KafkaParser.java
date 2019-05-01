@@ -48,13 +48,11 @@ public class KafkaParser implements Parser {
     @Override
     public String[] nextLine() {
         ConsumerRecord<String, String> record = consumerIter.next();
-        return new String[] {record.value(), record.key()};
+        return new String[] {record.value(), /*record.key()*/"kafkaTopicData.csv"};
     }
 
     @Override
     public boolean hasNextLine() {
-
-        System.out.println("hasNext(): "+consumerIter.hasNext());
 
         if(consumerIter.hasNext()){
             return true;
