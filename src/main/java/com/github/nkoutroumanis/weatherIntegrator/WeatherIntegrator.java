@@ -167,7 +167,7 @@ public final class WeatherIntegrator {
 
     private void integrate(Output output) throws IOException, ParseException {
 
-
+        start = System.currentTimeMillis();
 
         while (parser.hasNextLine()){
 
@@ -205,6 +205,8 @@ public final class WeatherIntegrator {
             output.out(sb.toString() , a[1]);
 
         }
+
+        elapsedTime = (System.currentTimeMillis() - start) / 1000;
 
             output.close();
 
@@ -268,6 +270,9 @@ public final class WeatherIntegrator {
 //
 //        wdo.obtainAttributes();
 //    }
+
+    public static long start;
+    public static long elapsedTime;
 
     public static long hits = 0;
     public static long numberofRecords = 0;

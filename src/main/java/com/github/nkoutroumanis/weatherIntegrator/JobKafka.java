@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
+import com.github.nkoutroumanis.Rectangle;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,26 +23,26 @@ public final class JobKafka {
         * */
 
 
-        long start = System.currentTimeMillis();
+        //long start = System.currentTimeMillis();
 
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("./client.properties", "vfi-batch-sample", 1,
+            WeatherIntegrator.newWeatherIntegrator("./client.properties", "vfi-batch-sample", 0,
                     "/home/wp3user01/grib-files/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic("./producer.properties","nikos-trial");
+                    .lruCacheMaxEntries(1).useIndex().filter(Rectangle.newRectangle(-10.5, 34,37.7, 60)).build().integrateAndOutputToKafkaTopic("./producer.properties","nikos-trial");
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
 
-            long elapsedTime = (System.currentTimeMillis() - start) / 1000;
-            System.out.println("Elapsed Time: " + elapsedTime + " sec");
+            //long elapsedTime = (System.currentTimeMillis() - start) / 1000;
+            System.out.println("Elapsed Time: " + WeatherIntegrator.elapsedTime + " sec");
 
             System.out.println("Number Of Records: " + WeatherIntegrator.numberofRecords);
             System.out.println("Number Of Hits: " + WeatherIntegrator.hits);
             System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
-            System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / elapsedTime));
+            System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / WeatherIntegrator.elapsedTime));
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
