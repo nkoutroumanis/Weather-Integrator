@@ -160,8 +160,6 @@ public final class WeatherIntegrator {
 
         while (parser.hasNextLine()){
 
-            System.out.println("PASSED");
-
             String[] a = parser.nextLine();
 
             String line = a[0];

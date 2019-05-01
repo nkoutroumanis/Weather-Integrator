@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.UUID;
 
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -31,9 +32,9 @@ public class KafkaParser implements Parser {
 
         Properties props = new Properties();
         props.load(new FileInputStream(propertiesFile));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
 
         this.consumer = new KafkaConsumer<>(props);
-
         consumer.subscribe(Arrays.asList(topicName));
 
         this.consumerIter = consumer.poll(Duration.ofMinutes(poll)).iterator();
