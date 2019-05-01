@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.FileParser;
 import com.github.nkoutroumanis.KafkaParser;
 import com.github.nkoutroumanis.Rectangle;
 import com.typesafe.config.Config;
@@ -13,7 +12,7 @@ import java.text.ParseException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class JobKafka {
+public final class JobKafkaApp {
 
     public static void main(String args[]) {
 
@@ -27,19 +26,22 @@ public final class JobKafka {
         * */
 
 
+        Config conf = ConfigFactory.load("./application.conf");
+        //int bar1 = conf.getInt("foo.bar");
+        Config wi = conf.getConfig("wi");
+        Config filter = conf.getConfig("filter");
 
         try {
-            Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
+            Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
 
-            WeatherIntegrator.newWeatherIntegrator("./client.properties", "vfi-batch-sample", 0,
-                    "/home/wp3user01/grib-files/", 7,
-                    8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().filter(Rectangle.newRectangle(-10.5, 34,37.7, 60)).build().integrateAndOutputToKafkaTopic("./producer.properties","nikos-trial");
+            WeatherIntegrator.newWeatherIntegrator(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll"),
+                    wi.getString("gribFilesFolderPath"), wi.getInt("numberOfColumnLongitude"),
+                    wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"), stream.collect(Collectors.toList()))
+                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"),filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(wi.getString("producerPropertiesPath"), wi.getString("producerTopic"));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
 
-            //long elapsedTime = (System.currentTimeMillis() - start) / 1000;
             System.out.println("Elapsed Time: " + WeatherIntegrator.elapsedTime + " sec");
 
             System.out.println("Number Of Records: " + WeatherIntegrator.numberofRecords);
@@ -47,6 +49,7 @@ public final class JobKafka {
             System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
             System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / WeatherIntegrator.elapsedTime));
             System.out.println("Kafka buffer times: " + KafkaParser.buffer);
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
