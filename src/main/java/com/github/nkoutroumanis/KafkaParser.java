@@ -31,9 +31,9 @@ public class KafkaParser implements Parser {
         this.poll = poll;
 
         Properties props = new Properties();
-        props.load(new FileInputStream(propertiesFile));
         props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
-
+        props.load(new FileInputStream(propertiesFile));
+        
         this.consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Arrays.asList(topicName));
 

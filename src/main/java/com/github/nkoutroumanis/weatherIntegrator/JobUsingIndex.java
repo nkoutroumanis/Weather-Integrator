@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
+import com.github.nkoutroumanis.Rectangle;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

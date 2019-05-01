@@ -28,6 +28,8 @@ public final class WeatherIntegrator {
 
     private final String separator;
 
+    private final Rectangle rectangle;
+
     public static class Builder {
 
         private final Parser parser;
@@ -45,6 +47,8 @@ public final class WeatherIntegrator {
         private String separator = ";";
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
+
+        private Rectangle rectangle = null;
 
         public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
 
@@ -88,6 +92,11 @@ public final class WeatherIntegrator {
             return this;
         }
 
+        public Builder filter(Rectangle rectangle){
+            this.rectangle = rectangle;
+            return this;
+        }
+
         public WeatherIntegrator build() throws IOException {
             return new WeatherIntegrator(this);
         }
@@ -107,6 +116,8 @@ public final class WeatherIntegrator {
 
         wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
 
+
+        rectangle = builder.rectangle;
     }
 
 //    private void clearExportingDirectory(String filesExportPath) throws IOException {
@@ -171,6 +182,13 @@ public final class WeatherIntegrator {
 
             double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
             double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+            //filtering
+            if(rectangle != null){
+                if(((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))){
+                    continue;
+                }
+            }
 
             StringBuilder sb = new StringBuilder();
 
