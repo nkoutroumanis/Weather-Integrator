@@ -37,7 +37,7 @@ public class KafkaParser implements Parser {
         this.consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Arrays.asList(topicName));
 
-        this.consumerIter = consumer.poll(Duration.ofSeconds(poll)).iterator();
+        this.consumerIter = consumer.poll(Duration.ofMillis(poll)).iterator();
 
     }
 
@@ -60,7 +60,7 @@ public class KafkaParser implements Parser {
         }
         else{
 
-            this.consumerIter = consumer.poll(Duration.ofSeconds(poll)).iterator();
+            this.consumerIter = consumer.poll(Duration.ofMillis(poll)).iterator();
 
             if(consumerIter.hasNext()){
                 buffer++;

@@ -5,6 +5,7 @@ import com.github.nkoutroumanis.Rectangle;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,8 +27,7 @@ public final class JobKafkaApp {
         * */
 
 
-        Config conf = ConfigFactory.load("./application.conf");
-        //int bar1 = conf.getInt("foo.bar");
+        Config conf = ConfigFactory.parseFile(new File(args[0]));
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
 
