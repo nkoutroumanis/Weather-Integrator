@@ -50,9 +50,10 @@ public final class WeatherIntegrator {
 
         private Rectangle rectangle = null;
 
-        public Builder(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+        public Builder(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
 
-            parser = FileParser.newFileParser(filesPath, filesExtension);
+            this.parser = parser;
+            //parser = FileParser.newFileParser(filesPath, filesExtension);
             this.gribFilesFolderPath = gribFilesFolderPath;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
@@ -61,16 +62,16 @@ public final class WeatherIntegrator {
             this.variables = variables;
         }
 
-        public Builder(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
-
-            parser = KafkaParser.newKafkaParser(propertiesFile, topicName, poll);
-            this.gribFilesFolderPath = gribFilesFolderPath;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-            this.variables = variables;
-        }
+//        public Builder(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+//
+//            parser = KafkaParser.newKafkaParser(propertiesFile, topicName, poll);
+//            this.gribFilesFolderPath = gribFilesFolderPath;
+//            this.numberOfColumnLongitude = numberOfColumnLongitude;
+//            this.numberOfColumnLatitude = numberOfColumnLatitude;
+//            this.numberOfColumnDate = numberOfColumnDate;
+//            this.dateFormat = new SimpleDateFormat(dateFormat);
+//            this.variables = variables;
+//        }
 
         public Builder gribFilesExtension(String gribFilesExtension) {
             this.gribFilesExtension = gribFilesExtension;
@@ -137,32 +138,25 @@ public final class WeatherIntegrator {
 //        }
 //    }
 
-    private boolean deleteDirectory(File directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.listFiles();
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file);
-            }
-        }
-        return directoryToBeDeleted.delete();
+    public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws IOException, ParseException {
+        integrate(kafkaOutput);
+    }
+//    public void integrateAndOutputToKafkaTopic(String properties, String topicName) throws IOException, ParseException {
+//        integrate(KafkaOutput.newKafkaOutput(properties, topicName));
+//    }
+
+    public void integrateAndOutputToDirectory(FileOutput fileOutput) throws IOException, ParseException {
+        integrate(fileOutput);
     }
 
-    public void integrateAndOutputToKafkaTopic(String properties, String topicName) throws IOException, ParseException {
-        integrate(KafkaOutput.newKafkaOutput(properties, topicName));
-    }
-
-    public void integrateAndOutputToDirectory(String directory) throws IOException, ParseException {
-
-        if(!directory.substring(directory.length()-1).equals(File.separator)){
-            directory = directory + File.separator;
-        }
-
-        deleteDirectory(new File(directory));
-        integrate(FileOutput.newFileOutput(directory));
-    }
-
-//    public void integrateAndOutputToKafkaTopic(){
-//        integrate(KafkaOutput.newKafkaOutput());
+//    public void integrateAndOutputToDirectory(String directory) throws IOException, ParseException {
+//
+//        if(!directory.substring(directory.length()-1).equals(File.separator)){
+//            directory = directory + File.separator;
+//        }
+//
+//        deleteDirectory(new File(directory));
+//        integrate(FileOutput.newFileOutput(directory));
 //    }
 
     private void integrate(Output output) throws IOException, ParseException {
@@ -212,13 +206,13 @@ public final class WeatherIntegrator {
 
     }
 
-    public static WeatherIntegrator.Builder newWeatherIntegrator(String filesPath, String filesExtension, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
-        return new WeatherIntegrator.Builder(filesPath, filesExtension, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
+    public static WeatherIntegrator.Builder newWeatherIntegrator(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+        return new WeatherIntegrator.Builder(parser, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
     }
 
-    public static WeatherIntegrator.Builder newWeatherIntegrator(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
-        return new WeatherIntegrator.Builder(propertiesFile, topicName, poll, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
-    }
+//    public static WeatherIntegrator.Builder newWeatherIntegrator(String propertiesFile, String topicName, long poll, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+//        return new WeatherIntegrator.Builder(propertiesFile, topicName, poll, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
+//    }
 
 //    public void startIntegration() throws IOException {
 //

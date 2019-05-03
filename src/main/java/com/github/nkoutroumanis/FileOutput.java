@@ -22,6 +22,8 @@ public final class FileOutput implements Output{
             directory = directory + File.separator;
         }
 
+        deleteDirectory(new File(directory));
+
         //create Export Directory
         try {
             Files.createDirectories(Paths.get(directory));
@@ -32,6 +34,16 @@ public final class FileOutput implements Output{
 
     public static FileOutput newFileOutput(String directory){
         return new FileOutput(directory);
+    }
+
+    private boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
     @Override

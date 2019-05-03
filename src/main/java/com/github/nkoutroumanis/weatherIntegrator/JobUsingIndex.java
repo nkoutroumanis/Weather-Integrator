@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
+import com.github.nkoutroumanis.FileOutput;
+import com.github.nkoutroumanis.FileParser;
 import com.github.nkoutroumanis.Rectangle;
 
 import java.io.IOException;
@@ -28,10 +30,10 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv",
+            WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv"),
                     "/Users/nicholaskoutroumanis/Desktop/grib/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory("/Users/nicholaskoutroumanis/Desktop/myNewFolder/");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/"));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

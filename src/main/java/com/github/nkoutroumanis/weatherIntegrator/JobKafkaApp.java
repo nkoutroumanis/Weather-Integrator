@@ -1,5 +1,6 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
+import com.github.nkoutroumanis.KafkaOutput;
 import com.github.nkoutroumanis.KafkaParser;
 import com.github.nkoutroumanis.Rectangle;
 import com.typesafe.config.Config;
@@ -34,10 +35,10 @@ public final class JobKafkaApp {
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
 
-            WeatherIntegrator.newWeatherIntegrator(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll"),
+            WeatherIntegrator.newWeatherIntegrator(KafkaParser.newKafkaParser(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll")),
                     wi.getString("gribFilesFolderPath"), wi.getInt("numberOfColumnLongitude"),
                     wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"), stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"),filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(wi.getString("producerPropertiesPath"), wi.getString("producerTopic"));
+                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"),filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(KafkaOutput.newKafkaOutput(wi.getString("producerPropertiesPath"), wi.getString("producerTopic")));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
