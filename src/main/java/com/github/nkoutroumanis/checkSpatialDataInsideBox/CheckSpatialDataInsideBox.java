@@ -10,6 +10,7 @@ import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.List;
 
 public final class CheckSpatialDataInsideBox implements FilesParse {
@@ -76,35 +77,38 @@ public final class CheckSpatialDataInsideBox implements FilesParse {
 //
 //    }
 
-    public void exportTxt(FileOutput fileOutput) throws IOException {
-
-
+    public void exportInfo(FileOutput fileOutput) throws IOException {
 
         while (parser.hasNextLine()){
 
-            String[] a = parser.nextLine();
+            try {
+                String[] a = parser.nextLine();
 
-            String line = a[0];
-            String[] separatedLine = line.split(separator);
+                String line = a[0];
+                String[] separatedLine = line.split(separator);
 
-            if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                    continue;
+                }
+
+                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+
+                if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
+                        && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
+                    numberOfRecordsInSpace2D++;
+                }
+
+                numberOfRecords++;
+            }
+            catch(ArrayIndexOutOfBoundsException | NumberFormatException e){
                 continue;
             }
 
-            double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-            double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-
-
-            if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
-                    && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
-                numberOfRecordsInSpace2D++;
-            }
-
-            numberOfRecords++;
-
         }
 
-        String fileName = "Spatial_Box_Info.txt";
+        String fileName = "Spatial-Box-Info.txt";
 
         fileOutput.out("In the Spatial Box with", fileName);
         fileOutput.out("maxLon: " + rectangle.getMaxx(), fileName);

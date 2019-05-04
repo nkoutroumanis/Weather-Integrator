@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -48,9 +49,9 @@ public final class WeatherIntegrator {
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
-        private Rectangle rectangle = null;
+        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
 
-        public Builder(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+        public Builder(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
 
             this.parser = parser;
             //parser = FileParser.newFileParser(filesPath, filesExtension);
@@ -165,38 +166,43 @@ public final class WeatherIntegrator {
 
         while (parser.hasNextLine()){
 
-            String[] a = parser.nextLine();
+            try {
+                String[] a = parser.nextLine();
 
-            String line = a[0];
-            String[] separatedLine = line.split(separator);
+                String line = a[0];
+                String[] separatedLine = line.split(separator);
 
-            if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
-                continue;
-            }
-
-            double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-            double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-
-            //filtering
-            if(rectangle != null){
-                if(((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))){
+                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
                     continue;
                 }
+
+                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
+
+                //filtering
+                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                    continue;
+                }
+
+
+                StringBuilder sb = new StringBuilder();
+
+                //if dataset finishes with ;
+                sb.append(line.substring(0, line.length() - 1));
+                //else sb.append(line);
+
+                numberofRecords++;
+
+                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
+
+                values.forEach(s -> sb.append(separator + s));
+
+                output.out(sb.toString(), a[1]);
             }
-
-            StringBuilder sb = new StringBuilder();
-
-            //if dataset finishes with ;
-            sb.append(line.substring(0, line.length() - 1));
-            //else sb.append(line);
-
-            numberofRecords++;
-
-            List<String> values = wdo.obtainAttributes(longitude, latitude, dateFormat.parse(separatedLine[numberOfColumnDate - 1]));
-
-            values.forEach(s -> sb.append(separator + s));
-
-            output.out(sb.toString() , a[1]);
+            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+                continue;
+            }
 
         }
 
@@ -206,7 +212,7 @@ public final class WeatherIntegrator {
 
     }
 
-    public static WeatherIntegrator.Builder newWeatherIntegrator(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws IOException {
+    public static WeatherIntegrator.Builder newWeatherIntegrator(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
         return new WeatherIntegrator.Builder(parser, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
     }
 

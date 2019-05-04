@@ -49,7 +49,7 @@ public class KafkaParser implements Parser {
     @Override
     public String[] nextLine() {
         ConsumerRecord<String, String> record = consumerIter.next();
-        return new String[] {record.value(), /*record.key()*/"kafkaTopicData.csv"};
+        return new String[] {record.value(), record.topic()+"-"+record.partition()+".csv"/*"kafkaTopicData.csv"*/};
     }
 
     @Override
