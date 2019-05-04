@@ -1,28 +1,34 @@
 package com.github.nkoutroumanis.histogram;
 
+import com.github.nkoutroumanis.FileOutput;
 import com.github.nkoutroumanis.FilesParse;
+import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.dbDataInsertion.MongoDbDataInsertion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bson.Document;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public final class GridPartition implements FilesParse {
 
-    private final Space2D space2D;
+    private final Rectangle rectangle;
     private final long cellsInXAxis;
     private final long cellsInYAxis;
-    private final String filesPath;
+    private final Parser parser;
     private final int numberOfColumnLongitude;
     private final int numberOfColumnLatitude;
     private final int numberOfColumnDate;
+    private final DateFormat dateFormat;
 
-    private final String filesExtension;
     private final String separator;
 
     private String exportPath;
@@ -32,31 +38,27 @@ public final class GridPartition implements FilesParse {
 
     public static class Builder {
 
-        private final Space2D space2D;
+        private Rectangle rectangle;
         private final long cellsInXAxis;
         private final long cellsInYAxis;
-        private final String filesPath;
+        private final Parser parser;
         private final int numberOfColumnLongitude;
         private final int numberOfColumnLatitude;
         private final int numberOfColumnDate;
+        private final DateFormat dateFormat;
 
-        private String filesExtension = ".csv";
         private String separator = ";";
 
-        public Builder(Space2D space2D, long cellsInXAxis, long cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
-            this.space2D = space2D;
+        public Builder(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+            this.rectangle = rectangle;
             this.cellsInXAxis = cellsInXAxis;
             this.cellsInYAxis = cellsInYAxis;
-            this.filesPath = filesPath;
+            this.parser = parser;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
             this.numberOfColumnDate = numberOfColumnDate;
+            this.dateFormat = new SimpleDateFormat(dateFormat);
 
-        }
-
-        public Builder filesExtension(String filesExtension) {
-            this.filesExtension = filesExtension;
-            return this;
         }
 
         public Builder separator(String separator) {
@@ -70,24 +72,24 @@ public final class GridPartition implements FilesParse {
     }
 
     private GridPartition(Builder builder) {
-        space2D = builder.space2D;
+        rectangle = builder.rectangle;
         cellsInXAxis = builder.cellsInXAxis;
         cellsInYAxis = builder.cellsInYAxis;
-        filesPath = builder.filesPath;
+        parser = builder.parser;
         numberOfColumnLongitude = builder.numberOfColumnLongitude;
         numberOfColumnLatitude = builder.numberOfColumnLatitude;
         numberOfColumnDate = builder.numberOfColumnDate;
+        dateFormat = builder.dateFormat;
 
-        filesExtension = builder.filesExtension;
         separator = builder.separator;
     }
 
 
-    public static Builder newGridPartition(Space2D space2D, long cellsInXAxis, long cellsInYAxis, String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate) {
-        return new Builder(space2D, cellsInXAxis, cellsInYAxis, filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate);
+    public static Builder newGridPartition(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        return new Builder(rectangle, cellsInXAxis, cellsInYAxis, parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
-    public void exportHistogram(String exportPath) {
+    public void exportHistogram(String exportPath) throws IOException {
 
         Path path = Paths.get(exportPath);
         //if directory exists does not exist
@@ -103,10 +105,39 @@ public final class GridPartition implements FilesParse {
         this.exportPath = exportPath;
         this.map = new HashMap<>();
 
-        x = (space2D.getMaxx() - space2D.getMinx()) / cellsInXAxis;
-        y = (space2D.getMaxy() - space2D.getMiny()) / cellsInYAxis;
+        x = (rectangle.getMaxx() - rectangle.getMinx()) / cellsInXAxis;
+        y = (rectangle.getMaxy() - rectangle.getMiny()) / cellsInYAxis;
 
-        parse(filesPath, separator, filesExtension, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate);
+
+        while (parser.hasNextLine()){
+
+            try {
+                String[] a = parser.nextLine();
+
+                String line = a[0];
+                String[] separatedLine = line.split(separator);
+
+                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                    continue;
+                }
+
+                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
+
+                //filtering
+                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                    continue;
+                }
+
+                insertToHistogram(longitude, latitude);
+
+            }
+            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+                continue;
+            }
+        }
+
 
         ObjectOutputStream out = null;
         try {
@@ -121,7 +152,7 @@ public final class GridPartition implements FilesParse {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
             Map<String, Object> properties = new HashMap<>();
-            properties.put("space2D", space2D);
+            properties.put("rectangle", rectangle);
             properties.put("cellsInXAxis", cellsInXAxis);
             properties.put("cellsInYAxis", cellsInYAxis);
             gson.toJson(properties, writer);
@@ -130,27 +161,25 @@ public final class GridPartition implements FilesParse {
             e.printStackTrace();
         }
 
-        System.out.println("Number Of Cells: " + (cellsInXAxis * cellsInYAxis));
-        System.out.println("Number Of Cells in X Axis: " + cellsInXAxis);
-        System.out.println("Number Of Cells in Y Axis: " + cellsInYAxis);
-        System.out.println("Number Of Filled Cells: " + map.size());
-        System.out.println("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()));
-        System.out.println("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Percentage of Empty Cells: " + (((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)));
-        System.out.println("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()));
-
-
-        System.out.println(Collections.min(map.values()));
-        System.out.println(Collections.max(map.values()));
+        FileOutput fileOutput = FileOutput.newFileOutput(exportPath);
+        String s = "histogram-info.txt";
+        fileOutput.out("Number Of Cells: " + (cellsInXAxis * cellsInYAxis),s);
+        fileOutput.out("Number Of Cells in X Axis: " + cellsInXAxis,s);
+        fileOutput.out("Number Of Cells in Y Axis: " + cellsInYAxis,s);
+        fileOutput.out("Number Of Filled Cells: " + map.size(),s);
+        fileOutput.out("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()),s);
+        fileOutput.out("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)),s);
+        fileOutput.out("Percentage of Empty Cells: " + (((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)),s);
+        fileOutput.out("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()),s);
+        fileOutput.out("Minimum number contained in a cell: " + Collections.min(map.values()),s);
+        fileOutput.out("Maximum number contained in a cell: " + Collections.min(map.values()),s);
 
     }
 
+    private void insertToHistogram(double longitude, double latitude) {
 
-    @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
-
-        long xc = (long) ((longitude - space2D.getMinx()) / x);
-        long yc = (long) ((latitude - space2D.getMiny()) / y);
+        long xc = (long) ((longitude - rectangle.getMinx()) / x);
+        long yc = (long) ((latitude - rectangle.getMiny()) / y);
 
         long k = xc + (yc * cellsInXAxis);
 
@@ -159,7 +188,6 @@ public final class GridPartition implements FilesParse {
         } else {
             map.put(k, 1l);
         }
-
     }
 
 }
