@@ -12,5 +12,4 @@ public interface Parser {
 
     static final Predicate<String> empty = (s1) -> (s1.trim().isEmpty());
 
-
 }

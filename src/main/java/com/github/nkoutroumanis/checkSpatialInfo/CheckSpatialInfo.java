@@ -1,5 +1,6 @@
 package com.github.nkoutroumanis.checkSpatialInfo;
 
+import com.github.nkoutroumanis.FileOutput;
 import com.github.nkoutroumanis.FilesParse;
 import com.github.nkoutroumanis.Parser;
 
@@ -19,7 +20,8 @@ public final class CheckSpatialInfo implements FilesParse {
 
     private final String separator;
 
-    private Set<String> filesWithErrors;
+    private Set<String> filesWithEmptySpatialInformation;
+    private Set<String> filesWithSpatialInformationOutOfRange;
 
     private long numberOfRecords = 0;
 
@@ -85,25 +87,25 @@ public final class CheckSpatialInfo implements FilesParse {
         }
     }
 
-    @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
-
-        if (Double.compare(maxx, longitude) == -1) {
-            maxx = longitude;
-        }
-        if (Double.compare(minx, longitude) == 1) {
-            minx = longitude;
-        }
-        if (Double.compare(maxy, latitude) == -1) {
-            maxy = latitude;
-        }
-        if (Double.compare(miny, latitude) == 1) {
-            miny = latitude;
-        }
-
-        numberOfRecords++;
-
-    }
+//    @Override
+//    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
+//
+//        if (Double.compare(maxx, longitude) == -1) {
+//            maxx = longitude;
+//        }
+//        if (Double.compare(minx, longitude) == 1) {
+//            minx = longitude;
+//        }
+//        if (Double.compare(maxy, latitude) == -1) {
+//            maxy = latitude;
+//        }
+//        if (Double.compare(miny, latitude) == 1) {
+//            miny = latitude;
+//        }
+//
+//        numberOfRecords++;
+//
+//    }
 
     @Override
     public void lineWithError(Path file, String line) {
@@ -114,9 +116,10 @@ public final class CheckSpatialInfo implements FilesParse {
         }
     }
 
-    public void exportTxt(String txtExportPath) {
+    public void exportTxt(FileOutput fileOutput) throws IOException {
 
-        filesWithErrors = new HashSet<>();
+        filesWithEmptySpatialInformation = new HashSet<>();
+        filesWithSpatialInformationOutOfRange = new HashSet<>();
 
 
         while (parser.hasNextLine()){
@@ -127,6 +130,9 @@ public final class CheckSpatialInfo implements FilesParse {
             String[] separatedLine = line.split(separator);
 
             if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                if (!filesWithEmptySpatialInformation.contains(a[1])) {
+                    filesWithEmptySpatialInformation.add(a[1]);
+                }
                 continue;
             }
 
@@ -134,9 +140,19 @@ public final class CheckSpatialInfo implements FilesParse {
             double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
 
-            if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
-                    && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
-                numberOfRecordsInSpace2D++;
+
+
+            if (Double.compare(maxx, longitude) == -1) {
+                maxx = longitude;
+            }
+            if (Double.compare(minx, longitude) == 1) {
+                minx = longitude;
+            }
+            if (Double.compare(maxy, latitude) == -1) {
+                maxy = latitude;
+            }
+            if (Double.compare(miny, latitude) == 1) {
+                miny = latitude;
             }
 
             numberOfRecords++;
@@ -145,8 +161,12 @@ public final class CheckSpatialInfo implements FilesParse {
 
         String fileName = "SpatialFilesInfo.txt";
 
-        fileOutput.out("Files With Errors: ", fileName);
-        filesWithErrors.forEach((s) -> fileOutput.out(s));
+        fileOutput.out("Files With Empty Spatial Information: ", fileName);
+        filesWithEmptySpatialInformation.forEach((s) -> fileOutput.out(s, fileName));
+        fileOutput.out("\r\n", fileName);
+
+        fileOutput.out("Files With Spatial Information out of range: ", fileName);
+        filesWithSpatialInformationOutOfRange.forEach((s) -> fileOutput.out(s, fileName));
         fileOutput.out("\r\n", fileName);
 
         fileOutput.out("Formed Spatial Box: ", fileName);
