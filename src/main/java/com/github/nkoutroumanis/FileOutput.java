@@ -15,14 +15,17 @@ public final class FileOutput implements Output{
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    private FileOutput(String directory){
+    private FileOutput(String directory, boolean deleteDirectoryIfExist){
         this.directory = directory;
 
         if(!directory.substring(directory.length()-1).equals(File.separator)){
             directory = directory + File.separator;
         }
 
-        deleteDirectory(new File(directory));
+        if(deleteDirectoryIfExist){
+            deleteDirectory(new File(directory));
+        }
+
 
         //create Export Directory
         try {
@@ -32,8 +35,8 @@ public final class FileOutput implements Output{
         }
     }
 
-    public static FileOutput newFileOutput(String directory){
-        return new FileOutput(directory);
+    public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist){
+        return new FileOutput(directory, deleteDirectoryIfExist);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {

@@ -53,6 +53,8 @@ public final class JobKafkaApp {
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

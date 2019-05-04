@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class CheckSpatialInfo implements FilesParse {
+public final class CheckSpatialInfo {
 
     private final Parser parser;
 

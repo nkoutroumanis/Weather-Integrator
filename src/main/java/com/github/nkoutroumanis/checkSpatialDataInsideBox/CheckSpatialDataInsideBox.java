@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
-public final class CheckSpatialDataInsideBox implements FilesParse {
+public final class CheckSpatialDataInsideBox {
 
     private final Parser parser;
 

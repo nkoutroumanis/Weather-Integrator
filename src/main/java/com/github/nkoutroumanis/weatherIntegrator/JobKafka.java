@@ -50,6 +50,8 @@ public final class JobKafka {
             System.out.println("Kafka buffer times: " + KafkaParser.buffer);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -33,7 +33,7 @@ public final class JobUsingIndex {
             WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv"),
                     "/Users/nicholaskoutroumanis/Desktop/grib/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/"));
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
@@ -47,6 +47,8 @@ public final class JobUsingIndex {
             System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / elapsedTime));
 
         } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class CheckSpatioTemporalInfo implements FilesParse {
+public final class CheckSpatioTemporalInfo {
 
     private final Parser parser;
 

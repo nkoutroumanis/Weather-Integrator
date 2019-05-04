@@ -22,7 +22,7 @@ public final class JobWithoutIndex {
             WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser("/home/nikolaos/Desktop/csv/", "csv"),
                     "/home/nikolaos/Documents/gb-january-2018/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(1).build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/home/nikolaos/Desktop/eraseItt/"));
+                    .lruCacheMaxEntries(1).build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/home/nikolaos/Desktop/eraseItt/",true));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");
@@ -38,6 +38,8 @@ public final class JobWithoutIndex {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

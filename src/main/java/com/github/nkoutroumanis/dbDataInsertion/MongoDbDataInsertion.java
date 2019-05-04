@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public final class MongoDbDataInsertion implements FilesParse {
+public final class MongoDbDataInsertion {
 
     private final MongoDbConnector mongoDbConnector;
     private final String database;

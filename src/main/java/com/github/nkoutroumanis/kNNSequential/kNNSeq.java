@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class kNNSeq implements FilesParse {
+public class kNNSeq {
 
     private final Parser parser;
     private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...

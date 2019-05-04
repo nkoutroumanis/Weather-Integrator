@@ -40,12 +40,14 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(filesPath, "csv",
+            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
                         gribFilesPath, 7,
                         8, 3, "yyyy-MM-dd HH:mm:ss",
                         variables)
                         .lruCacheMaxEntries(1).useIndex().build();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -54,12 +56,14 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(filesPath, "csv",
+            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
                         gribFilesPath, 7,
                         8, 3, "yyyy-MM-dd HH:mm:ss",
                         variables)
                         .lruCacheMaxEntries(1).build();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -72,7 +76,7 @@ public class BenchmarksTest {
     @OutputTimeUnit(TimeUnit.MINUTES)
     public void integrateDataUsingIndex()  {
         try {
-            wiWithIndex.integrateAndOutputToDirectory(filesExportPath);
+            wiWithIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -85,7 +89,7 @@ public class BenchmarksTest {
     @OutputTimeUnit(TimeUnit.HOURS)
     public void integrateDataWithoutIndex()  {
         try {
-            wiWithoutIndex.integrateAndOutputToDirectory(filesExportPath);
+            wiWithoutIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

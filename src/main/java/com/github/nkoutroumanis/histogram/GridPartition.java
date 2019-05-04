@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public final class GridPartition implements FilesParse {
+public final class GridPartition {
 
     private final Rectangle rectangle;
     private final long cellsInXAxis;
@@ -161,7 +161,7 @@ public final class GridPartition implements FilesParse {
             e.printStackTrace();
         }
 
-        FileOutput fileOutput = FileOutput.newFileOutput(exportPath);
+        FileOutput fileOutput = FileOutput.newFileOutput(exportPath, false);
         String s = "histogram-info.txt";
         fileOutput.out("Number Of Cells: " + (cellsInXAxis * cellsInYAxis),s);
         fileOutput.out("Number Of Cells in X Axis: " + cellsInXAxis,s);
@@ -174,6 +174,7 @@ public final class GridPartition implements FilesParse {
         fileOutput.out("Minimum number contained in a cell: " + Collections.min(map.values()),s);
         fileOutput.out("Maximum number contained in a cell: " + Collections.min(map.values()),s);
 
+        fileOutput.close();
     }
 
     private void insertToHistogram(double longitude, double latitude) {

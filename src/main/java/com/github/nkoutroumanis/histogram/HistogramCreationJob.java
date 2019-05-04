@@ -1,7 +1,10 @@
 package com.github.nkoutroumanis.histogram;
 
+import com.github.nkoutroumanis.FileParser;
+import com.github.nkoutroumanis.Rectangle;
+
 public final class HistogramCreationJob {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
 //        //x for longitude, y for latitude - the max values of lon and lat should be increased a little in order to include the whole data in histogram
 //        Rectangle space = Rectangle.newSpace2D(-26.64, 0, 121.57, 59.94);
 //        //Rectangle space = Rectangle.newSpace2D(20.1500159034, 34.9199876979, 26.61, 41.83);
@@ -28,10 +31,10 @@ public final class HistogramCreationJob {
 
 
         //x for longitude, y for latitude - the max values of lon and lat should be increased a little in order to include the whole data in histogram
-        Space2D space = Space2D.newSpace2D(20.15, 34.91, 26.61, 41.83);
+        Rectangle space = Rectangle.newRectangle(20.15, 34.91, 26.61, 41.83);
         //Rectangle space = Rectangle.newSpace2D(20.1500159034, 34.9199876979, 26.604196, 41.826905);
         //Rectangle space = Rectangle.newSpace2D(20, 34.9199876979, 27, 41.826905);
-        GridPartition.newGridPartition(space, 300, 300, "/home/nikolaos/Documents/synthetic-dataset2", 2, 3, 4).build().exportHistogram("/home/nikolaos/Documents/greek-hist/synthetic-dataset2/");
+        GridPartition.newGridPartition(space, 300, 300, FileParser.newFileParser("/home/nikolaos/Documents/synthetic-dataset2", ".csv"), 2, 3, 4, "yyyy-MM-dd HH:mm:ss").build().exportHistogram("/home/nikolaos/Documents/greek-hist/synthetic-dataset2/");
         System.out.println("------------------");
 
     }
