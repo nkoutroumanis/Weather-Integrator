@@ -1,21 +1,26 @@
 package com.github.nkoutroumanis.kNNSequential;
 
 import com.github.nkoutroumanis.FilesParse;
+import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.checkSpatialInfo.CheckSpatialInfo;
 
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class kNNSeq implements FilesParse {
 
-    private final String filesPath;
+    private final Parser parser;
     private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
     private final DateFormat dateFormat;
 
-    private String filesExtension;
     private String separator;
+    private final Rectangle rectangle;
 
     private List<Map.Entry<Double, String>> list;
     private double maxDistance;
@@ -25,32 +30,31 @@ public class kNNSeq implements FilesParse {
 
     public static class Builder {
 
-        private final String filesPath;
+        private final Parser parser;
         private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
         private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
         private final DateFormat dateFormat;
 
-        private String filesExtension = ".csv";
         private String separator = ";";
+        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
 
+        public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
 
-        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) {
-
-            this.filesPath = filesPath;
+            this.parser = parser;
             this.numberOfColumnDate = numberOfColumnDate;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
             this.dateFormat = new SimpleDateFormat(dateFormat);
         }
 
-        public Builder filesExtension(String filesExtension) {
-            this.filesExtension = filesExtension;
+        public Builder separator(String separator) {
+            this.separator = separator;
             return this;
         }
 
-        public Builder separator(String separator) {
-            this.separator = separator;
+        public Builder filter(Rectangle rectangle){
+            this.rectangle = rectangle;
             return this;
         }
 
@@ -61,27 +65,27 @@ public class kNNSeq implements FilesParse {
     }
 
     private kNNSeq(Builder builder){
-        filesPath = builder.filesPath;
+        parser = builder.parser;
         numberOfColumnDate = builder.numberOfColumnDate;
         numberOfColumnLatitude = builder.numberOfColumnLatitude;
         numberOfColumnLongitude = builder.numberOfColumnLongitude;
         dateFormat = builder.dateFormat;
 
-        filesExtension = builder.filesExtension;
         separator = builder.separator;
+        rectangle = builder.rectangle;
 
     }
 
-    public static Builder newkNNSeq(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) {
-        return new kNNSeq.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
+    public static Builder newkNNSeq(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        return new kNNSeq.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
-    public List<Map.Entry<Double, String>> findnearest(Point point, int neighboors){
+    public List<Map.Entry<Double, String>> findnearest(Point point, int neighboors) throws IOException {
 
         this.point = point;
         this.neighboors = neighboors;
 
-        if(FilesParse.longitudeOutOfRange.test(point.getX()) ||  FilesParse.latitudeOutOfRange.test(point.getY())){
+        if(Rectangle.longitudeOutOfRange.test(point.getX()) ||  Rectangle.latitudeOutOfRange.test(point.getY())){
             try {
                 throw new Exception("Point coordinates are wrong");
             } catch (Exception e) {
@@ -91,15 +95,41 @@ public class kNNSeq implements FilesParse {
 
         list = new ArrayList<>();
 
-        parse(filesPath, separator, filesExtension, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate);
+        while (parser.hasNextLine()){
+
+            try {
+                String[] a = parser.nextLine();
+
+                String line = a[0];
+                String[] separatedLine = line.split(separator);
+
+                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                    continue;
+                }
+
+                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
+
+                //filtering
+                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                    continue;
+                }
+
+                kNNCalculations(line, longitude, latitude);
+
+            }
+            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+                continue;
+            }
+        }
 
         list.sort((o1, o2) -> Double.compare(o1.getKey(), o2.getKey()));
 
         return list;
     }
 
-    @Override
-    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
+    public void kNNCalculations(String line, double longitude, double latitude) {
 
         double distance = FilesParse.harvesine(point.getX(), point.getY(), longitude, latitude);
 
@@ -146,5 +176,4 @@ public class kNNSeq implements FilesParse {
 
         }
     }
-
 }
