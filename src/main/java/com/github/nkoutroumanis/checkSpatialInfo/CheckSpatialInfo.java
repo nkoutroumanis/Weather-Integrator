@@ -1,6 +1,7 @@
 package com.github.nkoutroumanis.checkSpatialInfo;
 
 import com.github.nkoutroumanis.FilesParse;
+import com.github.nkoutroumanis.Parser;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,12 +12,11 @@ import java.util.Set;
 
 public final class CheckSpatialInfo implements FilesParse {
 
-    private final String filesPath;
+    private final Parser parser;
 
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 
-    private final String filesExtension;
     private final String separator;
 
     private Set<String> filesWithErrors;
@@ -30,24 +30,18 @@ public final class CheckSpatialInfo implements FilesParse {
 
     public static class Builder {
 
-        private final String filesPath;
+        private final Parser parser;
         private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 
-        private String filesExtension = ".csv";
         private String separator = ";";
 
 
-        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude) {
+        public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude) {
 
-            this.filesPath = filesPath;
+            this.parser = parser;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
             this.numberOfColumnLongitude = numberOfColumnLongitude;
-        }
-
-        public Builder filesExtension(String filesExtension) {
-            this.filesExtension = filesExtension;
-            return this;
         }
 
         public Builder separator(String separator) {
@@ -62,12 +56,11 @@ public final class CheckSpatialInfo implements FilesParse {
     }
 
     private CheckSpatialInfo(Builder builder) {
-        filesPath = builder.filesPath;
+        parser = builder.parser;
 
         numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 
-        filesExtension = builder.filesExtension;
         separator = builder.separator;
     }
 
@@ -125,6 +118,62 @@ public final class CheckSpatialInfo implements FilesParse {
 
         filesWithErrors = new HashSet<>();
 
+
+        while (parser.hasNextLine()){
+
+            String[] a = parser.nextLine();
+
+            String line = a[0];
+            String[] separatedLine = line.split(separator);
+
+            if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                continue;
+            }
+
+            double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+            double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+
+
+            if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
+                    && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
+                numberOfRecordsInSpace2D++;
+            }
+
+            numberOfRecords++;
+
+        }
+
+        String fileName = "SpatialFilesInfo.txt";
+
+        fileOutput.out("Files With Errors: ", fileName);
+        filesWithErrors.forEach((s) -> fileOutput.out(s));
+        fileOutput.out("\r\n", fileName);
+
+        fileOutput.out("Formed Spatial Box: ", fileName);
+        fileOutput.out("Max Longitude: " + maxx, fileName);
+        fileOutput.out("Min Longitude: " + minx, fileName);
+        fileOutput.out("Max Latitude: " + maxy, fileName);
+        fileOutput.out("Min Latitude: " + miny, fileName);
+
+        fileOutput.out("\r\n", fileName);
+        fileOutput.out("All of the records are " + numberOfRecords, fileName);
+
+        fileOutput.close();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         parse(filesPath, separator, filesExtension, numberOfColumnLongitude, numberOfColumnLatitude);
 
         //create Export Directory
@@ -161,8 +210,8 @@ public final class CheckSpatialInfo implements FilesParse {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude) {
-        return new CheckSpatialInfo.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude);
+    public static Builder newCheckSpatioTemporalInfo(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude) {
+        return new CheckSpatialInfo.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude);
     }
 
 

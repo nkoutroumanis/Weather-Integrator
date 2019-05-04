@@ -170,7 +170,7 @@ public final class WeatherIntegrator {
             String line = a[0];
             String[] separatedLine = line.split(separator);
 
-            if (WeatherIntegrator.empty.test(separatedLine[numberOfColumnLongitude - 1]) || WeatherIntegrator.empty.test(separatedLine[numberOfColumnLatitude - 1]) || WeatherIntegrator.empty.test(separatedLine[numberOfColumnDate - 1])) {
+            if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
                 continue;
             }
 
@@ -202,7 +202,7 @@ public final class WeatherIntegrator {
 
         elapsedTime = (System.currentTimeMillis() - start) / 1000;
 
-            output.close();
+        output.close();
 
     }
 
@@ -270,7 +270,5 @@ public final class WeatherIntegrator {
 
     public static long hits = 0;
     public static long numberofRecords = 0;
-
-    static final Predicate<String> empty = (s1) -> (s1.trim().isEmpty());
 
 }
