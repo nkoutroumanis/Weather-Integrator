@@ -4,7 +4,7 @@ import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public final class WeatherDataObtainer {
     //public static long hits = 0;
     //public static long numberofRecords = 0;
 
-    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables){
+    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) {
 
         lruCacheManager = LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension),
                 LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, variables);

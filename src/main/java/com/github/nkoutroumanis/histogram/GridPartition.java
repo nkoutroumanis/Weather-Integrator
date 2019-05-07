@@ -1,13 +1,10 @@
 package com.github.nkoutroumanis.histogram;
 
 import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.FilesParse;
 import com.github.nkoutroumanis.Parser;
 import com.github.nkoutroumanis.Rectangle;
-import com.github.nkoutroumanis.dbDataInsertion.MongoDbDataInsertion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.bson.Document;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,7 +13,10 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class GridPartition {
 
@@ -109,7 +109,7 @@ public final class GridPartition {
         y = (rectangle.getMaxy() - rectangle.getMiny()) / cellsInYAxis;
 
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             try {
                 String[] a = parser.nextLine();
@@ -132,8 +132,7 @@ public final class GridPartition {
 
                 insertToHistogram(longitude, latitude);
 
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
                 continue;
             }
         }
@@ -163,16 +162,16 @@ public final class GridPartition {
 
         FileOutput fileOutput = FileOutput.newFileOutput(exportPath, false);
         String s = "histogram-info.txt";
-        fileOutput.out("Number Of Cells: " + (cellsInXAxis * cellsInYAxis),s);
-        fileOutput.out("Number Of Cells in X Axis: " + cellsInXAxis,s);
-        fileOutput.out("Number Of Cells in Y Axis: " + cellsInYAxis,s);
-        fileOutput.out("Number Of Filled Cells: " + map.size(),s);
-        fileOutput.out("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()),s);
-        fileOutput.out("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)),s);
-        fileOutput.out("Percentage of Empty Cells: " + (((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)),s);
-        fileOutput.out("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()),s);
-        fileOutput.out("Minimum number contained in a cell: " + Collections.min(map.values()),s);
-        fileOutput.out("Maximum number contained in a cell: " + Collections.min(map.values()),s);
+        fileOutput.out("Number Of Cells: " + (cellsInXAxis * cellsInYAxis), s);
+        fileOutput.out("Number Of Cells in X Axis: " + cellsInXAxis, s);
+        fileOutput.out("Number Of Cells in Y Axis: " + cellsInYAxis, s);
+        fileOutput.out("Number Of Filled Cells: " + map.size(), s);
+        fileOutput.out("Number Of Empty Cells: " + ((cellsInXAxis * cellsInYAxis) - map.size()), s);
+        fileOutput.out("Percentage of Filled Cells: " + (((float) map.size()) / ((float) cellsInXAxis * cellsInYAxis)), s);
+        fileOutput.out("Percentage of Empty Cells: " + (((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) cellsInXAxis * cellsInYAxis)), s);
+        fileOutput.out("Empty Cells/Filled Cells: " + ((float) ((cellsInXAxis * cellsInYAxis) - map.size())) / ((float) map.size()), s);
+        fileOutput.out("Minimum number contained in a cell: " + Collections.min(map.values()), s);
+        fileOutput.out("Maximum number contained in a cell: " + Collections.min(map.values()), s);
 
         fileOutput.close();
     }

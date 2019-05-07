@@ -42,7 +42,7 @@ public final class WeatherIntegrator {
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
-        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
         public Builder(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
 
@@ -75,7 +75,7 @@ public final class WeatherIntegrator {
             return this;
         }
 
-        public Builder filter(Rectangle rectangle){
+        public Builder filter(Rectangle rectangle) {
             this.rectangle = rectangle;
             return this;
         }
@@ -128,7 +128,7 @@ public final class WeatherIntegrator {
 
         start = System.currentTimeMillis();
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             try {
                 String[] a = parser.nextLine();
@@ -163,8 +163,7 @@ public final class WeatherIntegrator {
                 values.forEach(s -> sb.append(separator + s));
 
                 output.out(sb.toString(), a[1]);
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
                 continue;
             }
 
@@ -177,7 +176,7 @@ public final class WeatherIntegrator {
     }
 
     public static WeatherIntegrator.Builder newWeatherIntegrator(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
-        return new WeatherIntegrator.Builder(parser, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate,  dateFormat, variables);
+        return new WeatherIntegrator.Builder(parser, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, variables);
     }
 
     public static long start;

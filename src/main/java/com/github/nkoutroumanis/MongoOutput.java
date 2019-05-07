@@ -1,7 +1,6 @@
 package com.github.nkoutroumanis;
 
 import com.github.nkoutroumanis.dbDataInsertion.MongoDbConnector;
-import com.github.nkoutroumanis.kafkaToMongoDB.KafkaToMongoJob;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;

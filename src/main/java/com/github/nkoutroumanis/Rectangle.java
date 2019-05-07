@@ -12,16 +12,16 @@ public final class Rectangle {
 
     private Rectangle(double minx, double miny, double maxx, double maxy) throws Exception {
 
-        if(checkLongitude(minx)){
+        if (checkLongitude(minx)) {
             throw new Exception("Lower bound longitude out of range");
         }
-        if(checkLatitude(miny)){
+        if (checkLatitude(miny)) {
             throw new Exception("Lower bound latitude out of range");
         }
-        if(checkLongitude(maxx)){
+        if (checkLongitude(maxx)) {
             throw new Exception("Upper bound longitude out of range");
         }
-        if(checkLatitude(maxy)){
+        if (checkLatitude(maxy)) {
             throw new Exception("Upper bound latitude out of range");
         }
 
@@ -51,11 +51,11 @@ public final class Rectangle {
         return miny;
     }
 
-    private boolean checkLongitude(double longitude){
+    private boolean checkLongitude(double longitude) {
         return longitudeOutOfRange.test(longitude);
     }
 
-    private boolean checkLatitude(double checkLatitude){
+    private boolean checkLatitude(double checkLatitude) {
         return latitudeOutOfRange.test(checkLatitude);
 
     }

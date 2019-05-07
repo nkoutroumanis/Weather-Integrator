@@ -9,10 +9,10 @@ public class Point {
 
     private Point(double x, double y) throws Exception {
 
-        if(checkLongitude(x)){
+        if (checkLongitude(x)) {
             throw new Exception("Longitude out of range");
         }
-        if(checkLatitude(y)){
+        if (checkLatitude(y)) {
             throw new Exception("Latitude out of range");
         }
 
@@ -32,11 +32,11 @@ public class Point {
         return y;
     }
 
-    private boolean checkLongitude(double longitude){
+    private boolean checkLongitude(double longitude) {
         return Rectangle.longitudeOutOfRange.test(longitude);
     }
 
-    private boolean checkLatitude(double checkLatitude){
+    private boolean checkLatitude(double checkLatitude) {
         return Rectangle.latitudeOutOfRange.test(checkLatitude);
 
     }

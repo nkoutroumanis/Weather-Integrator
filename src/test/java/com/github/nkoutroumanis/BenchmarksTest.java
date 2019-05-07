@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis;
 
-import com.github.nkoutroumanis.weatherIntegrator.WeatherDataObtainer;
 import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
@@ -41,10 +40,10 @@ public class BenchmarksTest {
     {
         try {
             wiWithIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
-                        gribFilesPath, 7,
-                        8, 3, "yyyy-MM-dd HH:mm:ss",
-                        variables)
-                        .lruCacheMaxEntries(1).useIndex().build();
+                    gribFilesPath, 7,
+                    8, 3, "yyyy-MM-dd HH:mm:ss",
+                    variables)
+                    .lruCacheMaxEntries(1).useIndex().build();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -57,10 +56,10 @@ public class BenchmarksTest {
     {
         try {
             wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
-                        gribFilesPath, 7,
-                        8, 3, "yyyy-MM-dd HH:mm:ss",
-                        variables)
-                        .lruCacheMaxEntries(1).build();
+                    gribFilesPath, 7,
+                    8, 3, "yyyy-MM-dd HH:mm:ss",
+                    variables)
+                    .lruCacheMaxEntries(1).build();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -74,7 +73,7 @@ public class BenchmarksTest {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.MINUTES)
-    public void integrateDataUsingIndex()  {
+    public void integrateDataUsingIndex() {
         try {
             wiWithIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {
@@ -87,7 +86,7 @@ public class BenchmarksTest {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.HOURS)
-    public void integrateDataWithoutIndex()  {
+    public void integrateDataWithoutIndex() {
         try {
             wiWithoutIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {

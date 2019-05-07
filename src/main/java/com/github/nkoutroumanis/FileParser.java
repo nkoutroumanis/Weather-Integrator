@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.AbstractMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class FileParser implements Parser {
@@ -15,7 +13,7 @@ public class FileParser implements Parser {
     private FileParser(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
 
-        if(!directoryName.substring(directoryName.length()-1).equals(File.separator)){
+        if (!directoryName.substring(directoryName.length() - 1).equals(File.separator)) {
             directoryName = directoryName + File.separator;
         }
 
@@ -43,7 +41,7 @@ public class FileParser implements Parser {
 
     @Override
     public String[] nextLine() {
-        return new String[] {linesIter.next(), filePath.substring(directoryName.length())};
+        return new String[]{linesIter.next(), filePath.substring(directoryName.length())};
         //return new AbstractMap.SimpleEntry(filePath, linesIter.next());
     }
 
@@ -51,8 +49,7 @@ public class FileParser implements Parser {
     public boolean hasNextLine() throws IOException {
         if (linesIter.hasNext()) {
             return true;
-        }
-        else {
+        } else {
             linesStream.close();
             if (filesIter.hasNext()) {
 
@@ -62,8 +59,7 @@ public class FileParser implements Parser {
                 linesStream = Files.lines(path);
                 linesIter = linesStream.iterator();
                 return true;
-            }
-            else {
+            } else {
                 filePath = null;
                 filesStream.close();
             }

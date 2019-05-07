@@ -13,9 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,16 +21,16 @@ public class ExperimentsDhJob {
 
     public static void main(String args[]) throws IOException {
 
-        if(Integer.valueOf(args[0])==0){
-            doOperations("real","/home/nikolaos/Documents/thesis-dataset/","/home/nikolaos/Documents/greek-hist/thesis-dataset/",200);
+        if (Integer.valueOf(args[0]) == 0) {
+            doOperations("real", "/home/nikolaos/Documents/thesis-dataset/", "/home/nikolaos/Documents/greek-hist/thesis-dataset/", 200);
         }
 
-        if(Integer.valueOf(args[0])==1){
-            doOperations("synthetic1","/home/nikolaos/Documents/synthetic-dataset1/","/home/nikolaos/Documents/greek-hist/synthetic-dataset1/", 200);
+        if (Integer.valueOf(args[0]) == 1) {
+            doOperations("synthetic1", "/home/nikolaos/Documents/synthetic-dataset1/", "/home/nikolaos/Documents/greek-hist/synthetic-dataset1/", 200);
         }
 
-        if(Integer.valueOf(args[0])==2){
-            doOperations("synthetic2","/home/nikolaos/Documents/synthetic-dataset2/","/home/nikolaos/Documents/greek-hist/synthetic-dataset2/", 200);
+        if (Integer.valueOf(args[0]) == 2) {
+            doOperations("synthetic2", "/home/nikolaos/Documents/synthetic-dataset2/", "/home/nikolaos/Documents/greek-hist/synthetic-dataset2/", 200);
         }
 
 
@@ -53,8 +51,7 @@ public class ExperimentsDhJob {
         MongoCollection m = mongoClient.getDatabase(database).getCollection("geoPoints");
 
 
-        if(histogramsPath.equals(""))
-        {
+        if (histogramsPath.equals("")) {
             System.out.println("histogramsPath is Null");
         }
         Random r = new Random();
@@ -77,7 +74,7 @@ public class ExperimentsDhJob {
 
             Stream.of(1500, 800, 300, 100, 50, 10).forEach(ki -> {
 
-                Stream.of(/*0.1, 0.05, 0.01, 0.005, 0.001*/0).forEach(dh->{
+                Stream.of(/*0.1, 0.05, 0.01, 0.005, 0.001*/0).forEach(dh -> {
 
                     final int k = ki;
                     //int points = 200;
@@ -98,7 +95,7 @@ public class ExperimentsDhJob {
                         double latitude = -1000;
 
                         int b = 0;
-                        while(b==0){
+                        while (b == 0) {
 
                             try {
                                 int randomFile = r.nextInt(numberOfFiles);
@@ -118,7 +115,7 @@ public class ExperimentsDhJob {
                                 if (FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude)) {
                                     //this block had only b = 1;
 
-                                    b =1;
+                                    b = 1;
 //                                double x = (lh.getMaxx() - lh.getMinx()) / lh.getNumberOfCellsxAxis();
 //                                double y = (lh.getMaxy() - lh.getMiny()) / lh.getNumberOfCellsyAxis();
 //
@@ -153,20 +150,17 @@ public class ExperimentsDhJob {
                         double randomX;
                         double randomY;
 
-                        if(r.nextInt(2)==1){
+                        if (r.nextInt(2) == 1) {
                             randomX = (longitude + dh);
-                        }
-                        else{
+                        } else {
                             randomX = (longitude - dh);
                         }
 
-                        if(r.nextInt(2)==1){
+                        if (r.nextInt(2) == 1) {
                             randomY = (latitude + dh);
-                        }
-                        else{
+                        } else {
                             randomY = (latitude - dh);
                         }
-
 
 
 //        if(r.nextInt(1)==1){
@@ -189,7 +183,7 @@ public class ExperimentsDhJob {
                         long t1 = System.nanoTime();
                         double determinedRadius = rd.findRadius(randomX, randomY, Long.valueOf(k));
                         timeForRadiusDetermination.add(System.nanoTime() - t1);
-                        System.out.println("formed point ("+ randomX +", " + randomY+"), km= "+determinedRadius+", i="+i);
+                        System.out.println("formed point (" + randomX + ", " + randomY + "), km= " + determinedRadius + ", i=" + i);
 
 
                         long t3 = System.nanoTime();
@@ -198,13 +192,13 @@ public class ExperimentsDhJob {
                         double realRadius = cursor2.next().getDouble("theLast");
                         timeOfRealRadius.add(System.nanoTime() - t3);
 
-                        if(Double.isInfinite(((determinedRadius * 1000) - realRadius) / realRadius)){
+                        if (Double.isInfinite(((determinedRadius * 1000) - realRadius) / realRadius)) {
                             i--;
                             continue;
                         }
 
                         radiusRatio.add(((determinedRadius * 1000) - realRadius) / realRadius);//(r' - r)/r
-                        System.out.println("The last: "+ realRadius + "The ratio "+ (((determinedRadius * 1000) - realRadius) / realRadius));
+                        System.out.println("The last: " + realRadius + "The ratio " + (((determinedRadius * 1000) - realRadius) / realRadius));
                         cursor2.close();
 
                         if (radiusRatio.get(radiusRatio.size() - 1) < 0) {
@@ -272,7 +266,7 @@ public class ExperimentsDhJob {
                     double tss2Std = Math.sqrt(t2sum / (timeOfRealRadius.size() - 1));
 
 
-                    try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "_dh_"+dh+ "+.txt", true);
+                    try (FileOutputStream fos = new FileOutputStream(path + File.separator + "Experiments_k_" + k + "_dh_" + dh + "+.txt", true);
                          OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8"); BufferedWriter bw = new BufferedWriter(osw); PrintWriter pw = new PrintWriter(bw, true)) {
 
                         pw.write("For k=" + k + " of Histogram " + path + "\r\n");

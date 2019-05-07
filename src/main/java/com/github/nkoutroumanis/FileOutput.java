@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public final class FileOutput implements Output{
+public final class FileOutput implements Output {
 
     private final String directory;
 
@@ -15,14 +15,14 @@ public final class FileOutput implements Output{
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    private FileOutput(String directory, boolean deleteDirectoryIfExist){
+    private FileOutput(String directory, boolean deleteDirectoryIfExist) {
         this.directory = directory;
 
-        if(!directory.substring(directory.length()-1).equals(File.separator)){
+        if (!directory.substring(directory.length() - 1).equals(File.separator)) {
             directory = directory + File.separator;
         }
 
-        if(deleteDirectoryIfExist){
+        if (deleteDirectoryIfExist) {
             deleteDirectory(new File(directory));
         }
 
@@ -35,7 +35,7 @@ public final class FileOutput implements Output{
         }
     }
 
-    public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist){
+    public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist) {
         return new FileOutput(directory, deleteDirectoryIfExist);
     }
 
@@ -52,14 +52,14 @@ public final class FileOutput implements Output{
     @Override
     public void out(String line, String lineMeta) {
 
-        if(!lineMeta.equals(filePath)){
+        if (!lineMeta.equals(filePath)) {
 
             close();
 
             try {
 
-                System.out.println("create directory on "+directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) +1));
-                Files.createDirectories(Paths.get(directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) +1)));
+                System.out.println("create directory on " + directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) + 1));
+                Files.createDirectories(Paths.get(directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) + 1)));
 
                 fos = new FileOutputStream(directory + lineMeta, true);
                 osw = new OutputStreamWriter(fos, "utf-8");
@@ -68,12 +68,11 @@ public final class FileOutput implements Output{
 
                 filePath = lineMeta;
 
-                System.out.println("line meta:"+lineMeta);
+                System.out.println("line meta:" + lineMeta);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
-            catch (UnsupportedEncodingException e) {
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,7 +86,7 @@ public final class FileOutput implements Output{
 
     @Override
     public void close() {
-        if(fos != null) {
+        if (fos != null) {
 
             try {
                 pw.close();

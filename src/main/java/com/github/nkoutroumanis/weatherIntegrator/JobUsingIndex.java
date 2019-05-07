@@ -2,7 +2,6 @@ package com.github.nkoutroumanis.weatherIntegrator;
 
 import com.github.nkoutroumanis.FileOutput;
 import com.github.nkoutroumanis.FileParser;
-import com.github.nkoutroumanis.Rectangle;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,13 +15,13 @@ public final class JobUsingIndex {
     public static void main(String args[]) {
 
         /*------------------
-        *
-        * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
-        * it works only for the case of having the semicolumn on the last column.
-        *
-        *
-        * ------------------
-        * */
+         *
+         * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
+         * it works only for the case of having the semicolumn on the last column.
+         *
+         *
+         * ------------------
+         * */
 
 
         long start = System.currentTimeMillis();

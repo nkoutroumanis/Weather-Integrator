@@ -3,7 +3,6 @@ package com.github.nkoutroumanis.syntheticDataset;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,24 +33,21 @@ public class SyntheticDatasetJob {
         PrintWriter pw;
 
 
-        for(int i=10328;i<(10328*2)+1;i++){
-            pw= new PrintWriter(path+ File.separator+i+".csv");
+        for (int i = 10328; i < (10328 * 2) + 1; i++) {
+            pw = new PrintWriter(path + File.separator + i + ".csv");
 
-            for(int j=0;j<3448;j++){
-                pw.write((r.nextInt(899)+100)+"_"+(r.nextInt(899)+100)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
+            for (int j = 0; j < 3448; j++) {
+                pw.write((r.nextInt(899) + 100) + "_" + (r.nextInt(899) + 100) + ";" + String.format("%.6f", minLongitude + Math.random() * lonDiff) + ";" + String.format("%.6f", minLatitude + Math.random() * latDiff) + ";" + sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime()))) + "\r\n");
             }
             pw.close();
         }
 
-            pw= new PrintWriter(path+ File.separator+20656+".csv");
+        pw = new PrintWriter(path + File.separator + 20656 + ".csv");
 
-            for(int j=0;j<903;j++){
-                pw.write((r.nextInt(899)+100)+"_"+(r.nextInt(899)+100)+";"+ String.format("%.6f", minLongitude + Math.random() * lonDiff) +";"+ String.format("%.6f", minLatitude + Math.random() * latDiff) +";"+ sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime())))+"\r\n");
-            }
-            pw.close();
-
-
-
+        for (int j = 0; j < 903; j++) {
+            pw.write((r.nextInt(899) + 100) + "_" + (r.nextInt(899) + 100) + ";" + String.format("%.6f", minLongitude + Math.random() * lonDiff) + ";" + String.format("%.6f", minLatitude + Math.random() * latDiff) + ";" + sd.format(new Date(ThreadLocalRandom.current().nextLong(minDate.getTime(), maxDate.getTime()))) + "\r\n");
+        }
+        pw.close();
 
 
     }

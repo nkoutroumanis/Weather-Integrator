@@ -1,20 +1,16 @@
 package com.github.nkoutroumanis;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.UUID;
-
-import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.common.KafkaException;
-import org.apache.kafka.common.serialization.LongDeserializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 
 public class KafkaParser implements Parser {
 
@@ -33,7 +29,7 @@ public class KafkaParser implements Parser {
         Properties props = new Properties();
         props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
         props.load(new FileInputStream(propertiesFile));
-        
+
         this.consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Arrays.asList(topicName));
 
@@ -49,20 +45,19 @@ public class KafkaParser implements Parser {
     @Override
     public String[] nextLine() {
         ConsumerRecord<String, String> record = consumerIter.next();
-        return new String[] {record.value(), record.topic()+"-"+record.partition()+".csv"/*"kafkaTopicData.csv"*/};
+        return new String[]{record.value(), record.topic() + "-" + record.partition() + ".csv"/*"kafkaTopicData.csv"*/};
     }
 
     @Override
     public boolean hasNextLine() {
 
-        if(consumerIter.hasNext()){
+        if (consumerIter.hasNext()) {
             return true;
-        }
-        else{
+        } else {
 
             this.consumerIter = consumer.poll(Duration.ofMillis(poll)).iterator();
 
-            if(consumerIter.hasNext()){
+            if (consumerIter.hasNext()) {
                 buffer++;
                 return true;
             }
@@ -71,5 +66,5 @@ public class KafkaParser implements Parser {
         }
     }
 
-    public static long buffer = 0 ;
+    public static long buffer = 0;
 }

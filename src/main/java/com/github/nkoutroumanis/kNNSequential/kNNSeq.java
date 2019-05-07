@@ -3,7 +3,6 @@ package com.github.nkoutroumanis.kNNSequential;
 import com.github.nkoutroumanis.FilesParse;
 import com.github.nkoutroumanis.Parser;
 import com.github.nkoutroumanis.Rectangle;
-import com.github.nkoutroumanis.checkSpatialInfo.CheckSpatialInfo;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -37,7 +36,7 @@ public class kNNSeq {
         private final DateFormat dateFormat;
 
         private String separator = ";";
-        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
         public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
 
@@ -53,7 +52,7 @@ public class kNNSeq {
             return this;
         }
 
-        public Builder filter(Rectangle rectangle){
+        public Builder filter(Rectangle rectangle) {
             this.rectangle = rectangle;
             return this;
         }
@@ -64,7 +63,7 @@ public class kNNSeq {
 
     }
 
-    private kNNSeq(Builder builder){
+    private kNNSeq(Builder builder) {
         parser = builder.parser;
         numberOfColumnDate = builder.numberOfColumnDate;
         numberOfColumnLatitude = builder.numberOfColumnLatitude;
@@ -85,7 +84,7 @@ public class kNNSeq {
         this.point = point;
         this.neighboors = neighboors;
 
-        if(Rectangle.longitudeOutOfRange.test(point.getX()) ||  Rectangle.latitudeOutOfRange.test(point.getY())){
+        if (Rectangle.longitudeOutOfRange.test(point.getX()) || Rectangle.latitudeOutOfRange.test(point.getY())) {
             try {
                 throw new Exception("Point coordinates are wrong");
             } catch (Exception e) {
@@ -95,7 +94,7 @@ public class kNNSeq {
 
         list = new ArrayList<>();
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             try {
                 String[] a = parser.nextLine();
@@ -118,8 +117,7 @@ public class kNNSeq {
 
                 kNNCalculations(line, longitude, latitude);
 
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
                 continue;
             }
         }
@@ -133,13 +131,13 @@ public class kNNSeq {
 
         double distance = FilesParse.harvesine(point.getX(), point.getY(), longitude, latitude);
 
-        if(list.size() == neighboors){
+        if (list.size() == neighboors) {
 
-            if(Double.compare(maxDistance, distance) == 1){
+            if (Double.compare(maxDistance, distance) == 1) {
 
                 int j = -1;
                 for (int i = 0; i < list.size(); i++) {
-                    if(Double.compare(list.get(i).getKey(), maxDistance) == 0){
+                    if (Double.compare(list.get(i).getKey(), maxDistance) == 0) {
                         j = i;
                         break;
                     }
@@ -150,7 +148,7 @@ public class kNNSeq {
                 //find the max key (distance) of entries from the list
                 double d = -1;
                 for (Map.Entry<Double, String> entry : list) {
-                    if(Double.compare(entry.getKey(), d) == 1){
+                    if (Double.compare(entry.getKey(), d) == 1) {
                         d = entry.getKey();
                     }
                 }
@@ -159,15 +157,14 @@ public class kNNSeq {
 
             }
 
-        }
-        else{
+        } else {
 
             list.add(new AbstractMap.SimpleEntry<>(distance, line));
 
             //find the max key (distance) of entries from the list
             double d = -1;
             for (Map.Entry<Double, String> entry : list) {
-                if(Double.compare(entry.getKey(), d) == 1){
+                if (Double.compare(entry.getKey(), d) == 1) {
                     d = entry.getKey();
                 }
             }

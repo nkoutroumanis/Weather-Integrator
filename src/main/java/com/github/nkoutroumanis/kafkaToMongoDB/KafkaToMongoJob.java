@@ -30,8 +30,7 @@ public class KafkaToMongoJob {
                     config.getString(inputKafkaPropsFileSetting),
                     config.getString(inputTopicNameSetting),
                     config.getLong(inputKafkaPollingSetting));
-        }
-        else {
+        } else {
             logger.error("Input type {} is not implemented", inputType);
             throw new NotImplementedException();
         }
@@ -48,8 +47,7 @@ public class KafkaToMongoJob {
                     config.getInt(inputLongitudeFieldIdSetting),
                     config.getInt(inputLatitudeFieldIdSetting),
                     config.getInt(inputDateFieldIdSetting));
-        }
-        else {
+        } else {
             logger.error("Input format parser {} is not implemented", inputFormat);
             throw new NotImplementedException();
         }
@@ -68,8 +66,7 @@ public class KafkaToMongoJob {
                     config.getString(outputMongoCollectionSetting),
                     config.getInt(outputMongoBatchSizeSetting)
             );
-        }
-        else {
+        } else {
             logger.error("Output type {} is not implemented", outputType);
             throw new NotImplementedException();
         }

@@ -1,17 +1,10 @@
 package com.github.nkoutroumanis.checkSpatialDataInsideBox;
 
 import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.FilesParse;
 import com.github.nkoutroumanis.Parser;
 import com.github.nkoutroumanis.Rectangle;
-import com.github.nkoutroumanis.histogram.Space2D;
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.ParseException;
-import java.util.List;
+import java.io.IOException;
 
 public final class CheckSpatialDataInsideBox {
 
@@ -79,7 +72,7 @@ public final class CheckSpatialDataInsideBox {
 
     public void exportInfo(FileOutput fileOutput) throws IOException {
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             try {
                 String[] a = parser.nextLine();
@@ -101,8 +94,7 @@ public final class CheckSpatialDataInsideBox {
                 }
 
                 numberOfRecords++;
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                 continue;
             }
 
