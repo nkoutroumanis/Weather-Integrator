@@ -3,7 +3,6 @@ package com.github.nkoutroumanis.checkSpatialDataInsideBox;
 import com.github.nkoutroumanis.FileOutput;
 import com.github.nkoutroumanis.FileParser;
 import com.github.nkoutroumanis.Rectangle;
-import com.github.nkoutroumanis.histogram.Space2D;
 
 public class CheckSpatialDataInsideBoxJob {
     public static void main(String args[]) throws Exception {
