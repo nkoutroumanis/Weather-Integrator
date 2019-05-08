@@ -1,6 +1,10 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
 import com.github.nkoutroumanis.*;
+import com.github.nkoutroumanis.datasources.Datasource;
+import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.outputs.KafkaOutput;
+import com.github.nkoutroumanis.outputs.Output;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -11,7 +15,7 @@ import java.util.List;
 
 public final class WeatherIntegrator {
 
-    private final Parser parser;
+    private final Datasource parser;
     private final WeatherDataObtainer wdo;
 
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
@@ -26,7 +30,7 @@ public final class WeatherIntegrator {
 
     public static class Builder {
 
-        private final Parser parser;
+        private final Datasource parser;
 
         private final String gribFilesFolderPath;
 
@@ -44,7 +48,7 @@ public final class WeatherIntegrator {
 
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
-        public Builder(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
+        public Builder(Datasource parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
 
             this.parser = parser;
             this.gribFilesFolderPath = gribFilesFolderPath;
@@ -136,7 +140,7 @@ public final class WeatherIntegrator {
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
-                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
                     continue;
                 }
 
@@ -175,7 +179,7 @@ public final class WeatherIntegrator {
 
     }
 
-    public static WeatherIntegrator.Builder newWeatherIntegrator(Parser parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
+    public static WeatherIntegrator.Builder newWeatherIntegrator(Datasource parser, String gribFilesFolderPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, List<String> variables) throws Exception {
         return new WeatherIntegrator.Builder(parser, gribFilesFolderPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, variables);
     }
 

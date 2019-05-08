@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.datasources;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-public class FileParser implements Parser {
+public class FileDatasource implements Datasource {
 
-    private FileParser(String directoryName, String filesExtension) throws IOException {
+    private FileDatasource(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
 
         if (!directoryName.substring(directoryName.length() - 1).equals(File.separator)) {
@@ -35,8 +35,8 @@ public class FileParser implements Parser {
 
     private String filePath;
 
-    public static FileParser newFileParser(String directoryName, String filesExtension) throws IOException {
-        return new FileParser(directoryName, filesExtension);
+    public static FileDatasource newFileParser(String directoryName, String filesExtension) throws IOException {
+        return new FileDatasource(directoryName, filesExtension);
     }
 
     @Override

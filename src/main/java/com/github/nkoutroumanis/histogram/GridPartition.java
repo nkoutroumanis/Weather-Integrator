@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.histogram;
 
-import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,7 +23,7 @@ public final class GridPartition {
     private final Rectangle rectangle;
     private final long cellsInXAxis;
     private final long cellsInYAxis;
-    private final Parser parser;
+    private final Datasource parser;
     private final int numberOfColumnLongitude;
     private final int numberOfColumnLatitude;
     private final int numberOfColumnDate;
@@ -41,7 +41,7 @@ public final class GridPartition {
         private Rectangle rectangle;
         private final long cellsInXAxis;
         private final long cellsInYAxis;
-        private final Parser parser;
+        private final Datasource parser;
         private final int numberOfColumnLongitude;
         private final int numberOfColumnLatitude;
         private final int numberOfColumnDate;
@@ -49,7 +49,7 @@ public final class GridPartition {
 
         private String separator = ";";
 
-        public Builder(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        public Builder(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
             this.rectangle = rectangle;
             this.cellsInXAxis = cellsInXAxis;
             this.cellsInYAxis = cellsInYAxis;
@@ -85,7 +85,7 @@ public final class GridPartition {
     }
 
 
-    public static Builder newGridPartition(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+    public static Builder newGridPartition(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
         return new Builder(rectangle, cellsInXAxis, cellsInYAxis, parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
@@ -117,7 +117,7 @@ public final class GridPartition {
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
-                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
                     continue;
                 }
 

@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.outputs;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;

@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.kNNSequential;
 
 import com.github.nkoutroumanis.FilesParse;
-import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.*;
 
 public class kNNSeq {
 
-    private final Parser parser;
+    private final Datasource parser;
     private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
@@ -29,7 +29,7 @@ public class kNNSeq {
 
     public static class Builder {
 
-        private final Parser parser;
+        private final Datasource parser;
         private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
         private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
@@ -38,7 +38,7 @@ public class kNNSeq {
         private String separator = ";";
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
-        public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
 
             this.parser = parser;
             this.numberOfColumnDate = numberOfColumnDate;
@@ -75,7 +75,7 @@ public class kNNSeq {
 
     }
 
-    public static Builder newkNNSeq(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+    public static Builder newkNNSeq(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
         return new kNNSeq.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
@@ -102,7 +102,7 @@ public class kNNSeq {
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
-                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
                     continue;
                 }
 

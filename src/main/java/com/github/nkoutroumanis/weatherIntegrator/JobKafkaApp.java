@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.KafkaOutput;
-import com.github.nkoutroumanis.KafkaParser;
+import com.github.nkoutroumanis.outputs.KafkaOutput;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.Rectangle;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -35,7 +35,7 @@ public final class JobKafkaApp {
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
 
-            WeatherIntegrator.newWeatherIntegrator(KafkaParser.newKafkaParser(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll")),
+            WeatherIntegrator.newWeatherIntegrator(KafkaDatasource.newKafkaParser(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll")),
                     wi.getString("gribFilesFolderPath"), wi.getInt("numberOfColumnLongitude"),
                     wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"), stream.collect(Collectors.toList()))
                     .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(KafkaOutput.newKafkaOutput(wi.getString("producerPropertiesPath"), wi.getString("producerTopic")));
@@ -49,7 +49,7 @@ public final class JobKafkaApp {
             System.out.println("Number Of Hits: " + WeatherIntegrator.hits);
             System.out.println("CHR (Number Of Hits)/(Number Of Records): " + ((double) WeatherIntegrator.hits / WeatherIntegrator.numberofRecords));
             System.out.println("Throughput (records/sec): " + ((double) WeatherIntegrator.numberofRecords / WeatherIntegrator.elapsedTime));
-            System.out.println("Kafka buffer times: " + KafkaParser.buffer);
+            System.out.println("Kafka buffer times: " + KafkaDatasource.buffer);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

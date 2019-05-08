@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.datasources;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.UUID;
 
-public class KafkaParser implements Parser {
+public class KafkaDatasource implements Datasource {
 
     private final KafkaConsumer<String, String> consumer;
     private Iterator<ConsumerRecord<String, String>> consumerIter;
@@ -21,7 +21,7 @@ public class KafkaParser implements Parser {
     private final String topicName;
     private final long poll;
 
-    private KafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
+    private KafkaDatasource(String propertiesFile, String topicName, long poll) throws IOException {
         this.propertiesFile = propertiesFile;
         this.topicName = topicName;
         this.poll = poll;
@@ -37,8 +37,8 @@ public class KafkaParser implements Parser {
 
     }
 
-    public static KafkaParser newKafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
-        return new KafkaParser(propertiesFile, topicName, poll);
+    public static KafkaDatasource newKafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
+        return new KafkaDatasource(propertiesFile, topicName, poll);
     }
 
 

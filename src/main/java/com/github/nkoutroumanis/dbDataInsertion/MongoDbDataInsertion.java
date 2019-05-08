@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.dbDataInsertion;
 
-import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -18,7 +18,7 @@ public final class MongoDbDataInsertion {
 
     private final MongoDbConnector mongoDbConnector;
     private final String database;
-    private final Parser parser;
+    private final Datasource parser;
     private final int numberOfColumnLongitude;
     private final int numberOfColumnLatitude;
     private final int numberOfColumnDate;
@@ -34,7 +34,7 @@ public final class MongoDbDataInsertion {
 
         private final MongoDbConnector mongoDbConnector;
         private final String database;
-        private final Parser parser;
+        private final Datasource parser;
         private final int numberOfColumnLongitude;
         private final int numberOfColumnLatitude;
         private final int numberOfColumnDate;
@@ -44,7 +44,7 @@ public final class MongoDbDataInsertion {
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
 
-        public Builder(MongoDbConnector mongoDbConnector, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        public Builder(MongoDbConnector mongoDbConnector, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
             this.mongoDbConnector = mongoDbConnector;
             this.database = mongoDbConnector.getDatabase();
             this.parser = parser;
@@ -84,7 +84,7 @@ public final class MongoDbDataInsertion {
     }
 
 
-    public static Builder newMongoDbDataInsertion(MongoDbConnector mongoDbConnector, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+    public static Builder newMongoDbDataInsertion(MongoDbConnector mongoDbConnector, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
         return new MongoDbDataInsertion.Builder(mongoDbConnector, parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
     }
 
@@ -102,7 +102,7 @@ public final class MongoDbDataInsertion {
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
-                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
+                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
                     continue;
                 }
 

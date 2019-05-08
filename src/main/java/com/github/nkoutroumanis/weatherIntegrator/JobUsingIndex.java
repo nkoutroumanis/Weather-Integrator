@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.FileParser;
+import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.datasources.FileDatasource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,7 +29,7 @@ public final class JobUsingIndex {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv"),
+            WeatherIntegrator.newWeatherIntegrator(FileDatasource.newFileParser("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv"),
                     "/Users/nicholaskoutroumanis/Desktop/grib/", 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss", stream.collect(Collectors.toList()))
                     .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true));

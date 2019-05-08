@@ -1,8 +1,8 @@
 package com.github.nkoutroumanis.checkSpatialInfo;
 
-import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.KafkaParser;
-import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public final class CheckSpatialInfo {
 
-    private final Parser parser;
+    private final Datasource parser;
 
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
@@ -32,7 +32,7 @@ public final class CheckSpatialInfo {
 
     public static class Builder {
 
-        private final Parser parser;
+        private final Datasource parser;
         private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
         private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 
@@ -40,7 +40,7 @@ public final class CheckSpatialInfo {
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
 
-        public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
+        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
 
             this.parser = parser;
             this.numberOfColumnLatitude = numberOfColumnLatitude;
@@ -139,9 +139,9 @@ public final class CheckSpatialInfo {
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
-                if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
 
-                    if (parser instanceof KafkaParser) {
+                    if (parser instanceof KafkaDatasource) {
                         a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                     }
 
@@ -157,7 +157,7 @@ public final class CheckSpatialInfo {
                 //filtering
                 if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
 
-                    if (parser instanceof KafkaParser) {
+                    if (parser instanceof KafkaDatasource) {
                         a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                     }
 
@@ -184,7 +184,7 @@ public final class CheckSpatialInfo {
 
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 
-                if (parser instanceof KafkaParser) {
+                if (parser instanceof KafkaDatasource) {
                     a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                 }
 
@@ -260,7 +260,7 @@ public final class CheckSpatialInfo {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
+    public static Builder newCheckSpatioTemporalInfo(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
         return new CheckSpatialInfo.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude);
     }
 

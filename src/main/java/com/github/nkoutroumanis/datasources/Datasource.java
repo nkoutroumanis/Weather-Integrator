@@ -1,9 +1,9 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.datasources;
 
 import java.io.IOException;
 import java.util.function.Predicate;
 
-public interface Parser {
+public interface Datasource {
 
     String[] nextLine();
 

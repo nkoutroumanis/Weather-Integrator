@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.outputs;
 
 import java.io.*;
 import java.nio.file.Files;

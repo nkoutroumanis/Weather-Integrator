@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis;
+package com.github.nkoutroumanis.outputs;
 
 import com.github.nkoutroumanis.dbDataInsertion.MongoDbConnector;
 import com.mongodb.MongoClient;

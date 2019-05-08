@@ -1,5 +1,7 @@
 package com.github.nkoutroumanis;
 
+import com.github.nkoutroumanis.datasources.FileDatasource;
+import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
@@ -39,7 +41,7 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
+            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(FileDatasource.newFileParser(filesPath, ".csv"),
                     gribFilesPath, 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss",
                     variables)
@@ -55,7 +57,7 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(FileParser.newFileParser(filesPath, ".csv"),
+            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(FileDatasource.newFileParser(filesPath, ".csv"),
                     gribFilesPath, 7,
                     8, 3, "yyyy-MM-dd HH:mm:ss",
                     variables)

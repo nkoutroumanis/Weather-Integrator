@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.checkSpatialInfo;
 
-import com.github.nkoutroumanis.FileOutput;
-import com.github.nkoutroumanis.FileParser;
+import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.datasources.FileDatasource;
 
 public class CheckSpatialInfoJob {
     public static void main(String args[]) throws Exception {
@@ -11,7 +11,7 @@ public class CheckSpatialInfoJob {
 
 //        CheckSpatialInfo.newCheckSpatioTemporalInfo(args[0],
 //                Integer.valueOf(args[1]), Integer.valueOf(args[2])).separator(args[3]).build().exportTxt(args[4]);
-        CheckSpatialInfo.newCheckSpatioTemporalInfo(FileParser.newFileParser("/home/nikolaos/Documents/thesis-dataset/", ".csv"),
+        CheckSpatialInfo.newCheckSpatioTemporalInfo(FileDatasource.newFileParser("/home/nikolaos/Documents/thesis-dataset/", ".csv"),
                 2, 3).separator(";").build().exportInfo(FileOutput.newFileOutput("/home/nikolaos/Desktop/infoAbout.txt", true));
 
     }

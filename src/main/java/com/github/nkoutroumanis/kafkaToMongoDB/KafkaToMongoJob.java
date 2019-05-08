@@ -1,9 +1,13 @@
 package com.github.nkoutroumanis.kafkaToMongoDB;
 
-import com.github.nkoutroumanis.KafkaParser;
-import com.github.nkoutroumanis.MongoOutput;
-import com.github.nkoutroumanis.Output;
-import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.AppConfig;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
+import com.github.nkoutroumanis.outputs.MongoOutput;
+import com.github.nkoutroumanis.outputs.Output;
+import com.github.nkoutroumanis.datasources.Datasource;
+import com.github.nkoutroumanis.parsers.CsvRecordParser;
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.bson.Document;
@@ -20,13 +24,13 @@ public class KafkaToMongoJob {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaToMongoJob.class);
 
-    private static final Config config = ConfigFactory.load();
+    private static final Config config = AppConfig.getInstance().getConfig();
 
-    private static Parser getInputParser() throws IOException {
+    private static Datasource getDatasource() throws IOException {
         String inputType = config.getString(inputTypeSetting);
         if (inputType.equals(streamType)) {
             logger.info("Using input type {}", streamType);
-            return KafkaParser.newKafkaParser(
+            return KafkaDatasource.newKafkaParser(
                     config.getString(inputKafkaPropsFileSetting),
                     config.getString(inputTopicNameSetting),
                     config.getLong(inputKafkaPollingSetting));
@@ -36,17 +40,15 @@ public class KafkaToMongoJob {
         }
     }
 
-    private static LineParser getLineParser() {
+    private static RecordParser getRecordParser() throws IOException {
+        Datasource source = getDatasource();
         String inputFormat = config.getString(inputFormatSetting);
         if (inputFormat.equals(csvFormat)) {
             logger.info("Using input format {}", csvFormat);
-            return new CsvLineParser(
+            return new CsvRecordParser(
                     config.getString(inputCsvSeparatorSetting),
                     config.getString(inputCsvHeaderSetting),
-                    config.getInt(inputVehicleFieldIdSetting),
-                    config.getInt(inputLongitudeFieldIdSetting),
-                    config.getInt(inputLatitudeFieldIdSetting),
-                    config.getInt(inputDateFieldIdSetting));
+                    source);
         } else {
             logger.error("Input format parser {} is not implemented", inputFormat);
             throw new NotImplementedException();
@@ -73,19 +75,18 @@ public class KafkaToMongoJob {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        Parser inputParser = getInputParser();
-        LineParser lineParser = getLineParser();
+        RecordParser recordParser = getRecordParser();
         Output output = getOutput();
 
-        String[] line;
+        Record record;
         Document doc;
         logger.info("Started filling mongo db");
         long reportCount = config.getLong(reportingNumberOfLinesSetting);
         long lineCount = 0;
-        while (inputParser.hasNextLine()) {
-            line = inputParser.nextLine();
-            doc = lineParser.parseLine(line[0]);
-            output.out(doc.toJson(), line[1]);
+        while (recordParser.hasNextRecord()) {
+            record = recordParser.nextRecord();
+            doc = record.toDocument();
+            output.out(doc.toJson(), record.getMetadata());
             if ((++lineCount % reportCount) == 0) {
                 logger.info("Processed {} lines", lineCount);
             }

@@ -1,6 +1,6 @@
 package com.github.nkoutroumanis.histogram;
 
-import com.github.nkoutroumanis.FileParser;
+import com.github.nkoutroumanis.datasources.FileDatasource;
 import com.github.nkoutroumanis.Rectangle;
 
 public final class HistogramCreationJob {
@@ -34,7 +34,7 @@ public final class HistogramCreationJob {
         Rectangle space = Rectangle.newRectangle(20.15, 34.91, 26.61, 41.83);
         //Rectangle space = Rectangle.newSpace2D(20.1500159034, 34.9199876979, 26.604196, 41.826905);
         //Rectangle space = Rectangle.newSpace2D(20, 34.9199876979, 27, 41.826905);
-        GridPartition.newGridPartition(space, 300, 300, FileParser.newFileParser("/home/nikolaos/Documents/synthetic-dataset2", ".csv"), 2, 3, 4, "yyyy-MM-dd HH:mm:ss").build().exportHistogram("/home/nikolaos/Documents/greek-hist/synthetic-dataset2/");
+        GridPartition.newGridPartition(space, 300, 300, FileDatasource.newFileParser("/home/nikolaos/Documents/synthetic-dataset2", ".csv"), 2, 3, 4, "yyyy-MM-dd HH:mm:ss").build().exportHistogram("/home/nikolaos/Documents/greek-hist/synthetic-dataset2/");
         System.out.println("------------------");
 
     }
