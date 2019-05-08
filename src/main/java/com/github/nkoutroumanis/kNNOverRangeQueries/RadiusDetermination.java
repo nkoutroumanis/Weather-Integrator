@@ -43,8 +43,8 @@ public class RadiusDetermination {
 //        minYc = (long) (miny / y);
 //        maxYc = minYc + numberOfCellsyAxis - 1;
 
-        this.minx=minx;
-        this.miny=miny;
+        this.minx = minx;
+        this.miny = miny;
     }
 
     public static RadiusDetermination newRadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {
@@ -125,8 +125,8 @@ public class RadiusDetermination {
 //        long xc = (long) (x / this.x);
 //        long yc = (long) (y / this.y);
 
-        long xc = (long) ((x-minx) / this.x);
-        long yc = (long) ((y-miny) / this.y);
+        long xc = (long) ((x - minx) / this.x);
+        long yc = (long) ((y - miny) / this.y);
 
         double distance = Integer.MIN_VALUE;
 
@@ -229,13 +229,13 @@ public class RadiusDetermination {
                 }
 
                 //double d4 = findTheMaxCornerDistance(x, y, (MinimumXc + (MaximumYc * numberOfCellsxAxis)));
-                double d4 = findTheMaxCornerDistance(x, y, MinimumXc, MaximumYc );
+                double d4 = findTheMaxCornerDistance(x, y, MinimumXc, MaximumYc);
 
                 if (distance < d4) {
                     distance = d4;
                 }
 
-                System.out.println("k= "+k);
+                System.out.println("k= " + k);
 
                 k = -1;
             }

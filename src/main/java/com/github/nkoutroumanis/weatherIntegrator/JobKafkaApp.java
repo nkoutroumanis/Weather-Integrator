@@ -19,13 +19,13 @@ public final class JobKafkaApp {
     public static void main(String args[]) {
 
         /*------------------
-        *
-        * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
-        * it works only for the case of having the semicolumn on the last column.
-        *
-        *
-        * ------------------
-        * */
+         *
+         * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
+         * it works only for the case of having the semicolumn on the last column.
+         *
+         *
+         * ------------------
+         * */
 
 
         Config conf = ConfigFactory.parseFile(new File(args[0]));
@@ -38,7 +38,7 @@ public final class JobKafkaApp {
             WeatherIntegrator.newWeatherIntegrator(KafkaParser.newKafkaParser(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll")),
                     wi.getString("gribFilesFolderPath"), wi.getInt("numberOfColumnLongitude"),
                     wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"), stream.collect(Collectors.toList()))
-                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"),filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(KafkaOutput.newKafkaOutput(wi.getString("producerPropertiesPath"), wi.getString("producerTopic")));
+                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat"))).build().integrateAndOutputToKafkaTopic(KafkaOutput.newKafkaOutput(wi.getString("producerPropertiesPath"), wi.getString("producerTopic")));
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

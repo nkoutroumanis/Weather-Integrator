@@ -1,14 +1,11 @@
 package com.github.nkoutroumanis.dbDataInsertion;
 
-import com.github.nkoutroumanis.FilesParse;
 import com.github.nkoutroumanis.Parser;
 import com.github.nkoutroumanis.Rectangle;
-import com.github.nkoutroumanis.checkSpatioTemporalInfo.CheckSpatioTemporalInfo;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +41,7 @@ public final class MongoDbDataInsertion {
         private final DateFormat dateFormat;
 
         private String separator = ";";
-        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
 
         public Builder(MongoDbConnector mongoDbConnector, Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
@@ -63,7 +60,7 @@ public final class MongoDbDataInsertion {
             return this;
         }
 
-        public Builder filter(Rectangle rectangle){
+        public Builder filter(Rectangle rectangle) {
             this.rectangle = rectangle;
             return this;
         }
@@ -97,7 +94,7 @@ public final class MongoDbDataInsertion {
 
         docs = new ArrayList<>();
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             try {
                 String[] a = parser.nextLine();
@@ -126,19 +123,18 @@ public final class MongoDbDataInsertion {
                 //System.out.println(new Document("objectId", separatedLine[0]).append("location", embeddedDoc).append("date", dateFormat.parse(separatedLine[numberOfColumnDate - 1])));
                 //mongoCollection.insertOne(docs);
 
-                if(docs.size() == 3000){
+                if (docs.size() == 3000) {
                     mongoCollection.insertMany(docs);
                     docs = new ArrayList<>();
                 }
 
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
                 continue;
             }
 
         }
 
-        if(docs.size() != 0){
+        if (docs.size() != 0) {
             mongoCollection.insertMany(docs);
             docs = null;
         }

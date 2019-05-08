@@ -1,12 +1,11 @@
 package com.github.nkoutroumanis.checkSpatioTemporalInfo;
 
-import com.github.nkoutroumanis.*;
-import com.github.nkoutroumanis.checkSpatialInfo.CheckSpatialInfo;
+import com.github.nkoutroumanis.FileOutput;
+import com.github.nkoutroumanis.KafkaParser;
+import com.github.nkoutroumanis.Parser;
+import com.github.nkoutroumanis.Rectangle;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +45,7 @@ public final class CheckSpatioTemporalInfo {
         private final DateFormat dateFormat;
 
         private String separator = ";";
-        private Rectangle rectangle = Rectangle.newRectangle(-180,-90,180,90);
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
         public Builder(Parser parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
 
@@ -63,7 +62,7 @@ public final class CheckSpatioTemporalInfo {
             return this;
         }
 
-        public Builder filter(Rectangle rectangle){
+        public Builder filter(Rectangle rectangle) {
             this.rectangle = rectangle;
             return this;
         }
@@ -143,18 +142,18 @@ public final class CheckSpatioTemporalInfo {
         emptySpatialInformation = new HashSet<>();
         spatialInformationOutOfRange = new HashSet<>();
 
-        while (parser.hasNextLine()){
+        while (parser.hasNextLine()) {
 
             String[] a = parser.nextLine();
 
-            try{
+            try {
 
                 String line = a[0];
                 String[] separatedLine = line.split(separator);
 
                 if (Parser.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Parser.empty.test(separatedLine[numberOfColumnDate - 1])) {
 
-                    if(parser instanceof KafkaParser){
+                    if (parser instanceof KafkaParser) {
                         a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                     }
 
@@ -169,9 +168,9 @@ public final class CheckSpatioTemporalInfo {
                 Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
 
                 //filtering
-                if(((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))){
+                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
 
-                    if(parser instanceof KafkaParser){
+                    if (parser instanceof KafkaParser) {
                         a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                     }
 
@@ -196,10 +195,9 @@ public final class CheckSpatioTemporalInfo {
 
                 numberOfRecords++;
 
-            }
-            catch(ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
 
-                if(parser instanceof KafkaParser){
+                if (parser instanceof KafkaParser) {
                     a[1] = a[1].substring(0, a[1].lastIndexOf("."));
                 }
 
@@ -236,23 +234,6 @@ public final class CheckSpatioTemporalInfo {
         fileOutput.out("All of the records are " + numberOfRecords, fileName);
 
         fileOutput.close();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        filesWithErrors = new HashSet<>();

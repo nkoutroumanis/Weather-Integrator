@@ -162,10 +162,9 @@ public final class Statistics implements FilesParse {
 
             double ressStd = Math.sqrt(sum / (columnsInFile.get(i).size() - 1));
 
-            if(stdOfColumnsPerFile.size() == columns.length){
-                stdOfColumnsPerFile.set(i, (stdOfColumnsPerFile.get(i) + ressStd)/2);
-            }
-            else{//list initialization
+            if (stdOfColumnsPerFile.size() == columns.length) {
+                stdOfColumnsPerFile.set(i, (stdOfColumnsPerFile.get(i) + ressStd) / 2);
+            } else {//list initialization
                 stdOfColumnsPerFile.add(ressStd);
             }
         }
@@ -193,7 +192,7 @@ public final class Statistics implements FilesParse {
 
             for (int i = 0; i < columns.length; i++) {
 
-                pw.write("Column Number " + columns[i] + ": Average: " + (sumOfColumnsPerFile.get(i)/numberofRecords) + ", ");
+                pw.write("Column Number " + columns[i] + ": Average: " + (sumOfColumnsPerFile.get(i) / numberofRecords) + ", ");
                 pw.write("Max: " + maxOfColumnsPerFile.get(i) + ", ");
                 pw.write("Min: " + minOfColumnsPerFile.get(i) + ", ");
                 pw.write("Std: " + stdOfColumnsPerFile.get(i) + "\r\n");
