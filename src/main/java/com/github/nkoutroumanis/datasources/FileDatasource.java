@@ -42,7 +42,6 @@ public class FileDatasource implements Datasource {
     @Override
     public String[] nextLine() {
         return new String[]{linesIter.next(), filePath.substring(directoryName.length())};
-        //return new AbstractMap.SimpleEntry(filePath, linesIter.next());
     }
 
     @Override
