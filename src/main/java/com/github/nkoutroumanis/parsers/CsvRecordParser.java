@@ -81,6 +81,20 @@ public class CsvRecordParser extends RecordParser {
     }
 
     @Override
+    public String toCsv(Record record){
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(record.getFieldValues()[0]);
+        for(int i = 1; i< record.getFieldValues().length;i++){
+            sb.append(separator);
+            sb.append(record.getFieldValues()[i]);
+        }
+
+        return sb.toString();
+    }
+
+    @Override
     public String getLatitude(Record record) {
         return record.getFieldValues()[latitudeFieldId];
     }

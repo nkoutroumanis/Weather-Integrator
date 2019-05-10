@@ -1,8 +1,11 @@
 package com.github.nkoutroumanis.datasources;
 
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +16,8 @@ import java.util.Properties;
 import java.util.UUID;
 
 public class KafkaDatasource implements Datasource {
+
+    private static final Logger logger = LoggerFactory.getLogger(KafkaDatasource.class);
 
     private final KafkaConsumer<String, String> consumer;
     private Iterator<ConsumerRecord<String, String>> consumerIter;
@@ -61,6 +66,9 @@ public class KafkaDatasource implements Datasource {
                 buffer++;
                 return true;
             }
+
+            logger.info("Kafka buffer times: {}", KafkaDatasource.buffer);
+
             consumer.close();
             return false;
         }

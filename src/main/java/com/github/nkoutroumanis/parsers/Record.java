@@ -56,4 +56,8 @@ public class Record {
     public void addFieldName(String newFieldName) {
         this.fieldNames.add(newFieldName);
     }
+
+    public void deleteLastFieldName(){ this.fieldNames.remove(fieldNames.size() - 1); }
+
+    public void deleteLastFieldValue(){ this.fieldNames.remove(fieldValues.size() - 1); }
 }

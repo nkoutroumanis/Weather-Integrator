@@ -1,11 +1,15 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
 import com.github.nkoutroumanis.*;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
+import com.github.nkoutroumanis.kafkaToMongoDB.KafkaToMongoJob;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.outputs.Output;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -15,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 public final class WeatherIntegrator {
+
+    private static final Logger logger = LoggerFactory.getLogger(WeatherIntegrator.class);
 
     private final RecordParser recordParser;
     private final WeatherDataObtainer wdo;
@@ -131,6 +137,7 @@ public final class WeatherIntegrator {
 
             //filtering
             if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                logger.warn("Record spatial information out of range {}", record.getMetadata());
                 continue;
             }
 
@@ -139,7 +146,7 @@ public final class WeatherIntegrator {
 
 
             //if dataset finishes with ;
-            sb.append(line.substring(0, line.length() - 1));
+            record.deleteLastFieldValue();
             //else sb.append(lineWithMeta);
 
             numberofRecords++;
@@ -187,8 +194,16 @@ public final class WeatherIntegrator {
         }
 
         elapsedTime = (System.currentTimeMillis() - start) / 1000;
-
         output.close();
+
+        Runtime rt = Runtime.getRuntime();
+
+        logger.info("Approximation of used Memory: {} MB", (rt.totalMemory() - rt.freeMemory()) / 1000000);
+        logger.info("Elapsed Time: {} sec", elapsedTime);
+        logger.info("Number Of Processed Records: {}", WeatherIntegrator.numberofRecords);
+        logger.info("Number Of Hits: {}", WeatherIntegrator.hits);
+        logger.info("CHR (Number Of Hits)/(Number Of Records): {}", ((double) hits / numberofRecords));
+        logger.info("Throughput (records/sec): {}", ((double) WeatherIntegrator.numberofRecords / WeatherIntegrator.elapsedTime));
 
     }
 
@@ -196,10 +211,10 @@ public final class WeatherIntegrator {
         return new WeatherIntegrator.Builder(recordParser, gribFilesFolderPath, variables);
     }
 
-    public static long start;
-    public static long elapsedTime;
+    private static long start;
+    private static long elapsedTime;
 
     public static long hits = 0;
-    public static long numberofRecords = 0;
+    private static long numberofRecords = 0;
 
 }
