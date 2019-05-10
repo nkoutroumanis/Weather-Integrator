@@ -24,7 +24,7 @@ public class KafkaToMongoJob {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaToMongoJob.class);
 
-    private static final Config config = AppConfig.getInstance().getConfig();
+    private static final Config config = AppConfig.config;
 
     private static Datasource getDatasource() throws IOException {
         String inputType = config.getString(inputTypeSetting);

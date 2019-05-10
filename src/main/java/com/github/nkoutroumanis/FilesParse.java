@@ -52,7 +52,7 @@ public interface FilesParse {
                 fileParse(path);
 
                 try (Stream<String> innerStream = Files.lines(path)) {
-                    //for each line
+                    //for each lineWithMeta
                     innerStream.forEach(line -> {
 
 
@@ -74,7 +74,7 @@ public interface FilesParse {
                             }
 
 //                            if (!(FilesParse.longitudeInGreekRegion.test(longitude) && FilesParse.latitudeInGreekRegion.test(latitude))) {
-//                                outOfRangeSpatialInformation(path, line);
+//                                outOfRangeSpatialInformation(path, lineWithMeta);
 //                                return;
 //                            }
 
@@ -111,7 +111,7 @@ public interface FilesParse {
                 fileParse(path);
 
                 try (Stream<String> innerStream = Files.lines(path)) {
-                    //for each line
+                    //for each lineWithMeta
                     innerStream.forEach(line -> {
 
                         try {

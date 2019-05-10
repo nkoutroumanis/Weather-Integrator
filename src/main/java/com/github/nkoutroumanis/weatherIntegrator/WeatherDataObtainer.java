@@ -156,7 +156,7 @@ public final class WeatherDataObtainer {
 //    }
 
 //    @Override
-//    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
+//    public void lineParse(String lineWithMeta, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, double longitude, double latitude) {
 //        try {
 //                WeatherDataObtainer.numberofRecords++;
 //
@@ -166,9 +166,9 @@ public final class WeatherDataObtainer {
 //
 //                long endTime = System.nanoTime();
 //
-//                //pw.write(line  + dataToBeIntegrated + "\r\n");
+//                //pw.write(lineWithMeta  + dataToBeIntegrated + "\r\n");
 //
-//                pw.write(line.substring(0, line.length() - 1) + dataToBeIntegrated + "\r\n");
+//                pw.write(lineWithMeta.substring(0, lineWithMeta.length() - 1) + dataToBeIntegrated + "\r\n");
 //
 //
 //        } catch (ParseException e) {
@@ -179,14 +179,14 @@ public final class WeatherDataObtainer {
 //    }
 
 //    @Override
-//    public void emptySpatioTemporalInformation(Path file, String line) {
-//        //pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
+//    public void emptySpatioTemporalInformation(Path file, String lineWithMeta) {
+//        //pw.write(lineWithMeta + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 //
 //    }
 //
 //    @Override
-//    public void outOfRangeSpatialInformation(Path file, String line) {
-//        //pw.write(line + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
+//    public void outOfRangeSpatialInformation(Path file, String lineWithMeta) {
+//        //pw.write(lineWithMeta + new String(new char[lruCacheManager.getNumberOfVariables()]).replace("\0", separator) + "\r\n");
 //
 //    }
 

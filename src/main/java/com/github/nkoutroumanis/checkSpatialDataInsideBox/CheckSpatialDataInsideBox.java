@@ -59,7 +59,7 @@ public final class CheckSpatialDataInsideBox {
 
 
 //    @Override
-//    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
+//    public void lineParse(String lineWithMeta, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
 //
 //        if ((Double.compare(space2D.getMaxx(), longitude) == 1) && (Double.compare(space2D.getMinx(), longitude) == -1)
 //                && (Double.compare(space2D.getMaxy(), latitude) == 1) && (Double.compare(space2D.getMiny(), latitude) == -1)) {

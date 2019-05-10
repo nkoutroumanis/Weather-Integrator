@@ -75,7 +75,7 @@ public final class CheckSpatialInfo {
 
 
 //    @Override
-//    public void emptySpatialInformation(Path file, String line) {
+//    public void emptySpatialInformation(Path file, String lineWithMeta) {
 //
 //        if (filesWithErrors.contains("Empty Spatial Information " + file.toString())) {
 //            filesWithErrors.add("Empty Spatial Information " + file.toString());
@@ -85,7 +85,7 @@ public final class CheckSpatialInfo {
 //    }
 //
 //    @Override
-//    public void outOfRangeSpatialInformation(Path file, String line) {
+//    public void outOfRangeSpatialInformation(Path file, String lineWithMeta) {
 //
 //        if (filesWithErrors.contains("Out of Range Spatial Information " + file.toString())) {
 //            filesWithErrors.add("Out of Range Spatial Information " + file.toString());
@@ -95,7 +95,7 @@ public final class CheckSpatialInfo {
 //    }
 
 //    @Override
-//    public void lineParse(String line, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
+//    public void lineParse(String lineWithMeta, String[] separatedLine, int numberOfColumnLongitude, int numberOfColumnLatitude, double longitude, double latitude) {
 //
 //        if (Double.compare(maxx, longitude) == -1) {
 //            maxx = longitude;
@@ -115,7 +115,7 @@ public final class CheckSpatialInfo {
 //    }
 
 //    @Override
-//    public void lineWithError(Path file, String line) {
+//    public void lineWithError(Path file, String lineWithMeta) {
 //        if (filesWithErrors.contains("Lines with Errors " + file.toString())) {
 //            filesWithErrors.add("Lines with Errors " + file.toString());
 //        } else {

@@ -1,5 +1,8 @@
 package com.github.nkoutroumanis.outputs;
 
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,12 +13,15 @@ public final class FileOutput implements Output {
 
     private String filePath = "";
 
+    private final RecordParser recordParser;
+
     private FileOutputStream fos;
     private OutputStreamWriter osw;
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    private FileOutput(String directory, boolean deleteDirectoryIfExist) {
+    private FileOutput(RecordParser recordParser, String directory, boolean deleteDirectoryIfExist) {
+        this.recordParser = recordParser;
         this.directory = directory;
 
         if (!directory.substring(directory.length() - 1).equals(File.separator)) {
@@ -35,8 +41,8 @@ public final class FileOutput implements Output {
         }
     }
 
-    public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist) {
-        return new FileOutput(directory, deleteDirectoryIfExist);
+    public static FileOutput newFileOutput(RecordParser recordParser, String directory, boolean deleteDirectoryIfExist) {
+        return new FileOutput(recordParser, directory, deleteDirectoryIfExist);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
@@ -50,7 +56,9 @@ public final class FileOutput implements Output {
     }
 
     @Override
-    public void out(String line, String lineMeta) {
+    public void out(Record record) {
+
+        String lineMeta = record.getMetadata();
 
         if (!lineMeta.equals(filePath)) {
 
@@ -68,7 +76,7 @@ public final class FileOutput implements Output {
 
                 filePath = lineMeta;
 
-                System.out.println("line meta:" + lineMeta);
+                System.out.println("lineWithMeta meta:" + lineMeta);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -80,7 +88,7 @@ public final class FileOutput implements Output {
 
         }
 
-        pw.write(line + "\r\n");
+        pw.write(recordParser.toCsv(record) + "\r\n");
 
     }
 
@@ -98,6 +106,5 @@ public final class FileOutput implements Output {
             }
         }
     }
-
 
 }
