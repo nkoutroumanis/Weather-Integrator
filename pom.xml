@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.nkoutroumanis.weatherIntegrator.JobUsingIndex</mainClass>
+                            <mainClass>com.github.nkoutroumanis.weatherIntegrator.JobFilesUsingIndex</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

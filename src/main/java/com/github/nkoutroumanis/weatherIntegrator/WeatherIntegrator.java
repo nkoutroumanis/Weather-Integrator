@@ -25,6 +25,9 @@ public final class WeatherIntegrator {
     private final RecordParser recordParser;
     private final WeatherDataObtainer wdo;
 
+    private final boolean checkLonLatRanges;
+    private final boolean removeLastValueFromRecords;
+
 //    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 //    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
 //    private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
@@ -33,7 +36,7 @@ public final class WeatherIntegrator {
 //
 //    private final String separator;
 
-    private final Rectangle rectangle;
+    private final Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
     public static class Builder {
 
@@ -53,7 +56,8 @@ public final class WeatherIntegrator {
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
-        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
+        private boolean checkLonLatRanges = false;
+        private boolean removeLastValueFromRecords = false;
 
         public Builder(RecordParser recordParser, String gribFilesFolderPath, List<String> variables) throws Exception {
 
@@ -68,6 +72,16 @@ public final class WeatherIntegrator {
 
         public Builder gribFilesExtension(String gribFilesExtension) {
             this.gribFilesExtension = gribFilesExtension;
+            return this;
+        }
+
+        public Builder checkLonLatRanges() {
+            this.checkLonLatRanges = true;
+            return this;
+        }
+
+        public Builder removeLastValueFromRecords() {
+            this.removeLastValueFromRecords = true;
             return this;
         }
 
@@ -86,18 +100,13 @@ public final class WeatherIntegrator {
             return this;
         }
 
-        public Builder filter(Rectangle rectangle) {
-            this.rectangle = rectangle;
-            return this;
-        }
-
-        public WeatherIntegrator build() throws IOException {
+        public WeatherIntegrator build() throws Exception {
             return new WeatherIntegrator(this);
         }
 
     }
 
-    private WeatherIntegrator(WeatherIntegrator.Builder builder) throws IOException {
+    private WeatherIntegrator(WeatherIntegrator.Builder builder) throws Exception {
 
         recordParser = builder.recordParser;
 //        numberOfColumnLongitude = builder.numberOfColumnLongitude;
@@ -105,9 +114,10 @@ public final class WeatherIntegrator {
 //        numberOfColumnDate = builder.numberOfColumnDate;
 //        dateFormat = builder.dateFormat;
 //        separator = builder.separator;
-
         wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
-        rectangle = builder.rectangle;
+
+        checkLonLatRanges = builder.checkLonLatRanges;
+        removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
 
     public void integrateAndOutputToKafkaTopic(String propertiesFile, String topicName) throws IOException, ParseException {
@@ -128,30 +138,44 @@ public final class WeatherIntegrator {
 
             Record record = recordParser.nextRecord();
 
-            recordParser.getDate(record);
+            try{
 
-            double longitude = Double.parseDouble(recordParser.getLongitude(record));
-            double latitude = Double.parseDouble(recordParser.getLatitude(record));
-            Date d = dateFormat.parse(recordParser.getDate(record));
+                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+                double latitude = Double.parseDouble(recordParser.getLatitude(record));
+                Date d = dateFormat.parse(recordParser.getDate(record));
 
 
-            //filtering
-            if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
-                logger.warn("Record spatial information out of range {}", record.getMetadata());
+                if(checkLonLatRanges){
+                    //filtering
+                    if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                        logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
+                        continue;
+                    }
+                }
+
+                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
+                record.addFieldValues(values);
+
+
+                if(removeLastValueFromRecords){
+                    //if dataset finishes with ;
+                    record.deleteLastFieldValue();
+                    //else sb.append(lineWithMeta);
+                }
+
+                numberofRecords++;
+
+                output.out(record);
+
+            }
+            catch (NumberFormatException | ParseException e){
+                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
                 continue;
             }
-
-            List<String> values = wdo.obtainAttributes(longitude, latitude, d);
-            record.addFieldValues(values);
-
-
-            //if dataset finishes with ;
-            record.deleteLastFieldValue();
-            //else sb.append(lineWithMeta);
-
-            numberofRecords++;
-
-            output.out(record);
+            catch (ArrayIndexOutOfBoundsException e){
+                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
+                continue;
+            }
 
 
 //            try {

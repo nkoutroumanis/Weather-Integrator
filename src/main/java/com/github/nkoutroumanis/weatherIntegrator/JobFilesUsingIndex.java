@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class JobUsingIndex {
+public final class JobFilesUsingIndex {
 
     public static void main(String args[]) {
 
