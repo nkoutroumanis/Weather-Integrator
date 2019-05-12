@@ -59,4 +59,8 @@ public abstract class RecordParser {
     public String getVehicle(Record record) {
         throw new NotImplementedException();
     }
+
+    public Datasource getDatasource() {
+        return source;
+    }
 }

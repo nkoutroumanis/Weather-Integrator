@@ -4,19 +4,25 @@ import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class CheckSpatialInfo {
 
-    private final Datasource parser;
+    private static final Logger logger = LoggerFactory.getLogger(CheckSpatialInfo.class);
 
-    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+    private final RecordParser recordParser;
 
-    private final String separator;
     private final Rectangle rectangle;
 
     private Set<String> errorLines;
@@ -32,24 +38,13 @@ public final class CheckSpatialInfo {
 
     public static class Builder {
 
-        private final Datasource parser;
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-
-        private String separator = ";";
+        private final RecordParser recordParser;
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
 
-        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
-
-            this.parser = parser;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
+        public Builder(RecordParser recordParser) throws Exception {
+            this.recordParser = recordParser;
+            this.rectangle = rectangle;
         }
 
         public Builder filter(Rectangle rectangle) {
@@ -64,12 +59,7 @@ public final class CheckSpatialInfo {
     }
 
     private CheckSpatialInfo(Builder builder) {
-        parser = builder.parser;
-
-        numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-
-        separator = builder.separator;
+        recordParser = builder.recordParser;
         rectangle = builder.rectangle;
     }
 
@@ -123,46 +113,35 @@ public final class CheckSpatialInfo {
 //        }
 //    }
 
-    public void exportInfo(FileOutput fileOutput) throws IOException {
+    public void exportInfo(FileOutput fileOutput) throws IOException, ParseException {
 
         errorLines = new HashSet<>();
         emptySpatialInformation = new HashSet<>();
         spatialInformationOutOfRange = new HashSet<>();
 
 
-        while (parser.hasNextLine()) {
+        while (recordParser.hasNextRecord()) {
 
-            String[] a = parser.nextLine();
+
+
+            Record record = recordParser.nextRecord();
+            String lineMetaData = record.getMetadata();
 
             try {
 
-                String line = a[0];
-                String[] separatedLine = line.split(separator);
+                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+                double latitude = Double.parseDouble(recordParser.getLatitude(record));
 
-                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
-
-                    if (parser instanceof KafkaDatasource) {
-                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
-                    }
-
-                    if (!emptySpatialInformation.contains(a[1])) {
-                        emptySpatialInformation.add(a[1]);
-                    }
-                    continue;
-                }
-
-                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
 
                 //filtering
                 if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
 
-                    if (parser instanceof KafkaDatasource) {
-                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+                    if (recordParser.getDatasource() instanceof KafkaDatasource) {
+                        lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
                     }
 
-                    if (!spatialInformationOutOfRange.contains(a[1])) {
-                        spatialInformationOutOfRange.add(a[1]);
+                    if (!spatialInformationOutOfRange.contains(lineMetaData)) {
+                        spatialInformationOutOfRange.add(lineMetaData);
                     }
                     continue;
                 }
@@ -182,18 +161,95 @@ public final class CheckSpatialInfo {
 
                 numberOfRecords++;
 
-            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 
-                if (parser instanceof KafkaDatasource) {
-                    a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+            } catch (NumberFormatException e) {
+                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+
+                if (recordParser.getDatasource() instanceof KafkaDatasource) {
+                    lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
                 }
 
-                if (!errorLines.contains(a[1])) {
-                    errorLines.add(a[1]);
+                if (!errorLines.contains(lineMetaData)) {
+                    errorLines.add(lineMetaData);
+                }
+
+                continue;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
+
+                if (recordParser.getDatasource() instanceof KafkaDatasource) {
+                    lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
+                }
+
+                if (!errorLines.contains(lineMetaData)) {
+                    errorLines.add(lineMetaData);
                 }
 
                 continue;
             }
+
+//            String[] a = parser.nextLine();
+//
+//            try {
+//
+//                String line = a[0];
+//                String[] separatedLine = line.split(separator);
+//
+//                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+//
+//                    if (parser instanceof KafkaDatasource) {
+//                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+//                    }
+//
+//                    if (!emptySpatialInformation.contains(a[1])) {
+//                        emptySpatialInformation.add(a[1]);
+//                    }
+//                    continue;
+//                }
+//
+//                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+//                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+//
+//                //filtering
+//                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+//
+//                    if (parser instanceof KafkaDatasource) {
+//                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+//                    }
+//
+//                    if (!spatialInformationOutOfRange.contains(a[1])) {
+//                        spatialInformationOutOfRange.add(a[1]);
+//                    }
+//                    continue;
+//                }
+//
+//                if (Double.compare(maxx, longitude) == -1) {
+//                    maxx = longitude;
+//                }
+//                if (Double.compare(minx, longitude) == 1) {
+//                    minx = longitude;
+//                }
+//                if (Double.compare(maxy, latitude) == -1) {
+//                    maxy = latitude;
+//                }
+//                if (Double.compare(miny, latitude) == 1) {
+//                    miny = latitude;
+//                }
+//
+//                numberOfRecords++;
+//
+//            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+//
+//                if (parser instanceof KafkaDatasource) {
+//                    a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+//                }
+//
+//                if (!errorLines.contains(a[1])) {
+//                    errorLines.add(a[1]);
+//                }
+//
+//                continue;
+//            }
 
         }
 
@@ -260,8 +316,8 @@ public final class CheckSpatialInfo {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude) throws Exception {
-        return new CheckSpatialInfo.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude);
+    public static Builder newCheckSpatioTemporalInfo(RecordParser recordParser) throws Exception {
+        return new CheckSpatialInfo.Builder(recordParser);
     }
 
 }

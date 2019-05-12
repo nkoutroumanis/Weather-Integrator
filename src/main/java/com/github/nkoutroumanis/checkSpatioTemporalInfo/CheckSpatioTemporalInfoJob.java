@@ -6,13 +6,6 @@ import com.github.nkoutroumanis.datasources.FileDatasource;
 public class CheckSpatioTemporalInfoJob {
     public static void main(String args[]) throws Exception {
 
-//        CheckSpatioTemporalInfo.newCheckSpatioTemporalInfo("/home/nikolaos/Documents/tambak",
-//                2, 3, 4,
-//                "yyyy-MM-dd HH:mm:ss").build().exportTxt("/home/nikolaos/Documents/gb");
-
-        CheckSpatioTemporalInfo.newCheckSpatioTemporalInfo(FileDatasource.newFileParser("/home/nikolaos/Documents/synthetic-dataset2/", ".csv"),
-                2, 3, 4,
-                "yyyy-MM-dd HH:mm:ss").build().exportInfo(FileOutput.newFileOutput("/home/nikolaos/Desktop/infoAbout/", true));
     }
 
 }

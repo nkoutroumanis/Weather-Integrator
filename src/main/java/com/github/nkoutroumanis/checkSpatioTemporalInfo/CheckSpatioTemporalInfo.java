@@ -4,6 +4,10 @@ import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.parsers.RecordParser;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -15,14 +19,10 @@ import java.util.Set;
 
 public final class CheckSpatioTemporalInfo {
 
-    private final Datasource parser;
+    private static final Logger logger = LoggerFactory.getLogger(CheckSpatioTemporalInfo.class);
 
-    private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-    private final DateFormat dateFormat;
+    private final RecordParser recordParser;
 
-    private final String separator;
     private final Rectangle rectangle;
 
     private Set<String> errorLines;
@@ -38,28 +38,13 @@ public final class CheckSpatioTemporalInfo {
 
     public static class Builder {
 
-        private final Datasource parser;
-        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-        private final DateFormat dateFormat;
+        private final RecordParser recordParser;
 
-        private String separator = ";";
         private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
 
-        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
-
-            this.parser = parser;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
+        public Builder(RecordParser recordParser) throws Exception {
+            this.recordParser = recordParser;
+            this.rectangle = rectangle;
         }
 
         public Builder filter(Rectangle rectangle) {
@@ -74,14 +59,7 @@ public final class CheckSpatioTemporalInfo {
     }
 
     private CheckSpatioTemporalInfo(Builder builder) {
-        parser = builder.parser;
-
-        numberOfColumnDate = builder.numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-        numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-        dateFormat = builder.dateFormat;
-
-        separator = builder.separator;
+        recordParser = builder.recordParser;
         rectangle = builder.rectangle;
     }
 
@@ -142,7 +120,7 @@ public final class CheckSpatioTemporalInfo {
         emptySpatialInformation = new HashSet<>();
         spatialInformationOutOfRange = new HashSet<>();
 
-        while (parser.hasNextLine()) {
+        while (recordParser.hasNextRecord()) {
 
             String[] a = parser.nextLine();
 
@@ -274,8 +252,8 @@ public final class CheckSpatioTemporalInfo {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
-        return new CheckSpatioTemporalInfo.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
+    public static Builder newCheckSpatioTemporalInfo(RecordParser recordParser) throws Exception {
+        return new CheckSpatioTemporalInfo.Builder(recordParser);
     }
 
 
