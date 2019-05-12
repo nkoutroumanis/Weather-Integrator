@@ -2,10 +2,9 @@ package com.github.nkoutroumanis.checkSpatioTemporalInfo;
 
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
-import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +25,8 @@ public final class CheckSpatioTemporalInfo {
     private final Rectangle rectangle;
 
     private Set<String> errorLines;
-    private Set<String> emptySpatialInformation;
-    private Set<String> spatialInformationOutOfRange;
+    //private Set<String> emptySpatialInformation;
+    private Set<String> spatioTemporalInformationOutOfRange;
 
     private long numberOfRecords = 0;
 
@@ -114,46 +113,34 @@ public final class CheckSpatioTemporalInfo {
 //        }
 //    }
 
-    public void exportInfo(FileOutput fileOutput) throws IOException {
+    public void exportInfo(FileOutput fileOutput) throws IOException, ParseException {
 
         errorLines = new HashSet<>();
-        emptySpatialInformation = new HashSet<>();
-        spatialInformationOutOfRange = new HashSet<>();
+        //emptySpatialInformation = new HashSet<>();
+        spatioTemporalInformationOutOfRange = new HashSet<>();
+
+        DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
 
         while (recordParser.hasNextRecord()) {
 
-            String[] a = parser.nextLine();
+            Record record = recordParser.nextRecord();
+            String lineMetaData = record.getMetadata();
 
             try {
 
-                String line = a[0];
-                String[] separatedLine = line.split(separator);
-
-                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
-
-                    if (parser instanceof KafkaDatasource) {
-                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
-                    }
-
-                    if (!emptySpatialInformation.contains(a[1])) {
-                        emptySpatialInformation.add(a[1]);
-                    }
-                    continue;
-                }
-
-                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
+                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+                double latitude = Double.parseDouble(recordParser.getLatitude(record));
+                Date d = dateFormat.parse(recordParser.getDate(record));
 
                 //filtering
                 if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
 
-                    if (parser instanceof KafkaDatasource) {
-                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+                    if (recordParser.getDatasource() instanceof KafkaDatasource) {
+                        lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
                     }
 
-                    if (!spatialInformationOutOfRange.contains(a[1])) {
-                        spatialInformationOutOfRange.add(a[1]);
+                    if (!spatioTemporalInformationOutOfRange.contains(lineMetaData)) {
+                        spatioTemporalInformationOutOfRange.add(lineMetaData);
                     }
                     continue;
                 }
@@ -173,33 +160,67 @@ public final class CheckSpatioTemporalInfo {
 
                 numberOfRecords++;
 
-            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
 
-                if (parser instanceof KafkaDatasource) {
-                    a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+
+
+//                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
+//
+//                    if (parser instanceof KafkaDatasource) {
+//                        a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+//                    }
+//
+//                    if (!emptySpatialInformation.contains(a[1])) {
+//                        emptySpatialInformation.add(a[1]);
+//                    }
+//                    continue;
+//                }
+
+
+            }catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
+
+                if((e instanceof NumberFormatException) || (e instanceof ParseException)){
+                    logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                }
+                else{
+                    logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
                 }
 
-                if (!errorLines.contains(a[1])) {
-                    errorLines.add(a[1]);
+                if (recordParser.getDatasource() instanceof KafkaDatasource) {
+                    lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
                 }
 
-                continue;
+                if (!errorLines.contains(lineMetaData)) {
+                    errorLines.add(lineMetaData);
+                }
             }
+
+//            catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
+//
+//                if (parser instanceof KafkaDatasource) {
+//                    a[1] = a[1].substring(0, a[1].lastIndexOf("."));
+//                }
+//
+//                if (!errorLines.contains(a[1])) {
+//                    errorLines.add(a[1]);
+//                }
+//
+//                continue;
+//            }
 
         }
 
-        String fileName = "SpatioTemporal-Info.txt";
+        String fileName = "Spatio-temporal-Info.txt";
 
         fileOutput.out("Lines error at: ", fileName);
         errorLines.forEach((s) -> fileOutput.out(s, fileName));
         fileOutput.out("\r\n", fileName);
 
-        fileOutput.out("Empty SpatioTemporal Information at: ", fileName);
-        emptySpatialInformation.forEach((s) -> fileOutput.out(s, fileName));
-        fileOutput.out("\r\n", fileName);
+//        fileOutput.out("Empty Spatio-temporal Information at: ", fileName);
+//        emptySpatialInformation.forEach((s) -> fileOutput.out(s, fileName));
+//        fileOutput.out("\r\n", fileName);
 
         fileOutput.out("Spatial Information out of range at: ", fileName);
-        spatialInformationOutOfRange.forEach((s) -> fileOutput.out(s, fileName));
+        spatioTemporalInformationOutOfRange.forEach((s) -> fileOutput.out(s, fileName));
         fileOutput.out("\r\n", fileName);
 
         fileOutput.out("Formed Spatial Box: ", fileName);

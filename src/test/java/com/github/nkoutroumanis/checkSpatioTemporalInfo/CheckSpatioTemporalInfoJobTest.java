@@ -20,7 +20,6 @@ public class CheckSpatioTemporalInfoJobTest {
         RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
         FileOutput fileOutput = FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
 
-
         CheckSpatioTemporalInfo.newCheckSpatioTemporalInfo(rp).build().exportInfo(fileOutput);
 
     }

@@ -26,7 +26,7 @@ public final class CheckSpatialInfo {
     private final Rectangle rectangle;
 
     private Set<String> errorLines;
-    private Set<String> emptySpatialInformation;
+    //private Set<String> emptySpatialInformation;
     private Set<String> spatialInformationOutOfRange;
 
     private long numberOfRecords = 0;
@@ -116,7 +116,7 @@ public final class CheckSpatialInfo {
     public void exportInfo(FileOutput fileOutput) throws IOException, ParseException {
 
         errorLines = new HashSet<>();
-        emptySpatialInformation = new HashSet<>();
+        //emptySpatialInformation = new HashSet<>();
         spatialInformationOutOfRange = new HashSet<>();
 
 
@@ -131,7 +131,6 @@ public final class CheckSpatialInfo {
 
                 double longitude = Double.parseDouble(recordParser.getLongitude(record));
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
-
 
                 //filtering
                 if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
@@ -162,8 +161,14 @@ public final class CheckSpatialInfo {
                 numberOfRecords++;
 
 
-            } catch (NumberFormatException e) {
-                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+
+                if(e instanceof NumberFormatException){
+                    logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                }
+                else{
+                    logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
+                }
 
                 if (recordParser.getDatasource() instanceof KafkaDatasource) {
                     lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
@@ -172,20 +177,6 @@ public final class CheckSpatialInfo {
                 if (!errorLines.contains(lineMetaData)) {
                     errorLines.add(lineMetaData);
                 }
-
-                continue;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
-
-                if (recordParser.getDatasource() instanceof KafkaDatasource) {
-                    lineMetaData = lineMetaData.substring(0, lineMetaData.lastIndexOf("."));
-                }
-
-                if (!errorLines.contains(lineMetaData)) {
-                    errorLines.add(lineMetaData);
-                }
-
-                continue;
             }
 
 //            String[] a = parser.nextLine();
@@ -259,9 +250,9 @@ public final class CheckSpatialInfo {
         errorLines.forEach((s) -> fileOutput.out(s, fileName));
         fileOutput.out("\r\n", fileName);
 
-        fileOutput.out("Empty Spatial Information at: ", fileName);
-        emptySpatialInformation.forEach((s) -> fileOutput.out(s, fileName));
-        fileOutput.out("\r\n", fileName);
+//        fileOutput.out("Empty Spatial Information at: ", fileName);
+//        emptySpatialInformation.forEach((s) -> fileOutput.out(s, fileName));
+//        fileOutput.out("\r\n", fileName);
 
         fileOutput.out("Spatial Information out of range at: ", fileName);
         spatialInformationOutOfRange.forEach((s) -> fileOutput.out(s, fileName));

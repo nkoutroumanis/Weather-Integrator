@@ -172,10 +172,8 @@ public final class WeatherIntegrator {
 
             } catch (NumberFormatException | ParseException e) {
                 logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
-                continue;
             } catch (ArrayIndexOutOfBoundsException e) {
                 logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
-                continue;
             }
 
 

@@ -3,8 +3,13 @@ package com.github.nkoutroumanis.histogram;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,16 +25,13 @@ import java.util.Map;
 
 public final class GridPartition {
 
+    private static final Logger logger = LoggerFactory.getLogger(GridPartition.class);
+
+
     private final Rectangle rectangle;
     private final long cellsInXAxis;
     private final long cellsInYAxis;
-    private final Datasource parser;
-    private final int numberOfColumnLongitude;
-    private final int numberOfColumnLatitude;
-    private final int numberOfColumnDate;
-    private final DateFormat dateFormat;
-
-    private final String separator;
+    private final RecordParser recordParser;
 
     private String exportPath;
     private Map<Long, Long> map;
@@ -41,29 +43,13 @@ public final class GridPartition {
         private Rectangle rectangle;
         private final long cellsInXAxis;
         private final long cellsInYAxis;
-        private final Datasource parser;
-        private final int numberOfColumnLongitude;
-        private final int numberOfColumnLatitude;
-        private final int numberOfColumnDate;
-        private final DateFormat dateFormat;
+        private final RecordParser recordParser;
 
-        private String separator = ";";
-
-        public Builder(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+        public Builder(RecordParser recordParser, Rectangle rectangle, long cellsInXAxis, long cellsInYAxis) throws Exception {
             this.rectangle = rectangle;
             this.cellsInXAxis = cellsInXAxis;
             this.cellsInYAxis = cellsInYAxis;
-            this.parser = parser;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
+            this.recordParser = recordParser;
         }
 
         public GridPartition build() {
@@ -72,24 +58,18 @@ public final class GridPartition {
     }
 
     private GridPartition(Builder builder) {
+        recordParser = builder.recordParser;
         rectangle = builder.rectangle;
         cellsInXAxis = builder.cellsInXAxis;
         cellsInYAxis = builder.cellsInYAxis;
-        parser = builder.parser;
-        numberOfColumnLongitude = builder.numberOfColumnLongitude;
-        numberOfColumnLatitude = builder.numberOfColumnLatitude;
-        numberOfColumnDate = builder.numberOfColumnDate;
-        dateFormat = builder.dateFormat;
-
-        separator = builder.separator;
     }
 
 
-    public static Builder newGridPartition(Rectangle rectangle, long cellsInXAxis, long cellsInYAxis, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
-        return new Builder(rectangle, cellsInXAxis, cellsInYAxis, parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
+    public static Builder newGridPartition(RecordParser recordParser, Rectangle rectangle, long cellsInXAxis, long cellsInYAxis) throws Exception {
+        return new Builder(recordParser, rectangle, cellsInXAxis, cellsInYAxis);
     }
 
-    public void exportHistogram(String exportPath) throws IOException {
+    public void exportHistogram(String exportPath) throws IOException, ParseException {
 
         Path path = Paths.get(exportPath);
         //if directory exists does not exist
@@ -108,32 +88,31 @@ public final class GridPartition {
         x = (rectangle.getMaxx() - rectangle.getMinx()) / cellsInXAxis;
         y = (rectangle.getMaxy() - rectangle.getMiny()) / cellsInYAxis;
 
+        DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
 
-        while (parser.hasNextLine()) {
+
+        while (recordParser.hasNextRecord()) {
+
+            Record record = recordParser.nextRecord();
 
             try {
-                String[] a = parser.nextLine();
 
-                String line = a[0];
-                String[] separatedLine = line.split(separator);
-
-                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
-                    continue;
-                }
-
-                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
+                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+                double latitude = Double.parseDouble(recordParser.getLatitude(record));
+                Date d = dateFormat.parse(recordParser.getDate(record));
 
                 //filtering
                 if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                    logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
                     continue;
                 }
 
                 insertToHistogram(longitude, latitude);
 
-            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
-                continue;
+            } catch (NumberFormatException | ParseException e) {
+                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
             }
         }
 
