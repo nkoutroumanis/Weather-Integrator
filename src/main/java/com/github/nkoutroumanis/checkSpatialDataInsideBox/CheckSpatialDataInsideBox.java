@@ -3,42 +3,36 @@ package com.github.nkoutroumanis.checkSpatialDataInsideBox;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
+import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 public final class CheckSpatialDataInsideBox {
 
-    private final Datasource parser;
+    private static final Logger logger = LoggerFactory.getLogger(CheckSpatialDataInsideBox.class);
 
-    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+    private final RecordParser recordParser;
     private final Rectangle rectangle;
-
-    private final String separator;
 
     private long numberOfRecords = 0;
     private long numberOfRecordsInSpace2D = 0;
 
     public static class Builder {
 
-        private final Datasource parser;
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        private final RecordParser recordParser;
         private final Rectangle rectangle;
 
-        private String separator = ";";
+        public Builder(RecordParser recordParser, Rectangle rectangle) {
 
-        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, Rectangle rectangle) {
-
-            this.parser = parser;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.recordParser = recordParser;
             this.rectangle = rectangle;
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
         }
 
         public CheckSpatialDataInsideBox build() {
@@ -48,13 +42,8 @@ public final class CheckSpatialDataInsideBox {
     }
 
     private CheckSpatialDataInsideBox(Builder builder) {
-        parser = builder.parser;
-
-        numberOfColumnLatitude = builder.numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        numberOfColumnLongitude = builder.numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        recordParser = builder.recordParser;
         rectangle = builder.rectangle;
-
-        separator = builder.separator;
     }
 
 
@@ -70,23 +59,17 @@ public final class CheckSpatialDataInsideBox {
 //
 //    }
 
-    public void exportInfo(FileOutput fileOutput) throws IOException {
+    public void exportInfo(FileOutput fileOutput) throws IOException, ParseException {
 
-        while (parser.hasNextLine()) {
+        while (recordParser.hasNextRecord()) {
+
+
+            Record record = recordParser.nextRecord();
 
             try {
-                String[] a = parser.nextLine();
 
-                String line = a[0];
-                String[] separatedLine = line.split(separator);
-
-                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
-                    continue;
-                }
-
-                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-
+                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+                double latitude = Double.parseDouble(recordParser.getLatitude(record));
 
                 if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
                         && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
@@ -94,9 +77,42 @@ public final class CheckSpatialDataInsideBox {
                 }
 
                 numberOfRecords++;
-            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+
+            } catch (NumberFormatException e) {
+                logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                continue;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
                 continue;
             }
+
+
+
+
+
+//            try {
+//                String[] a = parser.nextLine();
+//
+//                String line = a[0];
+//                String[] separatedLine = line.split(separator);
+//
+//                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1])) {
+//                    continue;
+//                }
+//
+//                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
+//                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
+//
+//
+//                if ((Double.compare(rectangle.getMaxx(), longitude) == 1) && (Double.compare(rectangle.getMinx(), longitude) == -1)
+//                        && (Double.compare(rectangle.getMaxy(), latitude) == 1) && (Double.compare(rectangle.getMiny(), latitude) == -1)) {
+//                    numberOfRecordsInSpace2D++;
+//                }
+//
+//                numberOfRecords++;
+//            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+//                continue;
+//            }
 
         }
 
@@ -158,8 +174,8 @@ public final class CheckSpatialDataInsideBox {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, Rectangle rectangle) {
-        return new CheckSpatialDataInsideBox.Builder(parser, numberOfColumnLongitude, numberOfColumnLatitude, rectangle);
+    public static Builder newCheckSpatioTemporalInfo(RecordParser parser, Rectangle rectangle) {
+        return new CheckSpatialDataInsideBox.Builder(parser, rectangle);
     }
 
 

@@ -43,25 +43,16 @@ public class CsvRecordParser extends RecordParser {
     }
 
     public CsvRecordParser(Datasource source, String separator, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat) {
-        super(source);
-        this.separator = separator;
-        this.headers = null;
-        this.vehicleFieldId = -1;
-        this.longitudeFieldId = longitudeFieldId;
-        this.latitudeFieldId = latitudeFieldId;
-        this.dateFieldId = dateFieldId;
-        this.dateFormat = dateFormat;
+        this(source, separator, null, -1, longitudeFieldId, latitudeFieldId, dateFieldId, dateFormat);
     }
 
     public CsvRecordParser(Datasource source, String separator, String headers) {
-        super(source);
-        this.separator = separator;
-        this.headers = headers.split(separator);
-        this.vehicleFieldId = -1;
-        this.longitudeFieldId = -1;
-        this.latitudeFieldId = -1;
-        this.dateFieldId = -1;
-        this.dateFormat = null;
+        this(source, separator, headers, -1, -1, -1, -1, null);
+    }
+
+    public CsvRecordParser(Datasource source, String separator, int longitudeFieldId, int latitudeFieldId) {
+
+        this(source, separator, null, -1, longitudeFieldId, latitudeFieldId, -1, null);
     }
 
     @Override
