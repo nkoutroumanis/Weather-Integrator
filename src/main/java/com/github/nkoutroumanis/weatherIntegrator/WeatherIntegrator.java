@@ -25,7 +25,6 @@ public final class WeatherIntegrator {
     private final RecordParser recordParser;
     private final WeatherDataObtainer wdo;
 
-    private final boolean checkLonLatRanges;
     private final boolean removeLastValueFromRecords;
 
 //    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
@@ -36,7 +35,7 @@ public final class WeatherIntegrator {
 //
 //    private final String separator;
 
-    private final Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
+    private final Rectangle rectangle;// = Rectangle.newRectangle(-180, -90, 180, 90);
 
     public static class Builder {
 
@@ -56,7 +55,7 @@ public final class WeatherIntegrator {
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
-        private boolean checkLonLatRanges = false;
+        private Rectangle rectangle = null;
         private boolean removeLastValueFromRecords = false;
 
         public Builder(RecordParser recordParser, String gribFilesFolderPath, List<String> variables) throws Exception {
@@ -75,8 +74,8 @@ public final class WeatherIntegrator {
             return this;
         }
 
-        public Builder checkLonLatRanges() {
-            this.checkLonLatRanges = true;
+        public Builder filter(Rectangle rectangle) {
+            this.rectangle = rectangle;
             return this;
         }
 
@@ -116,7 +115,7 @@ public final class WeatherIntegrator {
 //        separator = builder.separator;
         wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
 
-        checkLonLatRanges = builder.checkLonLatRanges;
+        rectangle = builder.rectangle;
         removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
 
@@ -145,7 +144,7 @@ public final class WeatherIntegrator {
                 Date d = dateFormat.parse(recordParser.getDate(record));
 
 
-                if(checkLonLatRanges){
+                if(rectangle != null){
                     //filtering
                     if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
                         logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
