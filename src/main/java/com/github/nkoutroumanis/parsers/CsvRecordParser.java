@@ -93,11 +93,9 @@ public class CsvRecordParser extends RecordParser {
         for (int i = 0; i < record.getFieldValues().size(); i++) {
             if (i == vehicleFieldId) {
                 result.append(vehicleFieldName, record.getFieldValues().get(i));
-            }
-            else if (i == dateFieldId) {
+            } else if (i == dateFieldId) {
                 result.append(dateFieldName, record.getFieldValues().get(i));
-            }
-            else if ((i != longitudeFieldId) && (i == latitudeFieldId)) {
+            } else if ((i != longitudeFieldId) && (i == latitudeFieldId)) {
                 result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
             }
         }
@@ -109,12 +107,12 @@ public class CsvRecordParser extends RecordParser {
     }
 
     @Override
-    public String toCsv(Record record){
+    public String toCsv(Record record) {
 
         StringBuilder sb = new StringBuilder();
 
         sb.append(record.getFieldValues().get(0));
-        for(int i = 1; i< record.getFieldValues().size();i++){
+        for (int i = 1; i < record.getFieldValues().size(); i++) {
             sb.append(separator);
             sb.append(record.getFieldValues().get(i));
         }
@@ -124,17 +122,17 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getLatitude(Record record) {
-        return record.getFieldValues().get(latitudeFieldId-1);
+        return record.getFieldValues().get(latitudeFieldId - 1);
     }
 
     @Override
     public String getLongitude(Record record) {
-        return record.getFieldValues().get(longitudeFieldId-1);
+        return record.getFieldValues().get(longitudeFieldId - 1);
     }
 
     @Override
     public String getDate(Record record) {
-        return record.getFieldValues().get(dateFieldId-1);
+        return record.getFieldValues().get(dateFieldId - 1);
     }
 
     @Override
@@ -144,6 +142,6 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getVehicle(Record record) {
-        return record.getFieldValues().get(vehicleFieldId-1);
+        return record.getFieldValues().get(vehicleFieldId - 1);
     }
 }

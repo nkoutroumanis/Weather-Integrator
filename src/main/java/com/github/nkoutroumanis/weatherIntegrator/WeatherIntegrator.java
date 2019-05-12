@@ -26,14 +26,6 @@ public final class WeatherIntegrator {
 
     private final boolean removeLastValueFromRecords;
 
-//    private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-//    private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-//    private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-//
-//    private final DateFormat dateFormat;
-//
-//    private final String separator;
-
     private final Rectangle rectangle;// = Rectangle.newRectangle(-180, -90, 180, 90);
 
     public static class Builder {
@@ -41,16 +33,9 @@ public final class WeatherIntegrator {
         private final RecordParser recordParser;
 
         private final String gribFilesFolderPath;
-
-        //        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-//        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-//        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-//
-//        private final DateFormat dateFormat;
         private final List<String> variables;
 
         private String gribFilesExtension = ".grb2";
-        //private String separator = ";";
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
 
@@ -61,10 +46,6 @@ public final class WeatherIntegrator {
 
             this.recordParser = recordParser;
             this.gribFilesFolderPath = gribFilesFolderPath;
-//            this.numberOfColumnLongitude = numberOfColumnLongitude;
-//            this.numberOfColumnLatitude = numberOfColumnLatitude;
-//            this.numberOfColumnDate = numberOfColumnDate;
-//            this.dateFormat = new SimpleDateFormat(dateFormat);
             this.variables = variables;
         }
 
@@ -82,11 +63,6 @@ public final class WeatherIntegrator {
             this.removeLastValueFromRecords = true;
             return this;
         }
-
-//        public Builder separator(String separator) {
-//            this.separator = separator;
-//            return this;
-//        }
 
         public Builder lruCacheMaxEntries(int lruCacheMaxEntries) {
             this.lruCacheMaxEntries = lruCacheMaxEntries;
@@ -107,11 +83,6 @@ public final class WeatherIntegrator {
     private WeatherIntegrator(WeatherIntegrator.Builder builder) throws Exception {
 
         recordParser = builder.recordParser;
-//        numberOfColumnLongitude = builder.numberOfColumnLongitude;
-//        numberOfColumnLatitude = builder.numberOfColumnLatitude;
-//        numberOfColumnDate = builder.numberOfColumnDate;
-//        dateFormat = builder.dateFormat;
-//        separator = builder.separator;
         wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
 
         rectangle = builder.rectangle;
@@ -164,7 +135,6 @@ public final class WeatherIntegrator {
 
                 List<String> values = wdo.obtainAttributes(longitude, latitude, d);
                 record.addFieldValues(values);
-
 
                 numberofRecords++;
 

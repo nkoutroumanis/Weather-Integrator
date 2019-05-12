@@ -1,15 +1,14 @@
 package com.github.nkoutroumanis.kafkaToMongoDB;
 
 import com.github.nkoutroumanis.AppConfig;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.outputs.MongoOutput;
 import com.github.nkoutroumanis.outputs.Output;
-import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +48,7 @@ public class KafkaToMongoJob {
                     source,
                     config.getString(inputCsvSeparatorSetting),
                     config.getString(inputCsvHeaderSetting)
-                    );
+            );
         } else {
             logger.error("Input format parser {} is not implemented", inputFormat);
             throw new NotImplementedException();

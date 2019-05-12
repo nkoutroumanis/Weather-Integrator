@@ -19,16 +19,16 @@ public final class MongoDbConnector {
         this.database = database;
     }
 
+    public static MongoDbConnector newMongoDbConnector(String host, int port, String database, String username, String password) {
+        return new MongoDbConnector(host, port, database, username, password);
+    }
+
     public String getDatabase() {
         return database;
     }
 
     public MongoClient getMongoClient() {
         return mongoClient;
-    }
-
-    public static MongoDbConnector newMongoDbConnector(String host, int port, String database, String username, String password) {
-        return new MongoDbConnector(host, port, database, username, password);
     }
 
 

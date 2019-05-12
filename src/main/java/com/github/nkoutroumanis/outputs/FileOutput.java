@@ -1,7 +1,5 @@
 package com.github.nkoutroumanis.outputs;
 
-import com.github.nkoutroumanis.parsers.Record;
-import com.github.nkoutroumanis.parsers.RecordParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,16 +9,13 @@ import java.nio.file.Paths;
 
 public final class FileOutput implements Output {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileOutput.class);
     private final String directory;
-
     private String filePath = "";
-
     private FileOutputStream fos;
     private OutputStreamWriter osw;
     private BufferedWriter bw;
     private PrintWriter pw;
-
-    private static final Logger logger = LoggerFactory.getLogger(FileOutput.class);
 
     private FileOutput(String directory, boolean deleteDirectoryIfExist) {
         this.directory = directory;

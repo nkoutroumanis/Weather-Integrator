@@ -18,6 +18,10 @@ public final class GribFileWithoutIndex implements GribFile {
         this.listOfVariables = listOfVariables.stream().map(s -> ncf.findVariable(s)).collect(Collectors.toList());
     }
 
+    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables) throws IOException {
+        return new GribFileWithoutIndex(path, listOfVariables);
+    }
+
     public List<String> getDataValuesByLatLon(double lat, double lon) {
 
         List<String> values = new ArrayList();
@@ -40,9 +44,5 @@ public final class GribFileWithoutIndex implements GribFile {
         });
 
         return values;
-    }
-
-    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables) throws IOException {
-        return new GribFileWithoutIndex(path, listOfVariables);
     }
 }

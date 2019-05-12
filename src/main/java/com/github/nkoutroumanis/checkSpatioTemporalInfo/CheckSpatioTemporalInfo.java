@@ -1,8 +1,8 @@
 package com.github.nkoutroumanis.checkSpatioTemporalInfo;
 
-import com.github.nkoutroumanis.outputs.FileOutput;
-import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
+import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import org.slf4j.Logger;
@@ -35,31 +35,13 @@ public final class CheckSpatioTemporalInfo {
     private double maxy = Integer.MIN_VALUE;
     private double miny = Integer.MAX_VALUE;
 
-    public static class Builder {
-
-        private final RecordParser recordParser;
-
-        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
-
-        public Builder(RecordParser recordParser) throws Exception {
-            this.recordParser = recordParser;
-            this.rectangle = rectangle;
-        }
-
-        public Builder filter(Rectangle rectangle) {
-            this.rectangle = rectangle;
-            return this;
-        }
-
-        public CheckSpatioTemporalInfo build() {
-            return new CheckSpatioTemporalInfo(this);
-        }
-
-    }
-
     private CheckSpatioTemporalInfo(Builder builder) {
         recordParser = builder.recordParser;
         rectangle = builder.rectangle;
+    }
+
+    public static Builder newCheckSpatioTemporalInfo(RecordParser recordParser) throws Exception {
+        return new CheckSpatioTemporalInfo.Builder(recordParser);
     }
 
 
@@ -161,8 +143,6 @@ public final class CheckSpatioTemporalInfo {
                 numberOfRecords++;
 
 
-
-
 //                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
 //
 //                    if (parser instanceof KafkaDatasource) {
@@ -176,12 +156,11 @@ public final class CheckSpatioTemporalInfo {
 //                }
 
 
-            }catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
+            } catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
 
-                if((e instanceof NumberFormatException) || (e instanceof ParseException)){
+                if ((e instanceof NumberFormatException) || (e instanceof ParseException)) {
                     logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
-                }
-                else{
+                } else {
                     logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
                 }
 
@@ -273,8 +252,26 @@ public final class CheckSpatioTemporalInfo {
 
     }
 
-    public static Builder newCheckSpatioTemporalInfo(RecordParser recordParser) throws Exception {
-        return new CheckSpatioTemporalInfo.Builder(recordParser);
+    public static class Builder {
+
+        private final RecordParser recordParser;
+
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
+
+        public Builder(RecordParser recordParser) throws Exception {
+            this.recordParser = recordParser;
+            this.rectangle = rectangle;
+        }
+
+        public Builder filter(Rectangle rectangle) {
+            this.rectangle = rectangle;
+            return this;
+        }
+
+        public CheckSpatioTemporalInfo build() {
+            return new CheckSpatioTemporalInfo(this);
+        }
+
     }
 
 

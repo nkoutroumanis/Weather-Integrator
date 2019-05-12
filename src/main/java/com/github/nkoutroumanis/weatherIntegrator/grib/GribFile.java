@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface GribFile {
 
-    List<String> getDataValuesByLatLon(double lat, double lon);
-
     static double roundToHalf(double f) {
         return Math.round(f * 2) / 2.0;
     }
@@ -24,5 +22,7 @@ public interface GribFile {
         }
         return i;
     }
+
+    List<String> getDataValuesByLatLon(double lat, double lon);
 
 }

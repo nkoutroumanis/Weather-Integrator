@@ -1,8 +1,8 @@
 package com.github.nkoutroumanis.kNNSequential;
 
 import com.github.nkoutroumanis.FilesParse;
-import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.datasources.Datasource;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,51 +17,13 @@ public class kNNSeq {
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
     private final DateFormat dateFormat;
-
-    private String separator;
     private final Rectangle rectangle;
-
+    private String separator;
     private List<Map.Entry<Double, String>> list;
     private double maxDistance;
 
     private Point point;
     private int neighboors;
-
-    public static class Builder {
-
-        private final Datasource parser;
-        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-        private final DateFormat dateFormat;
-
-        private String separator = ";";
-        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
-
-        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
-
-            this.parser = parser;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
-        }
-
-        public Builder filter(Rectangle rectangle) {
-            this.rectangle = rectangle;
-            return this;
-        }
-
-        public kNNSeq build() {
-            return new kNNSeq(this);
-        }
-
-    }
 
     private kNNSeq(Builder builder) {
         parser = builder.parser;
@@ -172,5 +134,41 @@ public class kNNSeq {
             maxDistance = d;
 
         }
+    }
+
+    public static class Builder {
+
+        private final Datasource parser;
+        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
+        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
+        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        private final DateFormat dateFormat;
+
+        private String separator = ";";
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
+
+        public Builder(Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+
+            this.parser = parser;
+            this.numberOfColumnDate = numberOfColumnDate;
+            this.numberOfColumnLatitude = numberOfColumnLatitude;
+            this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.dateFormat = new SimpleDateFormat(dateFormat);
+        }
+
+        public Builder separator(String separator) {
+            this.separator = separator;
+            return this;
+        }
+
+        public Builder filter(Rectangle rectangle) {
+            this.rectangle = rectangle;
+            return this;
+        }
+
+        public kNNSeq build() {
+            return new kNNSeq(this);
+        }
+
     }
 }

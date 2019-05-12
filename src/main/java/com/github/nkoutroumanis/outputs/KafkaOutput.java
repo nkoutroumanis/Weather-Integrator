@@ -1,7 +1,5 @@
 package com.github.nkoutroumanis.outputs;
 
-import com.github.nkoutroumanis.parsers.Record;
-import com.github.nkoutroumanis.parsers.RecordParser;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 

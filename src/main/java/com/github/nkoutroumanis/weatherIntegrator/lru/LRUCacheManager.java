@@ -28,6 +28,10 @@ public final class LRUCacheManager {
         this.numberOfVariables = variables.size();
     }
 
+    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
+        return new LRUCacheManager(tree, cache, useIndex, variables);
+    }
+
     //we can get safely the size because list is unmodifiable
     public int getNumberOfVariables() {
         return numberOfVariables;
@@ -54,10 +58,6 @@ public final class LRUCacheManager {
 
     private boolean isGribFileContainedInCache(String filePath) {
         return cache.containsKey(filePath);
-    }
-
-    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
-        return new LRUCacheManager(tree, cache, useIndex, variables);
     }
 
 

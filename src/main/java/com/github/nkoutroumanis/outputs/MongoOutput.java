@@ -1,8 +1,6 @@
 package com.github.nkoutroumanis.outputs;
 
 import com.github.nkoutroumanis.dbDataInsertion.MongoDbConnector;
-import com.github.nkoutroumanis.parsers.Record;
-import com.github.nkoutroumanis.parsers.RecordParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -13,12 +11,11 @@ import java.util.ArrayList;
 
 public class MongoOutput implements Output {
 
+    private static final Logger logger = LoggerFactory.getLogger(MongoOutput.class);
     private final MongoClient mongoClient;
     private final MongoCollection<Document> mongoCollection;
     private final ArrayList<Document> buffer;
     private final int batchSize;
-
-    private static final Logger logger = LoggerFactory.getLogger(MongoOutput.class);
 
     public MongoOutput(String host, int port, String database, String username, String password, String collection, int batchSize) {
         this.mongoClient = MongoDbConnector.newMongoDbConnector(host, port, database, username, password).getMongoClient();

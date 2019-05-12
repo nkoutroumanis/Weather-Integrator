@@ -4,6 +4,8 @@ import java.util.function.Predicate;
 
 public final class Rectangle {
 
+    public static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
+    public static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
     //x-lon, y-lat
     private final double maxx;
     private final double minx;
@@ -59,7 +61,4 @@ public final class Rectangle {
         return latitudeOutOfRange.test(checkLatitude);
 
     }
-
-    public static final Predicate<Double> longitudeOutOfRange = (longitude) -> ((Double.compare(longitude, 180) == 1) || (Double.compare(longitude, -180) == -1));
-    public static final Predicate<Double> latitudeOutOfRange = (latitude) -> ((Double.compare(latitude, 90) == 1) || (Double.compare(latitude, -90) == -1));
 }

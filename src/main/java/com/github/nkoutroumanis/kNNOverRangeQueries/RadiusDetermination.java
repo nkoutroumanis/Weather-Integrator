@@ -7,21 +7,16 @@ import java.util.Map;
 public class RadiusDetermination {
 
     private final Map<Long, Long> histogram;
-
-    private long numberOfCellsxAxis;
-    private long numberOfCellsyAxis;
-
     private final double x;
     private final double y;
-
     private final long minXc;
     private final long maxXc;
-
     private final long minYc;
     private final long maxYc;
-
     private final double minx;
     private final double miny;
+    private long numberOfCellsxAxis;
+    private long numberOfCellsyAxis;
 
 
     private RadiusDetermination(Map<Long, Long> histogram, long numberOfCellsxAxis, long numberOfCellsyAxis, double minx, double miny, double maxx, double maxy) {

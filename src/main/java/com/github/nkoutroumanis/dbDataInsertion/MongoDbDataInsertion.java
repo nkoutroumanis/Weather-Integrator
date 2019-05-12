@@ -1,7 +1,7 @@
 package com.github.nkoutroumanis.dbDataInsertion;
 
-import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
@@ -30,46 +30,6 @@ public final class MongoDbDataInsertion {
     private List<Document> docs;
     private MongoCollection mongoCollection;
 
-    public static class Builder {
-
-        private final MongoDbConnector mongoDbConnector;
-        private final String database;
-        private final Datasource parser;
-        private final int numberOfColumnLongitude;
-        private final int numberOfColumnLatitude;
-        private final int numberOfColumnDate;
-        private final DateFormat dateFormat;
-
-        private String separator = ";";
-        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
-
-
-        public Builder(MongoDbConnector mongoDbConnector, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
-            this.mongoDbConnector = mongoDbConnector;
-            this.database = mongoDbConnector.getDatabase();
-            this.parser = parser;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
-        }
-
-        public Builder filter(Rectangle rectangle) {
-            this.rectangle = rectangle;
-            return this;
-        }
-
-        public MongoDbDataInsertion build() {
-            return new MongoDbDataInsertion(this);
-        }
-    }
-
     private MongoDbDataInsertion(Builder builder) {
         mongoDbConnector = builder.mongoDbConnector;
         database = builder.database;
@@ -82,7 +42,6 @@ public final class MongoDbDataInsertion {
         separator = builder.separator;
         rectangle = builder.rectangle;
     }
-
 
     public static Builder newMongoDbDataInsertion(MongoDbConnector mongoDbConnector, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
         return new MongoDbDataInsertion.Builder(mongoDbConnector, parser, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat);
@@ -142,6 +101,46 @@ public final class MongoDbDataInsertion {
         mongoCollection = null;
 
         mongoDbConnector.getMongoClient().close();
+    }
+
+    public static class Builder {
+
+        private final MongoDbConnector mongoDbConnector;
+        private final String database;
+        private final Datasource parser;
+        private final int numberOfColumnLongitude;
+        private final int numberOfColumnLatitude;
+        private final int numberOfColumnDate;
+        private final DateFormat dateFormat;
+
+        private String separator = ";";
+        private Rectangle rectangle = Rectangle.newRectangle(-180, -90, 180, 90);
+
+
+        public Builder(MongoDbConnector mongoDbConnector, Datasource parser, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat) throws Exception {
+            this.mongoDbConnector = mongoDbConnector;
+            this.database = mongoDbConnector.getDatabase();
+            this.parser = parser;
+            this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.numberOfColumnLatitude = numberOfColumnLatitude;
+            this.numberOfColumnDate = numberOfColumnDate;
+            this.dateFormat = new SimpleDateFormat(dateFormat);
+
+        }
+
+        public Builder separator(String separator) {
+            this.separator = separator;
+            return this;
+        }
+
+        public Builder filter(Rectangle rectangle) {
+            this.rectangle = rectangle;
+            return this;
+        }
+
+        public MongoDbDataInsertion build() {
+            return new MongoDbDataInsertion(this);
+        }
     }
 
 //    @Override

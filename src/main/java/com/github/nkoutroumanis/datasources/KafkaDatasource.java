@@ -1,6 +1,5 @@
 package com.github.nkoutroumanis.datasources;
 
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -18,13 +17,12 @@ import java.util.UUID;
 public class KafkaDatasource implements Datasource {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaDatasource.class);
-
+    public static long buffer = 0;
     private final KafkaConsumer<String, String> consumer;
-    private Iterator<ConsumerRecord<String, String>> consumerIter;
-
     private final String propertiesFile;
     private final String topicName;
     private final long poll;
+    private Iterator<ConsumerRecord<String, String>> consumerIter;
 
     private KafkaDatasource(String propertiesFile, String topicName, long poll) throws IOException {
         this.propertiesFile = propertiesFile;
@@ -45,7 +43,6 @@ public class KafkaDatasource implements Datasource {
     public static KafkaDatasource newKafkaDatasource(String propertiesFile, String topicName, long poll) throws IOException {
         return new KafkaDatasource(propertiesFile, topicName, poll);
     }
-
 
     @Override
     public String[] nextLine() {
@@ -73,6 +70,4 @@ public class KafkaDatasource implements Datasource {
             return false;
         }
     }
-
-    public static long buffer = 0;
 }

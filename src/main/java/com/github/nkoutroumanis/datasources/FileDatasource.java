@@ -10,6 +10,13 @@ import java.util.stream.Stream;
 
 public class FileDatasource implements Datasource {
 
+    private final String directoryName;
+    private Stream<Path> filesStream;
+    private Iterator<Path> filesIter;
+    private Stream<String> linesStream;
+    private Iterator<String> linesIter;
+    private String filePath;
+
     private FileDatasource(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
 
@@ -26,14 +33,6 @@ public class FileDatasource implements Datasource {
         linesStream = Files.lines(path);
         linesIter = linesStream.iterator();
     }
-
-    private final String directoryName;
-    private Stream<Path> filesStream;
-    private Iterator<Path> filesIter;
-    private Stream<String> linesStream;
-    private Iterator<String> linesIter;
-
-    private String filePath;
 
     public static FileDatasource newFileDatasource(String directoryName, String filesExtension) throws IOException {
         return new FileDatasource(directoryName, filesExtension);

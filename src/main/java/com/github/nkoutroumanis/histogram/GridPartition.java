@@ -1,11 +1,9 @@
 package com.github.nkoutroumanis.histogram;
 
-import com.github.nkoutroumanis.outputs.FileOutput;
-import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
-import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -38,32 +36,12 @@ public final class GridPartition {
     private double x;
     private double y;
 
-    public static class Builder {
-
-        private Rectangle rectangle;
-        private final long cellsInXAxis;
-        private final long cellsInYAxis;
-        private final RecordParser recordParser;
-
-        public Builder(RecordParser recordParser, Rectangle rectangle, long cellsInXAxis, long cellsInYAxis) throws Exception {
-            this.rectangle = rectangle;
-            this.cellsInXAxis = cellsInXAxis;
-            this.cellsInYAxis = cellsInYAxis;
-            this.recordParser = recordParser;
-        }
-
-        public GridPartition build() {
-            return new GridPartition(this);
-        }
-    }
-
     private GridPartition(Builder builder) {
         recordParser = builder.recordParser;
         rectangle = builder.rectangle;
         cellsInXAxis = builder.cellsInXAxis;
         cellsInYAxis = builder.cellsInYAxis;
     }
-
 
     public static Builder newGridPartition(RecordParser recordParser, Rectangle rectangle, long cellsInXAxis, long cellsInYAxis) throws Exception {
         return new Builder(recordParser, rectangle, cellsInXAxis, cellsInYAxis);
@@ -166,6 +144,25 @@ public final class GridPartition {
             map.replace(k, map.get(k) + 1);
         } else {
             map.put(k, 1l);
+        }
+    }
+
+    public static class Builder {
+
+        private final long cellsInXAxis;
+        private final long cellsInYAxis;
+        private final RecordParser recordParser;
+        private Rectangle rectangle;
+
+        public Builder(RecordParser recordParser, Rectangle rectangle, long cellsInXAxis, long cellsInYAxis) throws Exception {
+            this.rectangle = rectangle;
+            this.cellsInXAxis = cellsInXAxis;
+            this.cellsInYAxis = cellsInYAxis;
+            this.recordParser = recordParser;
+        }
+
+        public GridPartition build() {
+            return new GridPartition(this);
         }
     }
 

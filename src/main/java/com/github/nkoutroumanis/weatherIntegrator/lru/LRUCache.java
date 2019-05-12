@@ -11,6 +11,10 @@ public final class LRUCache<K, V> extends LinkedHashMap<K, V> {
         this.maxEntries = maxEntries;
     }
 
+    public static LRUCache newLRUCache(int maxEntries) {
+        return new LRUCache(maxEntries);
+    }
+
     @Override
     protected boolean removeEldestEntry(Map.Entry eldest) {
 
@@ -19,10 +23,6 @@ public final class LRUCache<K, V> extends LinkedHashMap<K, V> {
 
     private int getMaxEntries() {
         return maxEntries;
-    }
-
-    public static LRUCache newLRUCache(int maxEntries) {
-        return new LRUCache(maxEntries);
     }
 
 }

@@ -28,7 +28,7 @@ public class Record {
 
     public Record(String[] fieldValues, String metadata, String[] fieldNames) {
         this(fieldValues, metadata);
-        if (fieldNames != null){
+        if (fieldNames != null) {
             this.fieldNames = new ArrayList<>(Arrays.asList(fieldNames));
         }
 
@@ -42,7 +42,7 @@ public class Record {
         return fieldNames;//fieldNames.toArray(new String[0]);
     }
 
-    public List<String>  getFieldValues() {
+    public List<String> getFieldValues() {
         return fieldValues;//fieldValues.toArray(new String[0]);
     }
 
@@ -62,7 +62,11 @@ public class Record {
         this.fieldNames.add(newFieldName);
     }
 
-    public void deleteLastFieldName(){ this.fieldNames.remove(fieldNames.size() - 1); }
+    public void deleteLastFieldName() {
+        this.fieldNames.remove(fieldNames.size() - 1);
+    }
 
-    public void deleteLastFieldValue(){ this.fieldValues.remove(fieldValues.size() - 1); }
+    public void deleteLastFieldValue() {
+        this.fieldValues.remove(fieldValues.size() - 1);
+    }
 }

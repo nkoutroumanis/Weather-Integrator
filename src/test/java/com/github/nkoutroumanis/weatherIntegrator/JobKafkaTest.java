@@ -2,7 +2,6 @@ package com.github.nkoutroumanis.weatherIntegrator;
 
 import com.github.nkoutroumanis.Rectangle;
 import com.github.nkoutroumanis.datasources.Datasource;
-import com.github.nkoutroumanis.datasources.FileDatasource;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
@@ -15,8 +14,6 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
 
 public class JobKafkaTest {
 

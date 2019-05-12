@@ -1,9 +1,9 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.datasources.Datasource;
-import com.github.nkoutroumanis.outputs.KafkaOutput;
-import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.datasources.Datasource;
+import com.github.nkoutroumanis.datasources.KafkaDatasource;
+import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import com.typesafe.config.Config;
@@ -53,17 +53,6 @@ public final class JobKafka {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

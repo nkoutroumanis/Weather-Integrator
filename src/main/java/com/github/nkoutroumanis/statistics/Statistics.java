@@ -15,69 +15,25 @@ import java.util.stream.Stream;
 
 public final class Statistics implements FilesParse {
 
+    public static long numberofRecords = 0;
     private final String filesPath;
     private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
     private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
     private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
     private final DateFormat dateFormat;
-
     private final int[] columns;
     private final String filesExtension;
     private final String separator;
-
-    private String filesExportPath;
-
     private final List<Double> maxOfColumnsPerFile;
     private final List<Double> minOfColumnsPerFile;
     private final List<Double> sumOfColumnsPerFile;
     private final List<Double> stdOfColumnsPerFile;
+    private String filesExportPath;
     private List<List<Double>> columnsInFile;
-
-
     private FileOutputStream fos;
     private OutputStreamWriter osw;
     private BufferedWriter bw;
     private PrintWriter pw;
-
-    public static long numberofRecords = 0;
-
-    public static class Builder {
-
-        private final String filesPath;
-
-        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
-        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
-        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
-        private final DateFormat dateFormat;
-
-        private final int[] columns;
-        private String filesExtension = ".csv";
-        private String separator = ";";
-
-        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, int... columns) {
-            this.filesPath = filesPath;
-            this.numberOfColumnDate = numberOfColumnDate;
-            this.numberOfColumnLatitude = numberOfColumnLatitude;
-            this.numberOfColumnLongitude = numberOfColumnLongitude;
-            this.dateFormat = new SimpleDateFormat(dateFormat);
-            this.columns = columns;
-        }
-
-        public Builder filesExtension(String filesExtension) {
-            this.filesExtension = filesExtension;
-            return this;
-        }
-
-        public Builder separator(String separator) {
-            this.separator = separator;
-            return this;
-        }
-
-        public Statistics build() {
-            return new Statistics(this);
-        }
-
-    }
 
     private Statistics(Builder builder) {
         filesPath = builder.filesPath;
@@ -109,6 +65,10 @@ public final class Statistics implements FilesParse {
 //        for (int i = 0; i < columns.length; i++) {
 //            stdOfColumnsPerFile.add(0d);
 //        }
+    }
+
+    public static Builder newStatistics(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, int... columns) {
+        return new Statistics.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, columns);
     }
 
     private void clearExportingDirectory() {
@@ -208,8 +168,42 @@ public final class Statistics implements FilesParse {
 
     }
 
-    public static Builder newStatistics(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, int... columns) {
-        return new Statistics.Builder(filesPath, numberOfColumnLongitude, numberOfColumnLatitude, numberOfColumnDate, dateFormat, columns);
+    public static class Builder {
+
+        private final String filesPath;
+
+        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
+        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
+        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        private final DateFormat dateFormat;
+
+        private final int[] columns;
+        private String filesExtension = ".csv";
+        private String separator = ";";
+
+        public Builder(String filesPath, int numberOfColumnLongitude, int numberOfColumnLatitude, int numberOfColumnDate, String dateFormat, int... columns) {
+            this.filesPath = filesPath;
+            this.numberOfColumnDate = numberOfColumnDate;
+            this.numberOfColumnLatitude = numberOfColumnLatitude;
+            this.numberOfColumnLongitude = numberOfColumnLongitude;
+            this.dateFormat = new SimpleDateFormat(dateFormat);
+            this.columns = columns;
+        }
+
+        public Builder filesExtension(String filesExtension) {
+            this.filesExtension = filesExtension;
+            return this;
+        }
+
+        public Builder separator(String separator) {
+            this.separator = separator;
+            return this;
+        }
+
+        public Statistics build() {
+            return new Statistics(this);
+        }
+
     }
 
 

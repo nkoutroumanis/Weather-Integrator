@@ -6,15 +6,7 @@ import com.github.nkoutroumanis.datasources.FileDatasource;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.RecordParser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.Test;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HistogramCreationJobTest {
 

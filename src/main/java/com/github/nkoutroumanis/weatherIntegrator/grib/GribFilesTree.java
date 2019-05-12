@@ -22,6 +22,10 @@ public final class GribFilesTree {
         traverseFolder(gribFilesFolderPath);
     }
 
+    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) {
+        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
+    }
+
     public String getFilePathByUnixTime(long date) {
 
         Map.Entry tmsmp1 = gribFilesTreeMap.floorEntry(date);
@@ -91,10 +95,6 @@ public final class GribFilesTree {
         long unixTime = date.getMillis() / 1000;
 
         return (unixTime + (long) time_val);
-    }
-
-    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) {
-        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
     }
 
 }
