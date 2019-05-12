@@ -2,6 +2,8 @@ package com.github.nkoutroumanis;
 
 import com.github.nkoutroumanis.datasources.FileDatasource;
 import com.github.nkoutroumanis.outputs.FileOutput;
+import com.github.nkoutroumanis.parsers.CsvRecordParser;
+import com.github.nkoutroumanis.parsers.RecordParser;
 import com.github.nkoutroumanis.weatherIntegrator.WeatherIntegrator;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
@@ -41,9 +43,9 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(FileDatasource.newFileParser(filesPath, ".csv"),
-                    gribFilesPath, 7,
-                    8, 3, "yyyy-MM-dd HH:mm:ss",
+
+            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(new CsvRecordParser(FileDatasource.newFileDatasource(filesPath, ".csv"),";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss"),
+                    gribFilesPath,
                     variables)
                     .lruCacheMaxEntries(1).useIndex().build();
         } catch (IOException e) {
@@ -57,9 +59,8 @@ public class BenchmarksTest {
 
     {
         try {
-            wiWithoutIndex = WeatherIntegrator.newWeatherIntegrator(FileDatasource.newFileParser(filesPath, ".csv"),
-                    gribFilesPath, 7,
-                    8, 3, "yyyy-MM-dd HH:mm:ss",
+            wiWithIndex = WeatherIntegrator.newWeatherIntegrator(new CsvRecordParser(FileDatasource.newFileDatasource(filesPath, ".csv"),";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss"),
+                    gribFilesPath,
                     variables)
                     .lruCacheMaxEntries(1).build();
         } catch (IOException e) {

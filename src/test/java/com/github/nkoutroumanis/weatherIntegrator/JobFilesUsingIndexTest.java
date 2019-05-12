@@ -3,6 +3,7 @@ package com.github.nkoutroumanis.weatherIntegrator;
 import com.github.nkoutroumanis.Rectangle;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.datasources.FileDatasource;
+import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import org.junit.Test;
@@ -27,13 +28,15 @@ public class JobFilesUsingIndexTest {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            Datasource ds = FileDatasource.newFileParser("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv");
+            Datasource ds = FileDatasource.newFileDatasource("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv");
 
             RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
 
-            WeatherIntegrator.newWeatherIntegrator(rp ,
+            FileOutput fileOutput = FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
+
+            WeatherIntegrator.newWeatherIntegrator(rp,
                     "/Users/nicholaskoutroumanis/Desktop/grib/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(fileOutput);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

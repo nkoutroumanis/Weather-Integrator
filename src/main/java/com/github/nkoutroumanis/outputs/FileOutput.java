@@ -2,6 +2,8 @@ package com.github.nkoutroumanis.outputs;
 
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,15 +15,14 @@ public final class FileOutput implements Output {
 
     private String filePath = "";
 
-    private final RecordParser recordParser;
-
     private FileOutputStream fos;
     private OutputStreamWriter osw;
     private BufferedWriter bw;
     private PrintWriter pw;
 
-    private FileOutput(RecordParser recordParser, String directory, boolean deleteDirectoryIfExist) {
-        this.recordParser = recordParser;
+    private static final Logger logger = LoggerFactory.getLogger(FileOutput.class);
+
+    private FileOutput(String directory, boolean deleteDirectoryIfExist) {
         this.directory = directory;
 
         if (!directory.substring(directory.length() - 1).equals(File.separator)) {
@@ -41,8 +42,8 @@ public final class FileOutput implements Output {
         }
     }
 
-    public static FileOutput newFileOutput(RecordParser recordParser, String directory, boolean deleteDirectoryIfExist) {
-        return new FileOutput(recordParser, directory, deleteDirectoryIfExist);
+    public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist) {
+        return new FileOutput(directory, deleteDirectoryIfExist);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
@@ -56,27 +57,26 @@ public final class FileOutput implements Output {
     }
 
     @Override
-    public void out(Record record) {
+    public void out(String line, String lineMetaData) {
 
-        String lineMeta = record.getMetadata();
-
-        if (!lineMeta.equals(filePath)) {
+        if (!lineMetaData.equals(filePath)) {
 
             close();
 
             try {
 
-                System.out.println("create directory on " + directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) + 1));
-                Files.createDirectories(Paths.get(directory + lineMeta.substring(0, lineMeta.lastIndexOf(File.separator) + 1)));
+                logger.info("Create directory on {}", directory + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1));
+                //System.out.println("create directory on " + );
+                Files.createDirectories(Paths.get(directory + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1)));
 
-                fos = new FileOutputStream(directory + lineMeta, true);
+                fos = new FileOutputStream(directory + lineMetaData, true);
                 osw = new OutputStreamWriter(fos, "utf-8");
                 bw = new BufferedWriter(osw);
                 pw = new PrintWriter(bw, true);
 
-                filePath = lineMeta;
+                filePath = lineMetaData;
 
-                System.out.println("lineWithMeta meta:" + lineMeta);
+                System.out.println("lineWithMeta meta:" + lineMetaData);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -88,7 +88,7 @@ public final class FileOutput implements Output {
 
         }
 
-        pw.write(recordParser.toCsv(record) + "\r\n");
+        pw.write(line + "\r\n");
 
     }
 

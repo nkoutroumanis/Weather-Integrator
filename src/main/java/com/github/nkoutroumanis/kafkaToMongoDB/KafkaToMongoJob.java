@@ -30,7 +30,7 @@ public class KafkaToMongoJob {
         String inputType = config.getString(inputTypeSetting);
         if (inputType.equals(streamType)) {
             logger.info("Using input type {}", streamType);
-            return KafkaDatasource.newKafkaParser(
+            return KafkaDatasource.newKafkaDatasource(
                     config.getString(inputKafkaPropsFileSetting),
                     config.getString(inputTopicNameSetting),
                     config.getLong(inputKafkaPollingSetting));
@@ -46,9 +46,10 @@ public class KafkaToMongoJob {
         if (inputFormat.equals(csvFormat)) {
             logger.info("Using input format {}", csvFormat);
             return new CsvRecordParser(
+                    source,
                     config.getString(inputCsvSeparatorSetting),
-                    config.getString(inputCsvHeaderSetting),
-                    source);
+                    config.getString(inputCsvHeaderSetting)
+                    );
         } else {
             logger.error("Input format parser {} is not implemented", inputFormat);
             throw new NotImplementedException();
@@ -85,7 +86,7 @@ public class KafkaToMongoJob {
         long lineCount = 0;
         while (recordParser.hasNextRecord()) {
             record = recordParser.nextRecord();
-            doc = record.toDocument();
+            doc = recordParser.toDocument(record);
             output.out(doc.toJson(), record.getMetadata());
             if ((++lineCount % reportCount) == 0) {
                 logger.info("Processed {} lines", lineCount);

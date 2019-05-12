@@ -1,13 +1,11 @@
 package com.github.nkoutroumanis.weatherIntegrator;
 
-import com.github.nkoutroumanis.*;
-import com.github.nkoutroumanis.datasources.KafkaDatasource;
-import com.github.nkoutroumanis.kafkaToMongoDB.KafkaToMongoJob;
-import com.github.nkoutroumanis.parsers.Record;
-import com.github.nkoutroumanis.parsers.RecordParser;
+import com.github.nkoutroumanis.Rectangle;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.outputs.Output;
+import com.github.nkoutroumanis.parsers.Record;
+import com.github.nkoutroumanis.parsers.RecordParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 
 public final class WeatherIntegrator {
 
@@ -43,7 +42,7 @@ public final class WeatherIntegrator {
 
         private final String gribFilesFolderPath;
 
-//        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
+        //        private final int numberOfColumnLongitude;//1 if the 1st column represents the longitude, 2 if the 2nd column...
 //        private final int numberOfColumnLatitude;//1 if the 1st column represents the latitude, 2 if the 2nd column...
 //        private final int numberOfColumnDate;//1 if the 1st column represents the date, 2 if the 2nd column...
 //
@@ -119,15 +118,20 @@ public final class WeatherIntegrator {
         removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
 
-    public void integrateAndOutputToKafkaTopic(String propertiesFile, String topicName) throws IOException, ParseException {
-        integrate(KafkaOutput.newKafkaOutput(recordParser, propertiesFile, topicName));
+    public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws IOException, ParseException {
+        integrate(kafkaOutput, (r) -> {
+            return recordParser.toCsv(r);
+        });
     }
 
-    public void integrateAndOutputToDirectory(String directory, boolean deleteDirectoryIfExist) throws IOException, ParseException {
-        integrate(FileOutput.newFileOutput(recordParser, directory, deleteDirectoryIfExist));
+    public void integrateAndOutputToDirectory(FileOutput fileOutput) throws IOException, ParseException {
+        integrate(fileOutput, (r) -> {
+            return recordParser.toCsv(r);
+        });
+
     }
 
-    private void integrate(Output output) throws IOException, ParseException {
+    private void integrate(Output output, Function<Record, String> function) throws IOException, ParseException {
 
         start = System.currentTimeMillis();
 
@@ -137,14 +141,14 @@ public final class WeatherIntegrator {
 
             Record record = recordParser.nextRecord();
 
-            try{
+            try {
 
                 double longitude = Double.parseDouble(recordParser.getLongitude(record));
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
                 Date d = dateFormat.parse(recordParser.getDate(record));
 
 
-                if(rectangle != null){
+                if (rectangle != null) {
                     //filtering
                     if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
                         logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
@@ -152,26 +156,24 @@ public final class WeatherIntegrator {
                     }
                 }
 
-                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
-                record.addFieldValues(values);
-
-
-                if(removeLastValueFromRecords){
+                if (removeLastValueFromRecords) {
                     //if dataset finishes with ;
                     record.deleteLastFieldValue();
                     //else sb.append(lineWithMeta);
                 }
 
+                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
+                record.addFieldValues(values);
+
+
                 numberofRecords++;
 
-                output.out(record);
+                output.out(function.apply(record), record.getMetadata());
 
-            }
-            catch (NumberFormatException | ParseException e){
+            } catch (NumberFormatException | ParseException e) {
                 logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
                 continue;
-            }
-            catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
                 continue;
             }

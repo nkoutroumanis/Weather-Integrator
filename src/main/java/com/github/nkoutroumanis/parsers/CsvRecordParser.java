@@ -31,10 +31,10 @@ public class CsvRecordParser extends RecordParser {
 //        this.headers = header.split(separator);
 //    }
 
-    public CsvRecordParser(Datasource source, String separator, String header, int vehicleFieldId, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat) {
+    public CsvRecordParser(Datasource source, String separator, String headers, int vehicleFieldId, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat) {
         super(source);
         this.separator = separator;
-        this.headers = header.split(separator);
+        this.headers = headers.split(separator);
         this.vehicleFieldId = vehicleFieldId;
         this.longitudeFieldId = longitudeFieldId;
         this.latitudeFieldId = latitudeFieldId;
@@ -53,9 +53,20 @@ public class CsvRecordParser extends RecordParser {
         this.dateFormat = dateFormat;
     }
 
+    public CsvRecordParser(Datasource source, String separator, String headers) {
+        super(source);
+        this.separator = separator;
+        this.headers = headers.split(separator);
+        this.vehicleFieldId = -1;
+        this.longitudeFieldId = -1;
+        this.latitudeFieldId = -1;
+        this.dateFieldId = -1;
+        this.dateFormat = null;
+    }
+
     @Override
     public Record nextRecord() throws ParseException {
-        String[] fieldValues = lineWithMeta[0].split(this.separator);
+        String[] fieldValues = lineWithMeta[0].split(this.separator, -1);
         if ((headers != null) && (fieldValues.length != headers.length)) {
             logger.error("Line has {} fields but {} fields are expected!\nLine: {}", fieldValues.length, headers.length, lineWithMeta[0]);
             throw new ParseException("Wrong input!", 0);
@@ -65,27 +76,28 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public Document toDocument(Record record) {
-        String[] fieldNames = record.getFieldNames();
-        String[] fieldValues = record.getFieldValues();
-        if ((fieldNames == null) || (fieldNames.length != fieldValues.length)) {
+        //String[] fieldNames = record.getFieldNames();
+        //String[] fieldValues = record.getFieldValues();
+
+        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
             logger.error("Field names is wrong!");
             return null;
         }
 
         Document result = new Document();
-        for (int i = 0; i < fieldValues.length; i++) {
+        for (int i = 0; i < record.getFieldValues().size(); i++) {
             if (i == vehicleFieldId) {
-                result.append(vehicleFieldName, fieldValues[i]);
+                result.append(vehicleFieldName, record.getFieldValues().get(i));
             }
             else if (i == dateFieldId) {
-                result.append(dateFieldName, fieldValues[i]);
+                result.append(dateFieldName, record.getFieldValues().get(i));
             }
             else if ((i != longitudeFieldId) && (i == latitudeFieldId)) {
-                result.append(fieldNames[i], fieldValues[i]);
+                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
             }
         }
         Document embeddedDoc = Consts.getPointDocument().append(
-                coordinatesFieldName, Arrays.asList(fieldValues[longitudeFieldId], fieldValues[latitudeFieldId])
+                coordinatesFieldName, Arrays.asList(record.getFieldValues().get(longitudeFieldId), record.getFieldValues().get(latitudeFieldId))
         );
         result.append(locationFieldName, embeddedDoc);
         return result;
@@ -96,10 +108,10 @@ public class CsvRecordParser extends RecordParser {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(record.getFieldValues()[0]);
-        for(int i = 1; i< record.getFieldValues().length;i++){
+        sb.append(record.getFieldValues().get(0));
+        for(int i = 1; i< record.getFieldValues().size();i++){
             sb.append(separator);
-            sb.append(record.getFieldValues()[i]);
+            sb.append(record.getFieldValues().get(i));
         }
 
         return sb.toString();
@@ -107,17 +119,17 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getLatitude(Record record) {
-        return record.getFieldValues()[latitudeFieldId];
+        return record.getFieldValues().get(latitudeFieldId-1);
     }
 
     @Override
     public String getLongitude(Record record) {
-        return record.getFieldValues()[longitudeFieldId];
+        return record.getFieldValues().get(longitudeFieldId-1);
     }
 
     @Override
     public String getDate(Record record) {
-        return record.getFieldValues()[dateFieldId];
+        return record.getFieldValues().get(dateFieldId-1);
     }
 
     @Override
@@ -127,6 +139,6 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getVehicle(Record record) {
-        return record.getFieldValues()[vehicleFieldId];
+        return record.getFieldValues().get(vehicleFieldId-1);
     }
 }

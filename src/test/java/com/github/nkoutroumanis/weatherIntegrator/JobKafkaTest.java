@@ -26,13 +26,15 @@ public class JobKafkaTest {
         try {
             Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
 
-            Datasource ds = KafkaDatasource.newKafkaParser("./client.properties", "vfi-batch-sample", 0);
+            Datasource ds = KafkaDatasource.newKafkaDatasource("./client.properties", "vfi-batch-sample", 0);
 
             RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
 
+            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
+
             WeatherIntegrator.newWeatherIntegrator(rp,
                     "/home/wp3user01/grib-files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic("./producer.properties", "nikos-trial");
+                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

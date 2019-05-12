@@ -42,7 +42,7 @@ public class KafkaDatasource implements Datasource {
 
     }
 
-    public static KafkaDatasource newKafkaParser(String propertiesFile, String topicName, long poll) throws IOException {
+    public static KafkaDatasource newKafkaDatasource(String propertiesFile, String topicName, long poll) throws IOException {
         return new KafkaDatasource(propertiesFile, topicName, poll);
     }
 

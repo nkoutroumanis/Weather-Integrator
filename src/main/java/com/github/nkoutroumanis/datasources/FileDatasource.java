@@ -35,7 +35,7 @@ public class FileDatasource implements Datasource {
 
     private String filePath;
 
-    public static FileDatasource newFileParser(String directoryName, String filesExtension) throws IOException {
+    public static FileDatasource newFileDatasource(String directoryName, String filesExtension) throws IOException {
         return new FileDatasource(directoryName, filesExtension);
     }
 

@@ -34,17 +34,19 @@ public final class JobKafka {
         Config conf = ConfigFactory.parseFile(new File(args[0]));
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
-        
+
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
 
-            Datasource ds = KafkaDatasource.newKafkaParser(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll"));
+            Datasource ds = KafkaDatasource.newKafkaDatasource(wi.getString("consumerPropertiesPath"), wi.getString("consumerTopic"), wi.getInt("poll"));
 
             RecordParser rp = new CsvRecordParser(ds, ";", wi.getInt("numberOfColumnLongitude"), wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"));
 
+            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
+
             WeatherIntegrator.newWeatherIntegrator(rp,
                     wi.getString("gribFilesFolderPath"), stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat"))).removeLastValueFromRecords()
-                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic("./producer.properties", "nikos-trial");
+                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
