@@ -13,9 +13,9 @@ public class CheckSpatialInfoJobTest {
     public void main() throws Exception {
 
 
-        Datasource ds = FileDatasource.newFileDatasource("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv");
-        RecordParser rp = new CsvRecordParser(ds, ";", 7, 8);
-        FileOutput fileOutput = FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
+        Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/csv/", ".csv");
+        RecordParser rp = new CsvRecordParser(ds, ";", 2, 3);
+        FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/checkSpatialInfoJob/", true);
 
 
         CheckSpatialInfo.newCheckSpatioTemporalInfo(rp).build().exportInfo(fileOutput);

@@ -12,9 +12,9 @@ public class CheckSpatioTemporalInfoJobTest {
     @Test
     public void main() throws Exception {
 
-        Datasource ds = FileDatasource.newFileDatasource("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv");
-        RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
-        FileOutput fileOutput = FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
+        Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/csv/", ".csv");
+        RecordParser rp = new CsvRecordParser(ds, ";", 2, 3, 4, "yyyy-MM-dd HH:mm:ss");
+        FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/checkSpatioTemporalInfoJob/", true);
 
         CheckSpatioTemporalInfo.newCheckSpatioTemporalInfo(rp).build().exportInfo(fileOutput);
 

@@ -1,0 +1,9 @@
+In the Spatial Box with
+maxLon: 98.1731682
+minLon: -106.7282958
+maxLat: 82.0
+minLat: -12.5515792
+There are 3448 records
+
+
+All of the records are 3448

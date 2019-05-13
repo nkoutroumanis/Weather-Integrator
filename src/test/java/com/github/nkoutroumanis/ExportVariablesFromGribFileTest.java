@@ -14,8 +14,8 @@ public class ExportVariablesFromGribFileTest {
 
     @Test
     public void exportVariablesFromFile000() throws IOException {
-        NetcdfFile ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_000.grb2"); //loading grib file
-        PrintWriter writer = new PrintWriter("variables/variables-of-000.txt", "UTF-8");
+        NetcdfFile ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_000.grb2"); //loading grib file
+        PrintWriter writer = new PrintWriter("./src/test/resources/weather-attributes/attributes-of-000.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
             writer.println(var.getName());
@@ -28,8 +28,8 @@ public class ExportVariablesFromGribFileTest {
 
     @Test
     public void exportVariablesFromFile003() throws IOException {
-        NetcdfFile ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_003.grb2"); //loading grib file
-        PrintWriter writer = new PrintWriter("variables/variables-of-003.txt", "UTF-8");
+        NetcdfFile ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_003.grb2"); //loading grib file
+        PrintWriter writer = new PrintWriter("./src/test/resources/weather-attributes/attributes-of-003.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
             writer.println(var.getName());
@@ -42,8 +42,8 @@ public class ExportVariablesFromGribFileTest {
 
     @Test
     public void exportVariablesFromFile006() throws IOException {
-        NetcdfFile ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_006.grb2"); //loading grib file
-        PrintWriter writer = new PrintWriter("variables/variables-of-006.txt", "UTF-8");
+        NetcdfFile ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_006.grb2"); //loading grib file
+        PrintWriter writer = new PrintWriter("./src/test/resources/weather-attributes/attributes-of-006.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
             writer.println(var.getName());
@@ -61,19 +61,19 @@ public class ExportVariablesFromGribFileTest {
         List<String> vars003 = new ArrayList<>();
         List<String> vars006 = new ArrayList<>();
 
-        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_000.grb2");
+        ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_000.grb2");
         List<Variable> v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars000.add(var.getName());
         }
 
-        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_003.grb2");
+        ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_003.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars003.add(var.getName());
         }
 
-        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_006.grb2");
+        ncf = NetcdfFile.open("./src/test/resources/gribSamples/gfs_4_20170608_0000_006.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars006.add(var.getName());
@@ -84,28 +84,28 @@ public class ExportVariablesFromGribFileTest {
 
         PrintWriter writer;
 
-        writer = new PrintWriter("variables/commons-000-003.txt", "UTF-8");
+        writer = new PrintWriter("./src/test/resources/weather-attributes/commons-000-003.txt", "UTF-8");
         for (String var : vars000.stream().filter(vars003::contains).collect(Collectors.toList())) {
             writer.println(var);
             System.out.println();
         }
         writer.close();
 
-        writer = new PrintWriter("variables/commons-003-006.txt", "UTF-8");
+        writer = new PrintWriter("./src/test/resources/weather-attributes/commons-003-006.txt", "UTF-8");
         for (String var : vars003.stream().filter(vars006::contains).collect(Collectors.toList())) {
             writer.println(var);
             System.out.println();
         }
         writer.close();
 
-        writer = new PrintWriter("variables/commons-000-006.txt", "UTF-8");
+        writer = new PrintWriter("./src/test/resources/weather-attributes/commons-000-006.txt", "UTF-8");
         for (String var : vars000.stream().filter(vars006::contains).collect(Collectors.toList())) {
             writer.println(var);
             System.out.println();
         }
         writer.close();
 
-        writer = new PrintWriter("variables/commons-000-003-006.txt", "UTF-8");
+        writer = new PrintWriter("./src/test/resources/weather-attributes/commons-000-003-006.txt", "UTF-8");
         for (String var : vars000.stream().filter(vars003::contains).filter(vars006::contains).collect(Collectors.toList())) {
             writer.println(var);
             System.out.println();

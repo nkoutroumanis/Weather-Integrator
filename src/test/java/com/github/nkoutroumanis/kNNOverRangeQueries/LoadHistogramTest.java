@@ -10,7 +10,7 @@ public class LoadHistogramTest {
 
     @Test
     public void newReadHistogram() {
-        Config conf = ConfigFactory.parseFile(new File("./histogram/properties.json"));
+        Config conf = ConfigFactory.parseFile(new File("./src/test/resources/histogram/properties.json"));
         System.out.println(conf.getDouble("space2D.maxx"));
 
     }
