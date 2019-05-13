@@ -23,11 +23,11 @@ public class JobKafkaTest {
         try {
             Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
 
-            Datasource ds = KafkaDatasource.newKafkaDatasource("./client.properties", "vfi-batch-sample", 0);
+            Datasource ds = KafkaDatasource.newKafkaDatasource("./src/test/resources/kafka/client.properties", "vfi-batch-sample", 0);
 
             RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
 
-            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
+            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./src/test/resources/kafka/producer.properties", "nikos-trial");
 
             WeatherIntegrator.newWeatherIntegrator(rp,
                     "./src/test/resources/grib003Samples/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
