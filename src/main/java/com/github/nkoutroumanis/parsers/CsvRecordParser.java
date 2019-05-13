@@ -144,4 +144,15 @@ public class CsvRecordParser extends RecordParser {
     public String getVehicle(Record record) {
         return record.getFieldValues().get(vehicleFieldId - 1);
     }
+
+    public CsvRecordParser(CsvRecordParser csvRecordParser){
+        super(csvRecordParser.source);
+        separator = csvRecordParser.separator;
+        headers = csvRecordParser.headers;
+        vehicleFieldId = csvRecordParser.vehicleFieldId;
+        longitudeFieldId = csvRecordParser.longitudeFieldId;
+        latitudeFieldId = csvRecordParser.latitudeFieldId;
+        dateFieldId = csvRecordParser.dateFieldId;
+        dateFormat = csvRecordParser.dateFormat;
+    }
 }

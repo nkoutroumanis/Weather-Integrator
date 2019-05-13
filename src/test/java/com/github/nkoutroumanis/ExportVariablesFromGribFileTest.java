@@ -28,7 +28,7 @@ public class ExportVariablesFromGribFileTest {
 
     @Test
     public void exportVariablesFromFile003() throws IOException {
-        NetcdfFile ncf = NetcdfFile.open("./grib_files/gfs_4_20160415_0000_003.grb2"); //loading grib file
+        NetcdfFile ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_003.grb2"); //loading grib file
         PrintWriter writer = new PrintWriter("variables/variables-of-003.txt", "UTF-8");
         List<Variable> vars = ncf.getVariables(); //listing all variables
         for (Variable var : vars) {
@@ -67,7 +67,7 @@ public class ExportVariablesFromGribFileTest {
             vars000.add(var.getName());
         }
 
-        ncf = NetcdfFile.open("./grib_files/gfs_4_20160415_0000_003.grb2");
+        ncf = NetcdfFile.open("./grib_files/gfs_4_20170608_0000_003.grb2");
         v = ncf.getVariables(); //listing all variables
         for (Variable var : v) {
             vars003.add(var.getName());

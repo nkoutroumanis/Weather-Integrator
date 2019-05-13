@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 public class FileDatasource implements Datasource {
 
     private final String directoryName;
+    private final String filesExtension;
+
     private Stream<Path> filesStream;
     private Iterator<Path> filesIter;
     private Stream<String> linesStream;
@@ -19,6 +21,7 @@ public class FileDatasource implements Datasource {
 
     private FileDatasource(String directoryName, String filesExtension) throws IOException {
         this.directoryName = directoryName;
+        this.filesExtension = filesExtension;
 
         if (!directoryName.substring(directoryName.length() - 1).equals(File.separator)) {
             directoryName = directoryName + File.separator;
@@ -63,5 +66,10 @@ public class FileDatasource implements Datasource {
             }
         }
         return false;
+    }
+
+    public FileDatasource(FileDatasource fileDatasource){
+        directoryName = fileDatasource.directoryName;
+        filesExtension = fileDatasource.filesExtension;
     }
 }
