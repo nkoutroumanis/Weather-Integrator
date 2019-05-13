@@ -23,6 +23,7 @@ public class Consts {
     public static final String outputMongoCollectionSetting = "output.options.mongoCollection";
     public static final String outputMongoUserSetting = "output.options.mongoUser";
     public static final String outputMongoPasswordSetting = "output.options.mongoPass";
+    public static final String outputMongoSslEnabledSetting = "output.options.mongoSslEnabled";
 
     public static final String reportingNumberOfLinesSetting = "reporting.everyNumberOfLines";
 

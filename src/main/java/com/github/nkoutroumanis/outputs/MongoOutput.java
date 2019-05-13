@@ -18,6 +18,7 @@ public class MongoOutput implements Output {
     private final int batchSize;
 
     public MongoOutput(String host, int port, String database, String username, String password, String collection, int batchSize) {
+        logger.info(password);
         this.mongoClient = MongoDbConnector.newMongoDbConnector(host, port, database, username, password).getMongoClient();
         this.mongoCollection = this.mongoClient.getDatabase(database).getCollection(collection);
         this.batchSize = batchSize;
@@ -39,6 +40,7 @@ public class MongoOutput implements Output {
     @Override
     public void close() {
         if (buffer.size() > 0) {
+            logger.debug("Writing batch to Mongo...");
             mongoCollection.insertMany(buffer);
             buffer.clear();
         }

@@ -95,7 +95,7 @@ public class CsvRecordParser extends RecordParser {
                 result.append(vehicleFieldName, record.getFieldValues().get(i));
             } else if (i == dateFieldId) {
                 result.append(dateFieldName, record.getFieldValues().get(i));
-            } else if ((i != longitudeFieldId) && (i == latitudeFieldId)) {
+            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
                 result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
             }
         }

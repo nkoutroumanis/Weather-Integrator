@@ -11,8 +11,7 @@ public final class MongoDbConnector {
     private final String database;
 
     private MongoDbConnector(String host, int port, String database, String username, String password) {
-
-        MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
+        MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
         MongoClientOptions options = MongoClientOptions.builder().maxConnectionIdleTime(90000)/*.sslEnabled(true)*/.build();
         mongoClient = new MongoClient(new ServerAddress(host, port), credential, options);
 
