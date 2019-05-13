@@ -6,6 +6,7 @@ import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.RecordParser;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 
 public class JobKafkaTest {
 
+    @Ignore
     @Test
     public void main() {
 
