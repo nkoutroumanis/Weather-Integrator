@@ -44,7 +44,7 @@ public class HistogramCreationJobTest {
         //Rectangle space = Rectangle.newSpace2D(20, 34.9199876979, 27, 41.826905);
 
         Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/csv/", ".csv");
-        RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
+        RecordParser rp = new CsvRecordParser(ds, ";", 2, 3, 4, "yyyy-MM-dd HH:mm:ss");
         FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/csv-enriched/", true);
 
         GridPartition.newGridPartition(rp, space, 300, 300).build().exportHistogram("./src/test/resources/histogram/");
