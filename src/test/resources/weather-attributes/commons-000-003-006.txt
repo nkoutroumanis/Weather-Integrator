@@ -28,6 +28,7 @@ pressure_difference_layer2_bounds
 sigma_layer
 sigma_layer_bounds
 height_above_ground4
+isobaric4
 potential_vorticity_surface
 Absolute_vorticity_isobaric
 Apparent_temperature_height_above_ground
