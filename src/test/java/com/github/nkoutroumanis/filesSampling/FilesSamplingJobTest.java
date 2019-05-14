@@ -22,7 +22,6 @@ public class FilesSamplingJobTest {
         FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/sampling/", true);
 
         FilesSamping.newFilesSamping(rp, 1000).build().exportSamplesToFile(fileOutput);
-
     }
 
     @Test
