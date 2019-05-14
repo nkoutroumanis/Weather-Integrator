@@ -28,8 +28,6 @@ public class FilesSamping {
 
     private final Rectangle rectangle;
 
-    //private long numberOfRecords = 0;
-
     private double maxx = Integer.MIN_VALUE;
     private double minx = Integer.MAX_VALUE;
     private double maxy = Integer.MIN_VALUE;
