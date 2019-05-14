@@ -32,7 +32,7 @@ public class JobKafkaTest {
             KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./src/test/resources/kafka/producer.properties", "nikos-trial");
 
             WeatherIntegrator.newWeatherIntegrator(rp,
-                    "./src/test/resources/grib003Samples/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
+                    "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
                     .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
 
         } catch (IOException | ParseException e) {

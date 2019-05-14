@@ -24,7 +24,7 @@ public class BenchmarksTest {
 
     private final static String filesPath = "./src/test/resources/csv";
     private final static String filesExportPath = "./src/test/resources/csv-enriched";
-    private final static String gribFilesPath = "./src/test/resources/grib003Samples/";
+    private final static String gribFilesPath = "./src/test/resources/gribFiles/grib003Files/";
     private final static String gribFilesExtension = ".grb2";
 
 

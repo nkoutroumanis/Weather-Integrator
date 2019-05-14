@@ -24,7 +24,7 @@ public class JobFilesUsingIndexTest {
         FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/csv-enriched/", true);
 
         WeatherIntegrator.newWeatherIntegrator(rp,
-                "./src/test/resources/grib003Samples/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
+                "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
                 .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(fileOutput);
 
 
