@@ -174,8 +174,6 @@ public class FilesSamping {
 
                 if(randomNumbers.contains(numberOfRecords)){
                     fileOutput.out(rp.toCsv(record),"samples.csv");
-                    logger.debug("HERE {}",rp.toCsv(record));
-
                 }
 
             } catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
@@ -185,9 +183,7 @@ public class FilesSamping {
                 } else {
                     logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
                 }
-
             }
-
         }
 
         fileOutput.close();
