@@ -75,7 +75,7 @@ public class BenchmarksTest {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.MINUTES)
-    public void integrateDataUsingIndex() {
+    public void integrateDataUsingIndex() throws Exception {
         try {
             wiWithIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {
@@ -88,7 +88,7 @@ public class BenchmarksTest {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.HOURS)
-    public void integrateDataWithoutIndex() {
+    public void integrateDataWithoutIndex() throws Exception {
         try {
             wiWithoutIndex.integrateAndOutputToDirectory(FileOutput.newFileOutput(filesExportPath, true));
         } catch (IOException e) {

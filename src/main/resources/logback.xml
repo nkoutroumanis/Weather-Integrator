@@ -35,5 +35,5 @@
         <appender-ref ref="FILE"/>
     </root>
 
-    <logger name="ch" level="OFF"/>
+    <logger name="org" level="OFF"/>
 </configuration>

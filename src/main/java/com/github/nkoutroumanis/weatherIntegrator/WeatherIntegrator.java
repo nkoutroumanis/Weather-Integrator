@@ -89,20 +89,20 @@ public final class WeatherIntegrator {
         removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
 
-    public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws IOException, ParseException {
+    public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws Exception {
         integrate(kafkaOutput, (r) -> {
             return recordParser.toCsv(r);
         });
     }
 
-    public void integrateAndOutputToDirectory(FileOutput fileOutput) throws IOException, ParseException {
+    public void integrateAndOutputToDirectory(FileOutput fileOutput) throws Exception {
         integrate(fileOutput, (r) -> {
             return recordParser.toCsv(r);
         });
 
     }
 
-    private void integrate(Output output, Function<Record, String> function) throws IOException, ParseException {
+    private void integrate(Output output, Function<Record, String> function) throws Exception {
 
         start = System.currentTimeMillis();
 
