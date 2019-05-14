@@ -173,7 +173,7 @@ public class FilesSamping {
                 numberOfRecords++;
 
                 if(randomNumbers.contains(numberOfRecords)){
-                    fileOutput.out(rp.toCsv(record),"samples.csv");
+                    fileOutput.out(rp.toCsv(record), lineMetaData);
                 }
 
             } catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
