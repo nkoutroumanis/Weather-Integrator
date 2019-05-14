@@ -12,10 +12,8 @@ import com.typesafe.config.Config;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import static com.github.nkoutroumanis.kafkaToMongoDB.Consts.*;
 
@@ -35,7 +33,7 @@ public class KafkaToMongoJob {
                     config.getLong(inputKafkaPollingSetting));
         } else {
             logger.error("Input type {} is not implemented", inputType);
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -56,7 +54,7 @@ public class KafkaToMongoJob {
             );
         } else {
             logger.error("Input format parser {} is not implemented", inputFormat);
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -66,7 +64,7 @@ public class KafkaToMongoJob {
             logger.info("Using output type {}", mongoType);
             if (config.getBoolean(outputMongoSslEnabledSetting)) {
                 logger.error("SSL encryption to MongoDB is not currently supported");
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
             }
             else {
                 return new MongoOutput(
@@ -81,7 +79,7 @@ public class KafkaToMongoJob {
             }
         } else {
             logger.error("Output type {} is not implemented", outputType);
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 

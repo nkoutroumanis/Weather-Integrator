@@ -2,7 +2,6 @@ package com.github.nkoutroumanis.parsers;
 
 import com.github.nkoutroumanis.datasources.Datasource;
 import org.bson.Document;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -33,31 +32,31 @@ public abstract class RecordParser {
 
 
     public Document toDocument(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String toCsv(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String getLatitude(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String getLongitude(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String getDate(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String getDateFormat() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public String getVehicle(Record record) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public Datasource getDatasource() {
