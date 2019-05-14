@@ -21,7 +21,7 @@ public class FilesSamplingJobTest {
         RecordParser rp = new CsvRecordParser(ds, ";", 2, 3, 4, "yyyy-MM-dd HH:mm:ss");
         FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/sampling/", true);
 
-        FilesSamping.newFilesSamping(rp, 1000).build().exportSamplesToFile(fileOutput);
+        FilesSamping.newFilesSamping(rp, 10).build().exportSamplesToFile(fileOutput);
     }
 
     @Test
