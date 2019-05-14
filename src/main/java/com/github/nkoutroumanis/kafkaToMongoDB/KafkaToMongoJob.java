@@ -91,16 +91,27 @@ public class KafkaToMongoJob {
             Document doc;
             logger.info("Started filling mongo db");
             long reportCount = config.getLong(reportingNumberOfLinesSetting);
-            long lineCount = 0;
+            long recordCount = 0;
+            long startTime = System.currentTimeMillis();
+            long totalElapsedTime, stepElapsedTime, curTime, prevTime = startTime;
             while (recordParser.hasNextRecord()) {
                 record = recordParser.nextRecord();
                 doc = recordParser.toDocument(record);
                 output.out(doc.toJson(), record.getMetadata());
-                if ((++lineCount % reportCount) == 0) {
-                    logger.info("Processed {} lines", lineCount);
+                if ((++recordCount % reportCount) == 0) {
+                    curTime = System.currentTimeMillis();
+                    totalElapsedTime = (curTime - startTime) / 1000;
+                    stepElapsedTime = (curTime - prevTime) / 1000;
+                    prevTime = curTime;
+                    logger.info("Processed {} records.\nTotal throughput {} msg/sec. Step throughput {} msg/sec.", recordCount, recordCount / totalElapsedTime, reportCount / stepElapsedTime);
                 }
+                //if (recordCount == 1000000) break;
             }
+            curTime = System.currentTimeMillis();
+            totalElapsedTime = (curTime - startTime) / 1000;
             logger.info("Process completed successfully!");
+            logger.info("Total throughput: {} msg/sec.", recordCount / totalElapsedTime);
+            logger.info("Total time: {} seconds.", totalElapsedTime);
         }
     }
 }
