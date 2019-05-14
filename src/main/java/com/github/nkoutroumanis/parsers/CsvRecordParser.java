@@ -99,8 +99,10 @@ public class CsvRecordParser extends RecordParser {
                 result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
             }
         }
+        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
+        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
         Document embeddedDoc = Consts.getPointDocument().append(
-                coordinatesFieldName, Arrays.asList(record.getFieldValues().get(longitudeFieldId), record.getFieldValues().get(latitudeFieldId))
+                coordinatesFieldName, Arrays.asList(longitude, latitude)
         );
         result.append(locationFieldName, embeddedDoc);
         return result;
