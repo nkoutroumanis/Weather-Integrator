@@ -62,4 +62,6 @@ public abstract class RecordParser {
     public Datasource getDatasource() {
         return source;
     }
+
+    public abstract RecordParser cloneRecordParser(Datasource datasource);
 }

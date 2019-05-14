@@ -70,4 +70,9 @@ public class KafkaDatasource implements Datasource {
             return false;
         }
     }
+
+    @Override
+    public Datasource cloneDatasource() throws IOException {
+        return new KafkaDatasource(propertiesFile, topicName, poll);
+    }
 }

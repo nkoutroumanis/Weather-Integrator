@@ -11,4 +11,6 @@ public interface Datasource {
 
     boolean hasNextLine() throws IOException;
 
+    Datasource cloneDatasource() throws IOException;
+
 }

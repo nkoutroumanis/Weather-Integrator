@@ -68,8 +68,8 @@ public class FileDatasource implements Datasource {
         return false;
     }
 
-    public FileDatasource(FileDatasource fileDatasource){
-        directoryName = fileDatasource.directoryName;
-        filesExtension = fileDatasource.filesExtension;
+    @Override
+    public Datasource cloneDatasource() throws IOException {
+        return newFileDatasource(directoryName, filesExtension);
     }
 }

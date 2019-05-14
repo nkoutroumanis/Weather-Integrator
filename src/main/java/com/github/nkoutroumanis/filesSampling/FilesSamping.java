@@ -1,6 +1,8 @@
 package com.github.nkoutroumanis.filesSampling;
 
 import com.github.nkoutroumanis.Rectangle;
+import com.github.nkoutroumanis.checkSpatialInfo.CheckSpatialInfo;
+import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.outputs.FileOutput;
 import com.github.nkoutroumanis.parsers.Record;
@@ -26,7 +28,7 @@ public class FilesSamping {
 
     private final Rectangle rectangle;
 
-    private long numberOfRecords = 0;
+    //private long numberOfRecords = 0;
 
     private double maxx = Integer.MIN_VALUE;
     private double minx = Integer.MAX_VALUE;
@@ -39,7 +41,7 @@ public class FilesSamping {
         rectangle = builder.rectangle;
     }
 
-    public static Builder newCheckSpatioTemporalInfo(RecordParser recordParser, long samples) throws Exception {
+    public static Builder newFilesSamping(RecordParser recordParser, long samples) throws Exception {
         return new Builder(recordParser, samples);
     }
 
@@ -67,9 +69,14 @@ public class FilesSamping {
 
     }
 
-    public void exportInfo(FileOutput fileOutput) throws Exception {
+    public void exportSamplesToFile(FileOutput fileOutput) throws Exception {
 
         DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
+
+        Datasource ds = recordParser.getDatasource().cloneDatasource();
+        RecordParser rp = recordParser.cloneRecordParser(ds);
+
+        long numberOfRecords = 0;
 
         while (recordParser.hasNextRecord()) {
 
@@ -115,19 +122,70 @@ public class FilesSamping {
         }
 
         if(samples>=numberOfRecords){
-            throw new Exception("Samples can not be more than the existing nuumber of records");
+            throw new Exception("Samples can not be more than the existing number of records");
         }
 
         Random rand = new Random();
-
-        //rand.nextLong(4l);
-
-
-
         Set<Long> randomNumbers = new HashSet<>();
+        boolean i = true;
+        while(i){
+            long generatedLong = 1 + (long) (Math.random() * (numberOfRecords - 1));
 
+            if(!randomNumbers.contains(generatedLong)){
+                randomNumbers.add(generatedLong);
 
+                if(randomNumbers.size() == samples){
+                    i = false;
+                }
+            }
+        }
+        numberOfRecords = 0;
 
+        while (rp.hasNextRecord()) {
 
+            Record record = rp.nextRecord();
+            String lineMetaData = record.getMetadata();
+
+            try {
+
+                double longitude = Double.parseDouble(rp.getLongitude(record));
+                double latitude = Double.parseDouble(rp.getLatitude(record));
+                Date d = dateFormat.parse(rp.getDate(record));
+
+                //filtering
+                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+                    continue;
+                }
+
+                if (Double.compare(maxx, longitude) == -1) {
+                    maxx = longitude;
+                }
+                if (Double.compare(minx, longitude) == 1) {
+                    minx = longitude;
+                }
+                if (Double.compare(maxy, latitude) == -1) {
+                    maxy = latitude;
+                }
+                if (Double.compare(miny, latitude) == 1) {
+                    miny = latitude;
+                }
+
+                numberOfRecords++;
+
+                if(randomNumbers.contains(numberOfRecords)){
+                    fileOutput.out(rp.toCsv(record),"samples.csv");
+                }
+
+            } catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
+
+                if ((e instanceof NumberFormatException) || (e instanceof ParseException)) {
+                    logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                } else {
+                    logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
+                }
+
+            }
+
+        }
     }
 }
