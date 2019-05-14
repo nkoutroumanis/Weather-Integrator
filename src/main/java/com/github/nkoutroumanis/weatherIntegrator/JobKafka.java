@@ -31,7 +31,7 @@ public final class JobKafka {
          * */
 
 
-        Config conf = ConfigFactory.parseFile(new File(args[0]));
+        Config conf = ConfigFactory.load();
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
 
@@ -44,12 +44,21 @@ public final class JobKafka {
 
             KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
 
-            WeatherIntegrator.newWeatherIntegrator(rp,
-                    wi.getString("gribFilesFolderPath"), stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat"))).removeLastValueFromRecords()
-                    .lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+            WeatherIntegrator.Builder w = WeatherIntegrator.newWeatherIntegrator(rp,
+                    wi.getString("gribFilesFolderPath"), stream.collect(Collectors.toList()));
 
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            if(wi.getBoolean("filter")){
+                w.filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat")));
+            }
+
+            if(wi.getBoolean("removeLastValueFromRecords")){
+                w.removeLastValueFromRecords();
+            }
+
+            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
