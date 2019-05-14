@@ -1,0 +1,10 @@
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 3389
+Number Of Empty Cells: 86611
+Percentage of Filled Cells: 0.037655555
+Percentage of Empty Cells: 0.96234447
+Empty Cells/Filled Cells: 25.556507
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1

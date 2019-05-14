@@ -18,13 +18,13 @@ public class JobFilesUsingIndexTest {
     @Test
     public void main() throws Exception {
 
-        Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
-        Datasource ds = FileDatasource.newFileDatasource("./src/test/java/resources/", ".csv");
+        Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
+        Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/csv/", ".csv");
         RecordParser rp = new CsvRecordParser(ds, ";", 2, 3, 4, "yyyy-MM-dd HH:mm:ss");
-        FileOutput fileOutput = FileOutput.newFileOutput("./src/test/java/resources/enriched/", true);
+        FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/csv-enriched/", true);
 
         WeatherIntegrator.newWeatherIntegrator(rp,
-                "./src/test/java/resources/grib003Samples/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
+                "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
                 .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToDirectory(fileOutput);
 
 

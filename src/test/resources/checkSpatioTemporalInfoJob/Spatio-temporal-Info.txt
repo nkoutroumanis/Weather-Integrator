@@ -1,0 +1,14 @@
+Lines error at: 
+
+
+Spatial Information out of range at: 
+
+
+Formed Spatial Box: 
+Max Longitude: 26.601897
+Min Longitude: 20.150214
+Max Latitude: 41.825585
+Min Latitude: 34.92129
+
+
+All of the records are 3448

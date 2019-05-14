@@ -6,6 +6,7 @@ import com.github.nkoutroumanis.datasources.KafkaDatasource;
 import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.RecordParser;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,20 +18,21 @@ import java.util.stream.Stream;
 
 public class JobKafkaTest {
 
+    @Ignore("kafka can not run while testing")
     @Test
     public void main() {
 
         try {
-            Stream<String> stream = Files.lines(Paths.get("./variables/weather-variables.txt"));
+            Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
 
-            Datasource ds = KafkaDatasource.newKafkaDatasource("./client.properties", "vfi-batch-sample", 0);
+            Datasource ds = KafkaDatasource.newKafkaDatasource("./src/test/resources/kafka/client.properties", "vfi-batch-sample", 0);
 
             RecordParser rp = new CsvRecordParser(ds, ";", 7, 8, 3, "yyyy-MM-dd HH:mm:ss");
 
-            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
+            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./src/test/resources/kafka/producer.properties", "nikos-trial");
 
             WeatherIntegrator.newWeatherIntegrator(rp,
-                    "/home/wp3user01/grib-files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
+                    "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
                     .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
 
         } catch (IOException | ParseException e) {

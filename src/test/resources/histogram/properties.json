@@ -1,0 +1,10 @@
+{
+  "cellsInXAxis": 300,
+  "cellsInYAxis": 300,
+  "rectangle": {
+    "maxx": 26.61,
+    "minx": 20.15,
+    "maxy": 41.83,
+    "miny": 34.91
+  }
+}

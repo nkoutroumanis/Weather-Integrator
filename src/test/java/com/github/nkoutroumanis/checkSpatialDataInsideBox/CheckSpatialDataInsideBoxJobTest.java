@@ -13,9 +13,9 @@ public class CheckSpatialDataInsideBoxJobTest {
     @Test
     public void main() throws Exception {
 
-        Datasource ds = FileDatasource.newFileDatasource("/Users/nicholaskoutroumanis/Desktop/csv/", ".csv");
-        RecordParser rp = new CsvRecordParser(ds, ";", 7, 8);
-        FileOutput fileOutput = FileOutput.newFileOutput("/Users/nicholaskoutroumanis/Desktop/myNewFolder/", true);
+        Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/csv/", ".csv");
+        RecordParser rp = new CsvRecordParser(ds, ";", 2, 3);
+        FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/checkSpatialDataInsideBox/", true);
 
         CheckSpatialDataInsideBox.newCheckSpatioTemporalInfo(rp, Rectangle.newRectangle(-106.7282958, -12.5515792, 98.1731682, 82.0)).build().exportInfo(fileOutput);
 
