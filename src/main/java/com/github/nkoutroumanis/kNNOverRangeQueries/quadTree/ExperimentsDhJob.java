@@ -78,7 +78,7 @@ public class ExperimentsDhJob {
 
             QuadTree quadTree1 = null;
             try {
-                quadTree1 = QuadTree.deserializeQuadTree(path.getAbsolutePath());
+                quadTree1 = QuadTree.deserializeQuadTree(path + File.separator+ "quadTree.bin");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
