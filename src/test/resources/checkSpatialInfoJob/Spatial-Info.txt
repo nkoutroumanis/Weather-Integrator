@@ -5,10 +5,10 @@ Spatial Information out of range at:
 
 
 Formed Spatial Box: 
-Max Longitude: 26.601897
-Min Longitude: 20.150214
+Max Longitude: 26.603443
+Min Longitude: 20.15014
 Max Latitude: 41.825585
-Min Latitude: 34.92129
+Min Latitude: 34.919989
 
 
-All of the records are 3448
+All of the records are 10344

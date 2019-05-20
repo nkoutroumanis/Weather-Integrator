@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.kNNOverRangeQueries;
+package com.github.nkoutroumanis.kNNOverRangeQueries.gridPartitioning;
 
 import com.github.nkoutroumanis.FilesParse;
 import com.mongodb.MongoClient;

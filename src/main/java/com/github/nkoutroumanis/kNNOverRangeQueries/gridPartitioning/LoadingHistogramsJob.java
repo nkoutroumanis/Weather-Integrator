@@ -1,4 +1,4 @@
-package com.github.nkoutroumanis.kNNOverRangeQueries;
+package com.github.nkoutroumanis.kNNOverRangeQueries.gridPartitioning;
 
 public class LoadingHistogramsJob {
 

@@ -28,3 +28,53 @@ Percentage of Empty Cells: 0.96234447
 Empty Cells/Filled Cells: 25.556507
 Minimum number contained in a cell: 1
 Maximum number contained in a cell: 1
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 9788
+Number Of Empty Cells: 80212
+Percentage of Filled Cells: 0.10875556
+Percentage of Empty Cells: 0.8912445
+Empty Cells/Filled Cells: 8.194933
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 9788
+Number Of Empty Cells: 80212
+Percentage of Filled Cells: 0.10875556
+Percentage of Empty Cells: 0.8912445
+Empty Cells/Filled Cells: 8.194933
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 9788
+Number Of Empty Cells: 80212
+Percentage of Filled Cells: 0.10875556
+Percentage of Empty Cells: 0.8912445
+Empty Cells/Filled Cells: 8.194933
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 9788
+Number Of Empty Cells: 80212
+Percentage of Filled Cells: 0.10875556
+Percentage of Empty Cells: 0.8912445
+Empty Cells/Filled Cells: 8.194933
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1
+Number Of Cells: 90000
+Number Of Cells in X Axis: 300
+Number Of Cells in Y Axis: 300
+Number Of Filled Cells: 9788
+Number Of Empty Cells: 80212
+Percentage of Filled Cells: 0.10875556
+Percentage of Empty Cells: 0.8912445
+Empty Cells/Filled Cells: 8.194933
+Minimum number contained in a cell: 1
+Maximum number contained in a cell: 1
