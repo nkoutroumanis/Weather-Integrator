@@ -75,7 +75,6 @@ public class ExperimentsDhJob {
             //LoadHistogram lh = LoadHistogram.newLoadHistogram(path.toString());
             //RadiusDetermination rd = RadiusDetermination.newRadiusDetermination(lh.getHistogram(), lh.getNumberOfCellsxAxis(), lh.getNumberOfCellsyAxis(), lh.getMinx(), lh.getMiny(), lh.getMaxx(), lh.getMaxy());
 
-
             QuadTree quadTree1 = null;
             try {
                 quadTree1 = QuadTree.deserializeQuadTree(path + File.separator+ "quadTree.bin");
