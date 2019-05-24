@@ -25,9 +25,9 @@ public class ExperimentsDhJob {
 
     public static void main(String args[]) throws IOException {
 
-        if (Integer.valueOf(args[0]) == 0) {
-            doOperations("real", "/home/nikolaos/Documents/thesis-dataset/", "/home/nikolaos/Documents/greek-hist/thesis-dataset/", 200);
-        }
+        //if (Integer.valueOf(args[0]) == 0) {
+            doOperations("real", "/home/nikolaos/Documents/thesis-dataset/", "/home/nikolaos/Documents/quadTrees-distinct/", 200);
+       // }
 
 //        if (Integer.valueOf(args[0]) == 1) {
 //            doOperations("synthetic1", "/home/nikolaos/Documents/synthetic-dataset1/", "/home/nikolaos/Documents/greek-hist/synthetic-dataset1/", 200);
