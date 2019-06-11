@@ -1,6 +1,7 @@
 package com.github.nkoutroumanis.parsers;
 
 import com.github.nkoutroumanis.datasources.Datasource;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class JsonRecordParser extends RecordParser {
     public JsonRecordParser(Datasource source, String longitudeFieldName, String latitudeFieldName, String dateFieldName, String dateFormat) {
         super(source);
 
-        this.vehicleFieldName = -1;
+        this.vehicleFieldName = "";
         this.longitudeFieldName = longitudeFieldName;
         this.latitudeFieldName = latitudeFieldName;
         this.dateFieldName = dateFieldName;
@@ -38,16 +39,16 @@ public class JsonRecordParser extends RecordParser {
     }
 
     public JsonRecordParser(Datasource source) {
-        this(source, -1, -1, -1, -1, null);
+        this(source, "", "", "", "", null);
     }
 
     public JsonRecordParser(Datasource source, String longitudeFieldName, String latitudeFieldName) {
         super(source);
 
-        this.vehicleFieldName = -1;
+        this.vehicleFieldName = "";
         this.longitudeFieldName = longitudeFieldName;
         this.latitudeFieldName = latitudeFieldName;
-        this.dateFieldName = -1;
+        this.dateFieldName = "";
         this.dateFormat = null;
 
     }
@@ -64,7 +65,11 @@ public class JsonRecordParser extends RecordParser {
 
     @Override
     public Record nextRecord() throws ParseException {
-        return null;
+        String[] fieldValues = lineWithMeta[0].split(this.separator, -1);
+        Gson gson = new Gson();
+        gson.fromJson().toJson(,)
+
+        return new Record(fieldValues, lineWithMeta[1], headers);
     }
 
     @Override
