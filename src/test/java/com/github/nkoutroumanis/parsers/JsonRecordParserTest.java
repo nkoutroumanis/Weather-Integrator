@@ -11,6 +11,8 @@ import org.junit.Test;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -33,12 +35,13 @@ public class JsonRecordParserTest {
 //        JSONParser parser=factory.newJsonParser();
 //        Map jsonMap=parser.parseJson(jsonString);
 
-        ConfigFactory.parseString("{ \"id\" : 3, \"loc\" :{ \"xs\" : 3, \"dfdf\" : { \"ds\": 434} } }").root().forEach(
-                (s1 , s2)->{
 
-                    System.out.println(s1+" "+s2);
+        ConfigFactory.parseString("{ \"id\" : 3, \"loc\" :{ \"xs\" : 3, \"dfdf\" : { \"ds\": 434} } }").root().entrySet().stream().flatMap(configValue -> Stream.of(configValue.getValue().unwrapped()) )
+                .collect(Collectors.toList()).forEach(
+                (s1)->{
 
-                    if(s2 instanceof ConfigV)
+                    System.out.println(s1+" ");
+
 
     });
 
