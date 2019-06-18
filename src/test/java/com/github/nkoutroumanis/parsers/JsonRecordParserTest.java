@@ -1,16 +1,18 @@
 package com.github.nkoutroumanis.parsers;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
+import com.google.gson.*;
+import com.typesafe.config.*;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +22,6 @@ public class JsonRecordParserTest {
 
     @Test
     public void recordParser() {
-        Gson gson = new Gson();
 //
 //        Type listType = new TypeToken<List<String>>() {}.getType();
 //
@@ -36,14 +37,30 @@ public class JsonRecordParserTest {
 //        Map jsonMap=parser.parseJson(jsonString);
 
 
-        ConfigFactory.parseString("{ \"id\" : 3, \"loc\" :{ \"xs\" : 3, \"dfdf\" : { \"ds\": 434} } }").root().entrySet().stream().flatMap(configValue -> Stream.of(configValue.getValue().unwrapped()) )
-                .collect(Collectors.toList()).forEach(
-                (s1)->{
+        Config config = ConfigFactory.parseString("{ \"id\" : 3, \"loc\" :{ \"xs\" : 3, \"dfdf\" : { \"ds\": 434} } }");
 
-                    System.out.println(s1+" ");
+        Map<String, Object> properties = new HashMap<>();
+
+        for (Map.Entry<String, ConfigValue> entry: config.entrySet()) {
+            //String[] keys = ConfigUtil.splitPath(entry.getKey()).toArray(new String[0]);
+            System.out.println("Root key = " + entry.getKey() + " " + entry.getValue().render());
+            properties.put(entry.getKey(), entry.getValue().render());
+
+        }
 
 
-    });
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(properties));
+
+        Config config1 = ConfigFactory.parseMap(properties);
+        System.out.println(config1.root().render(ConfigRenderOptions.concise()));
+
+
+
+        /*.root()
+                .forEach((b1,b2) -> {
+            System.out.println(b1 +" "+b2);
+        });*/
 
         //s.forEach(k-> System.out.println(k));
 
