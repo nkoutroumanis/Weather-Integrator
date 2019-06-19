@@ -2,10 +2,16 @@ package com.github.nkoutroumanis.parsers;
 
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.google.gson.Gson;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigRenderOptions;
+import com.typesafe.config.ConfigValue;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
+import java.util.*;
 
 public class JsonRecordParser extends RecordParser {
 
@@ -65,11 +71,125 @@ public class JsonRecordParser extends RecordParser {
 
     @Override
     public Record nextRecord() throws ParseException {
-        String[] fieldValues = lineWithMeta[0].split(this.separator, -1);
-        Gson gson = new Gson();
-        gson.fromJson().toJson(,)
+
+        String json = lineWithMeta[0];
+
+        Config config = ConfigFactory.parseString(json);
+        Set<Map.Entry<String, ConfigValue>> jsonSet = config.entrySet();
+
+       String[] headers = new String[jsonSet.size()];
+       String[] fieldValues = new String[jsonSet.size()];
+
+       int k = 0;
+
+        for (Map.Entry<String, ConfigValue> entry: jsonSet) {
+            headers[k] = entry.getKey();
+            fieldValues[k] = entry.getValue().render();
+            k++;
+        }
 
         return new Record(fieldValues, lineWithMeta[1], headers);
+    }
+
+    @Override
+    public Document toDocument(Record record) {
+
+        List<String> fieldNames = record.getFieldNames();
+        List<String> fieldValues = record.getFieldValues();
+
+        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
+            logger.error("Field names is wrong!");
+            return null;
+        }
+
+        Map<String, Object> properties = new HashMap<>();
+        for(int i =0; i<fieldNames.size();i++){
+            properties.put(fieldNames.get(i), fieldValues.get(i));
+        }
+
+        Config config1 = ConfigFactory.parseMap(properties);
+        Document doc = Document.parse(config1.root().render(ConfigRenderOptions.concise()));
+
+        doc.
+        Document result = new Document();
+        for (int i = 0; i < record.getFieldValues().size(); i++) {
+            if (i == vehicleFieldId) {
+                result.append(vehicleFieldName, record.getFieldValues().get(i));
+            } else if (i == dateFieldId) {
+                result.append(dateFieldName, record.getFieldValues().get(i));
+            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
+                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
+            }
+        }
+        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
+        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
+        Document embeddedDoc = Consts.getPointDocument().append(
+                coordinatesFieldName, Arrays.asList(longitude, latitude)
+        );
+        result.append(locationFieldName, embeddedDoc);
+        return result;
+
+    }
+
+    @Override
+    public String getLatitude(Record record) {
+
+        List<String> fieldNames = record.getFieldNames();
+        List<String> fieldValues = record.getFieldValues();
+
+
+        for(int i=0;i<fieldNames.size();i++){
+            if(fieldNames.get(i).equals(latitudeFieldName)){
+                return fieldValues.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getLongitude(Record record) {
+        List<String> fieldNames = record.getFieldNames();
+        List<String> fieldValues = record.getFieldValues();
+
+
+        for(int i=0;i<fieldNames.size();i++){
+            if(fieldNames.get(i).equals(longitudeFieldName)){
+                return fieldValues.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getDate(Record record) {
+        List<String> fieldNames = record.getFieldNames();
+        List<String> fieldValues = record.getFieldValues();
+
+
+        for(int i=0;i<fieldNames.size();i++){
+            if(fieldNames.get(i).equals(dateFieldName)){
+                return fieldValues.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getVehicle(Record record) {
+        List<String> fieldNames = record.getFieldNames();
+        List<String> fieldValues = record.getFieldValues();
+
+
+        for(int i=0;i<fieldNames.size();i++){
+            if(fieldNames.get(i).equals(vehicleFieldName)){
+                return fieldValues.get(i);
+            }
+        }
+
+        return null;
     }
 
     @Override
