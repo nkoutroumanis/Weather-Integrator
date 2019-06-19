@@ -59,7 +59,8 @@ public class JsonRecordParserTest {
         //System.out.println(gson.toJson(properties));
 
         Config config1 = ConfigFactory.parseMap(properties);
-        config1 = config1.withValue("adsadsadsadsa", ConfigValueFactory.fromAnyRef("sdfsdfdffsddf"));
+        Config config2 = config1.withValue("laat", ConfigValueFactory.fromAnyRef(554));
+
         System.out.println(config1.root().render(ConfigRenderOptions.concise()));
 
 
