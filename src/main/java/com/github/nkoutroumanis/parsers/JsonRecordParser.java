@@ -107,27 +107,27 @@ public class JsonRecordParser extends RecordParser {
             properties.put(fieldNames.get(i), fieldValues.get(i));
         }
 
-        Config config1 = ConfigFactory.parseMap(properties);
-        Document doc = Document.parse(config1.root().render(ConfigRenderOptions.concise()));
+        Config config = ConfigFactory.parseMap(properties);
+        Document doc = Document.parse(config.root().render(ConfigRenderOptions.concise()));
 
-        doc.
-        Document result = new Document();
-        for (int i = 0; i < record.getFieldValues().size(); i++) {
-            if (i == vehicleFieldId) {
-                result.append(vehicleFieldName, record.getFieldValues().get(i));
-            } else if (i == dateFieldId) {
-                result.append(dateFieldName, record.getFieldValues().get(i));
-            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
-                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
-            }
-        }
-        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
-        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
-        Document embeddedDoc = Consts.getPointDocument().append(
-                coordinatesFieldName, Arrays.asList(longitude, latitude)
-        );
-        result.append(locationFieldName, embeddedDoc);
-        return result;
+        return doc;
+//        Document result = new Document();
+//        for (int i = 0; i < record.getFieldValues().size(); i++) {
+//            if (i == vehicleFieldId) {
+//                result.append(vehicleFieldName, record.getFieldValues().get(i));
+//            } else if (i == dateFieldId) {
+//                result.append(dateFieldName, record.getFieldValues().get(i));
+//            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
+//                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
+//            }
+//        }
+//        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
+//        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
+//        Document embeddedDoc = Consts.getPointDocument().append(
+//                coordinatesFieldName, Arrays.asList(longitude, latitude)
+//        );
+//        result.append(locationFieldName, embeddedDoc);
+//        return result;
 
     }
 
