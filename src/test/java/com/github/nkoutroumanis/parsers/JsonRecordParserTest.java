@@ -3,16 +3,12 @@ package com.github.nkoutroumanis.parsers;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import com.typesafe.config.*;
+import org.bson.Document;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,24 +41,33 @@ public class JsonRecordParserTest {
 
         Config config = ConfigFactory.parseString(s1);
 
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, ConfigValue> properties = new HashMap<>();
 
         for (Map.Entry<String, ConfigValue> entry: config.entrySet()) {
             //String[] keys = ConfigUtil.splitPath(entry.getKey()).toArray(new String[0]);
-            System.out.println("Root key = " + entry.getKey() + " " + entry.getValue().render());
-            properties.put(entry.getKey(), entry.getValue().render());
+            System.out.println("Root key = " + entry.getKey() + " " + entry.getValue().unwrapped());
+            properties.put(entry.getKey(), entry.getValue());
 
         }
 
+        ;
+
+        Base64.getEncoder().encodeToString(new ObjectOutputStream(new ByteArrayOutputStream()).writeObject());
+        new ObjectInputStream(new ByteArrayInputStream(Base64.getDecoder().decode(""))).readObject();
+        //properties.put("lof", Arrays.asList(30,40));
+
+//        properties.put("lof.type","Point");
+//        properties.put("lof.coordinates","[3,7]");
 
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
         //System.out.println(gson.toJson(properties));
 
         Config config1 = ConfigFactory.parseMap(properties);
-        Config config2 = config1.withValue("laat", ConfigValueFactory.fromAnyRef(554));
 
         System.out.println(config1.root().render(ConfigRenderOptions.concise()));
 
+        System.out.println();
+        System.out.println(Document.parse(config1.root().render(ConfigRenderOptions.concise())));
 
 
 

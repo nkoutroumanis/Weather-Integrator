@@ -16,7 +16,7 @@ public class Record {
 //    private static int vehicleFieldId = AppConfig.getInstance().getConfig().getInt(inputVehicleFieldIdSetting);
 //    private static int dateFieldId = AppConfig.getInstance().getConfig().getInt(inputDateFieldIdSetting);
 
-    private List<String> fieldValues;
+    private List<Object> fieldValues;
     private List<String> fieldNames;
     private String metadata;
 
@@ -42,11 +42,11 @@ public class Record {
         return fieldNames;//fieldNames.toArray(new String[0]);
     }
 
-    public List<String> getFieldValues() {
+    public List<Object> getFieldValues() {
         return fieldValues;//fieldValues.toArray(new String[0]);
     }
 
-    public void addFieldValues(List<String> newFieldValues) {
+    public void addFieldValues(List<Object> newFieldValues) {
         this.fieldValues.addAll(newFieldValues);
     }
 
@@ -54,7 +54,7 @@ public class Record {
         this.fieldNames.addAll(newFieldNames);
     }
 
-    public void addFieldValue(String newFieldValue) {
+    public void addFieldValue(Object newFieldValue) {
         this.fieldValues.add(newFieldValue);
     }
 

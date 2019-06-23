@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class KafkaOutput implements Output {
+public class KafkaOutput implements Output<String> {
 
     private final KafkaProducer<String, String> producer;
 

@@ -79,34 +79,34 @@ public class CsvRecordParser extends RecordParser {
         return new Record(fieldValues, lineWithMeta[1], headers);
     }
 
-    @Override
-    public Document toDocument(Record record) {
-        //String[] fieldNames = record.getFieldNames();
-        //String[] fieldValues = record.getFieldValues();
-
-        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
-            logger.error("Field names is wrong!");
-            return null;
-        }
-
-        Document result = new Document();
-        for (int i = 0; i < record.getFieldValues().size(); i++) {
-            if (i == vehicleFieldId) {
-                result.append(vehicleFieldName, record.getFieldValues().get(i));
-            } else if (i == dateFieldId) {
-                result.append(dateFieldName, record.getFieldValues().get(i));
-            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
-                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
-            }
-        }
-        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
-        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
-        Document embeddedDoc = Consts.getPointDocument().append(
-                coordinatesFieldName, Arrays.asList(longitude, latitude)
-        );
-        result.append(locationFieldName, embeddedDoc);
-        return result;
-    }
+//    @Override
+//    public Document toDocument(Record record) {
+//        //String[] fieldNames = record.getFieldNames();
+//        //String[] fieldValues = record.getFieldValues();
+//
+//        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
+//            logger.error("Field names is wrong!");
+//            return null;
+//        }
+//
+//        Document result = new Document();
+//        for (int i = 0; i < record.getFieldValues().size(); i++) {
+//            if (i == vehicleFieldId) {
+//                result.append(vehicleFieldName, record.getFieldValues().get(i));
+//            } else if (i == dateFieldId) {
+//                result.append(dateFieldName, record.getFieldValues().get(i));
+//            } else if ((i != longitudeFieldId) && (i != latitudeFieldId)) {
+//                result.append(record.getFieldNames().get(i), record.getFieldValues().get(i));
+//            }
+//        }
+//        double longitude = Double.parseDouble(record.getFieldValues().get(longitudeFieldId));
+//        double latitude = Double.parseDouble(record.getFieldValues().get(latitudeFieldId));
+//        Document embeddedDoc = Consts.getPointDocument().append(
+//                coordinatesFieldName, Arrays.asList(longitude, latitude)
+//        );
+//        result.append(locationFieldName, embeddedDoc);
+//        return result;
+//    }
 
     @Override
     public String toCsv(Record record) {
@@ -124,17 +124,17 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getLatitude(Record record) {
-        return record.getFieldValues().get(latitudeFieldId - 1);
+        return (String) record.getFieldValues().get(latitudeFieldId - 1);
     }
 
     @Override
     public String getLongitude(Record record) {
-        return record.getFieldValues().get(longitudeFieldId - 1);
+        return (String) record.getFieldValues().get(longitudeFieldId - 1);
     }
 
     @Override
     public String getDate(Record record) {
-        return record.getFieldValues().get(dateFieldId - 1);
+        return (String) record.getFieldValues().get(dateFieldId - 1);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class CsvRecordParser extends RecordParser {
 
     @Override
     public String getVehicle(Record record) {
-        return record.getFieldValues().get(vehicleFieldId - 1);
+        return (String) record.getFieldValues().get(vehicleFieldId - 1);
     }
 
     @Override

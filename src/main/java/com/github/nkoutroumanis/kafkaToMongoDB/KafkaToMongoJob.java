@@ -96,6 +96,10 @@ public class KafkaToMongoJob {
             long totalElapsedTime, stepElapsedTime, curTime, prevTime = startTime;
             while (recordParser.hasNextRecord()) {
                 record = recordParser.nextRecord();
+
+
+
+
                 doc = recordParser.toDocument(record);
                 output.out(doc.toJson(), record.getMetadata());
                 if ((++recordCount % reportCount) == 0) {

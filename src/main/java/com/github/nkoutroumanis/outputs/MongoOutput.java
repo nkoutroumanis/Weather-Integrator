@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public class MongoOutput implements Output {
+public class MongoOutput implements Output<Document> {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoOutput.class);
     private final MongoClient mongoClient;
@@ -26,9 +26,10 @@ public class MongoOutput implements Output {
     }
 
     @Override
-    public void out(String line, String lineMetaData) {
+    public void out(Document document, String lineMetaData) {
 
-        buffer.add(Document.parse(line));
+        buffer.add(document);
+        //buffer.add(Document.parse(line));
         if (buffer.size() == batchSize) {
             logger.debug("Writing batch to Mongo...");
             mongoCollection.insertMany(buffer);

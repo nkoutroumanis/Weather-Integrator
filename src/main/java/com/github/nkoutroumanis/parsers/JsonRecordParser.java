@@ -91,26 +91,27 @@ public class JsonRecordParser extends RecordParser {
         return new Record(fieldValues, lineWithMeta[1], headers);
     }
 
-    @Override
-    public Document toDocument(Record record) {
-
-        List<String> fieldNames = record.getFieldNames();
-        List<String> fieldValues = record.getFieldValues();
-
-        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
-            logger.error("Field names is wrong!");
-            return null;
-        }
-
-        Map<String, Object> properties = new HashMap<>();
-        for(int i =0; i<fieldNames.size();i++){
-            properties.put(fieldNames.get(i), fieldValues.get(i));
-        }
-
-        Config config = ConfigFactory.parseMap(properties);
-        Document doc = Document.parse(config.root().render(ConfigRenderOptions.concise()));
-
-        return doc;
+//    @Override
+//    public String toJsonString(Record record) {
+//
+//        List<String> fieldNames = record.getFieldNames();
+//        List<String> fieldValues = record.getFieldValues();
+//
+//        if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
+//            logger.error("Field names is wrong!");
+//            return null;
+//        }
+//
+//        Map<String, Object> properties = new HashMap<>();
+//        for(int i =0; i<fieldNames.size();i++){
+//            properties.put(fieldNames.get(i), fieldValues.get(i));
+//        }
+//
+//        Config config = ConfigFactory.parseMap(properties);
+//        return config.root().render(ConfigRenderOptions.concise());
+//        Document doc = Document.parse(config.root().render(ConfigRenderOptions.concise()));
+//
+//        return doc;
 //        Document result = new Document();
 //        for (int i = 0; i < record.getFieldValues().size(); i++) {
 //            if (i == vehicleFieldId) {
@@ -129,7 +130,7 @@ public class JsonRecordParser extends RecordParser {
 //        result.append(locationFieldName, embeddedDoc);
 //        return result;
 
-    }
+//    }
 
     @Override
     public String getLatitude(Record record) {
@@ -150,7 +151,7 @@ public class JsonRecordParser extends RecordParser {
     @Override
     public String getLongitude(Record record) {
         List<String> fieldNames = record.getFieldNames();
-        List<String> fieldValues = record.getFieldValues();
+        List<Object> fieldValues = record.getFieldValues();
 
 
         for(int i=0;i<fieldNames.size();i++){
@@ -165,7 +166,7 @@ public class JsonRecordParser extends RecordParser {
     @Override
     public String getDate(Record record) {
         List<String> fieldNames = record.getFieldNames();
-        List<String> fieldValues = record.getFieldValues();
+        List<Object> fieldValues = record.getFieldValues();
 
 
         for(int i=0;i<fieldNames.size();i++){
@@ -180,7 +181,7 @@ public class JsonRecordParser extends RecordParser {
     @Override
     public String getVehicle(Record record) {
         List<String> fieldNames = record.getFieldNames();
-        List<String> fieldValues = record.getFieldValues();
+        List<Object> fieldValues = record.getFieldValues();
 
 
         for(int i=0;i<fieldNames.size();i++){

@@ -7,7 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public final class FileOutput implements Output {
+public final class FileOutput implements Output<String> {
 
     private static final Logger logger = LoggerFactory.getLogger(FileOutput.class);
     private final String directory;
