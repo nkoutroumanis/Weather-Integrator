@@ -44,11 +44,9 @@ public final class GribFileWithIndex implements GribFile {
             try {
                 values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
             } catch (ArrayIndexOutOfBoundsException k) {
-//                System.out.println("INVALIDRANGEEXC333");
 //                try {
                     values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
 //                } catch (ArrayIndexOutOfBoundsException j) {
-//                    System.out.println("INVALIDRANGEEXC444");
 //                    values.add(e.getKey().copy());
 //                }
             }

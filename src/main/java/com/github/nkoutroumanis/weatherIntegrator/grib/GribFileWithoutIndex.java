@@ -31,13 +31,12 @@ public final class GribFileWithoutIndex implements GribFile {
                 try {
                     values.add(v.read("0,0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon)).getObject(0));
                 } catch (InvalidRangeException i) {
-                    System.out.println("INVALIDRANGEEXC111");
-//                    try {
+                    try {
                         values.add(v.read("0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon)).getObject(0));
-//                    } catch (InvalidRangeException k) {
-//                        System.out.println("INVALIDRANGEEXC222");
+                    } catch (InvalidRangeException e) {
+                        e.printStackTrace();
 //                        values.add(v.read().toString().replace(" ", ""));
-//                    }
+                    }
                 }
 
             } catch (IOException e) {
