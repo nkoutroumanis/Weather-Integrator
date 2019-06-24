@@ -21,7 +21,7 @@ public final class WeatherDataObtainer {
         return new WeatherDataObtainer(gribFilesFolderPath, gribFilesExtension, lruCacheMaxEntries, useIndex, variables);
     }
 
-    public List<String> obtainAttributes(double longitude, double latitude, Date date) throws IOException {
+    public List<Object> obtainAttributes(double longitude, double latitude, Date date) throws IOException {
         return lruCacheManager.getData(date, latitude, longitude);
     }
 

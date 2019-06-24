@@ -37,7 +37,7 @@ public final class LRUCacheManager {
         return numberOfVariables;
     }
 
-    public List<String> getData(Date date, double lat, double lon) throws IOException {
+    public List<Object> getData(Date date, double lat, double lon) throws IOException {
 
         String choosenGribFilePath = tree.getFilePathByUnixTime(date.getTime() / 1000L);
 

@@ -22,20 +22,22 @@ public final class GribFileWithoutIndex implements GribFile {
         return new GribFileWithoutIndex(path, listOfVariables);
     }
 
-    public List<String> getDataValuesByLatLon(double lat, double lon) {
+    public List<Object> getDataValuesByLatLon(double lat, double lon) {
 
-        List<String> values = new ArrayList();
+        List<Object> values = new ArrayList();
 
         listOfVariables.forEach(v -> {
             try {
                 try {
-                    values.add(String.valueOf(v.read("0,0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon))).replace(" ", ""));
+                    values.add(v.read("0,0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon)).getObject(0));
                 } catch (InvalidRangeException i) {
-                    try {
-                        values.add(String.valueOf(v.read("0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon))).replace(" ", ""));
-                    } catch (InvalidRangeException k) {
-                        values.add(String.valueOf(v.read()));
-                    }
+                    System.out.println("INVALIDRANGEEXC111");
+//                    try {
+                        values.add(v.read("0, " + GribFile.getLatIndex(lat) + ", " + GribFile.getLonIndex(lon)).getObject(0));
+//                    } catch (InvalidRangeException k) {
+//                        System.out.println("INVALIDRANGEEXC222");
+//                        values.add(v.read().toString().replace(" ", ""));
+//                    }
                 }
 
             } catch (IOException e) {

@@ -35,20 +35,22 @@ public final class GribFileWithIndex implements GribFile {
         return new GribFileWithIndex(path, listOfVariables);
     }
 
-    public List<String> getDataValuesByLatLon(double lat, double lon) {
+    public List<Object> getDataValuesByLatLon(double lat, double lon) {
 
-        List<String> values = new ArrayList();
+        List<Object> values = new ArrayList();
 
         listOfEntries.forEach(e -> {
             double t1 = System.nanoTime();
             try {
-                values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))).toString());
+                values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
             } catch (ArrayIndexOutOfBoundsException k) {
-                try {
-                    values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon)))).toString());
-                } catch (ArrayIndexOutOfBoundsException j) {
-                    values.add(e.getKey().copy().toString());
-                }
+//                System.out.println("INVALIDRANGEEXC333");
+//                try {
+                    values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
+//                } catch (ArrayIndexOutOfBoundsException j) {
+//                    System.out.println("INVALIDRANGEEXC444");
+//                    values.add(e.getKey().copy());
+//                }
             }
 
         });

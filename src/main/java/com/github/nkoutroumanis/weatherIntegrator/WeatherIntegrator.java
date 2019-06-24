@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -133,7 +134,7 @@ public final class WeatherIntegrator {
                     //else sb.append(lineWithMeta);
                 }
 
-                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
+                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
                 record.addFieldValues(values);
 
                 numberofRecords++;

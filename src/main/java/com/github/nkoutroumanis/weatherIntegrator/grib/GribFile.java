@@ -23,6 +23,6 @@ public interface GribFile {
         return i;
     }
 
-    List<String> getDataValuesByLatLon(double lat, double lon);
+    List<Object> getDataValuesByLatLon(double lat, double lon);
 
 }
