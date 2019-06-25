@@ -65,6 +65,13 @@ public class JsonRecordParserTest {
 
         Config config1 = ConfigFactory.parseMap(properties);
 
+        config1 = config1.withoutPath("location");
+        config1 = config1.withValue("location.type", ConfigValueFactory.fromAnyRef("Point"));
+        config1 = config1.withValue("location.coordinates", ConfigValueFactory.fromAnyRef(Arrays.asList(10,20)));
+
+        config1 = config1.withoutPath("VEHICLE_ID");
+        config1 = config1.withValue("vehicle_id", ConfigValueFactory.fromAnyRef("343_43"));
+
         System.out.println(config1.root().render(ConfigRenderOptions.concise()));
 
         System.out.println();
