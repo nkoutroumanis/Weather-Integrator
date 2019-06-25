@@ -97,6 +97,8 @@ public class KafkaToMongoJob {
             while (recordParser.hasNextRecord()) {
                 record = recordParser.nextRecord();
 
+                recordParser.toConfig(record);
+
 
 
 
