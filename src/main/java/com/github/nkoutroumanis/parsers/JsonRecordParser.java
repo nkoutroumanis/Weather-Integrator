@@ -78,13 +78,13 @@ public class JsonRecordParser extends RecordParser {
         Set<Map.Entry<String, ConfigValue>> jsonSet = config.entrySet();
 
        String[] headers = new String[jsonSet.size()];
-       String[] fieldValues = new String[jsonSet.size()];
+       Object[] fieldValues = new Object[jsonSet.size()];
 
        int k = 0;
 
         for (Map.Entry<String, ConfigValue> entry: jsonSet) {
             headers[k] = entry.getKey();
-            fieldValues[k] = entry.getValue().render();
+            fieldValues[k] = entry.getValue();
             k++;
         }
 
@@ -136,12 +136,12 @@ public class JsonRecordParser extends RecordParser {
     public String getLatitude(Record record) {
 
         List<String> fieldNames = record.getFieldNames();
-        List<String> fieldValues = record.getFieldValues();
+        List<Object> fieldValues = record.getFieldValues();
 
 
         for(int i=0;i<fieldNames.size();i++){
             if(fieldNames.get(i).equals(latitudeFieldName)){
-                return fieldValues.get(i);
+                return ((ConfigValue)fieldValues.get(i)).render();
             }
         }
 
@@ -156,7 +156,7 @@ public class JsonRecordParser extends RecordParser {
 
         for(int i=0;i<fieldNames.size();i++){
             if(fieldNames.get(i).equals(longitudeFieldName)){
-                return fieldValues.get(i);
+                return ((ConfigValue)fieldValues.get(i)).render();
             }
         }
 
@@ -171,7 +171,7 @@ public class JsonRecordParser extends RecordParser {
 
         for(int i=0;i<fieldNames.size();i++){
             if(fieldNames.get(i).equals(dateFieldName)){
-                return fieldValues.get(i);
+                return ((ConfigValue)fieldValues.get(i)).render();
             }
         }
 
@@ -186,7 +186,7 @@ public class JsonRecordParser extends RecordParser {
 
         for(int i=0;i<fieldNames.size();i++){
             if(fieldNames.get(i).equals(vehicleFieldName)){
-                return fieldValues.get(i);
+                return ((ConfigValue)fieldValues.get(i)).render();
             }
         }
 

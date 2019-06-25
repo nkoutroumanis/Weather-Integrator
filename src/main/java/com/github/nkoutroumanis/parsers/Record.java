@@ -20,13 +20,13 @@ public class Record {
     private List<String> fieldNames;
     private String metadata;
 
-    private Record(String[] fieldValues, String metadata) {
+    private Record(Object[] fieldValues, String metadata) {
 
         this.fieldValues = new ArrayList<>(Arrays.asList(fieldValues));
         this.metadata = metadata;
     }
 
-    public Record(String[] fieldValues, String metadata, String[] fieldNames) {
+    public Record(Object[] fieldValues, String metadata, String[] fieldNames) {
         this(fieldValues, metadata);
         if (fieldNames != null) {
             this.fieldNames = new ArrayList<>(Arrays.asList(fieldNames));

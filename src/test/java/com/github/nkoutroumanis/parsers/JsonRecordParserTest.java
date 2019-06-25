@@ -46,7 +46,7 @@ public class JsonRecordParserTest {
         for (Map.Entry<String, ConfigValue> entry: config.entrySet()) {
             //String[] keys = ConfigUtil.splitPath(entry.getKey()).toArray(new String[0]);
             System.out.println("Root key = " + entry.getKey() + " " + entry.getValue().unwrapped());
-            properties.put(entry.getKey(), ConfigValueFactory.fromAnyRef( entry.getValue().render()));
+            properties.put(entry.getKey(),  entry.getValue());
 
         }
 
