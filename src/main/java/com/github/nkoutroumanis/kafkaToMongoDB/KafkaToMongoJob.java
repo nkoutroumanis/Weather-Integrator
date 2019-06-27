@@ -9,11 +9,14 @@ import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigRenderOptions;
+import com.typesafe.config.ConfigValueFactory;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static com.github.nkoutroumanis.kafkaToMongoDB.Consts.*;
 
@@ -97,13 +100,20 @@ public class KafkaToMongoJob {
             while (recordParser.hasNextRecord()) {
                 record = recordParser.nextRecord();
 
-                recordParser.toConfig(record);
+                Config config = recordParser.toConfig(record);
 
+                config = config.withoutPath(Consts.locationFieldName);
+                config = config.withValue(Consts.locationFieldName + ".type", ConfigValueFactory.fromAnyRef("Point"));
+                config = config.withValue(Consts.locationFieldName + ".coordinates", ConfigValueFactory.fromAnyRef(Arrays.asList(10,20)));
 
+                config = config.withoutPath("VEHICLE_ID");
+                config = config.withValue(Consts.vehicleFieldName, ConfigValueFactory.fromAnyRef(Consts.vehicleFieldName));
 
+                config = config.withValue(Consts.dateFieldName, config.getValue("TIMESTAMP"));
+                config = config.withoutPath("TIMESTAMP");
 
-                doc = recordParser.toDocument(record);
-                output.out(doc.toJson(), record.getMetadata());
+                //doc = recordParser.toDocument(record);
+                output.out(Document.parse(config.root().render(ConfigRenderOptions.concise())), record.getMetadata());
                 if ((++recordCount % reportCount) == 0) {
                     curTime = System.currentTimeMillis();
                     totalElapsedTime = (curTime - startTime) / 1000;

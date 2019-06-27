@@ -1,5 +1,6 @@
 package com.github.nkoutroumanis.parsers;
 
+import com.github.nkoutroumanis.kafkaToMongoDB.Consts;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import com.typesafe.config.*;
@@ -65,12 +66,16 @@ public class JsonRecordParserTest {
 
         Config config1 = ConfigFactory.parseMap(properties);
 
-        config1 = config1.withoutPath("location");
-        config1 = config1.withValue("location.type", ConfigValueFactory.fromAnyRef("Point"));
-        config1 = config1.withValue("location.coordinates", ConfigValueFactory.fromAnyRef(Arrays.asList(10,20)));
+        config1 = config1.withoutPath(Consts.locationFieldName);
+        config1 = config1.withValue(Consts.locationFieldName + ".type", ConfigValueFactory.fromAnyRef("Point"));
+        config1 = config1.withValue(Consts.locationFieldName + ".coordinates", ConfigValueFactory.fromAnyRef(Arrays.asList(10,20)));
 
         config1 = config1.withoutPath("VEHICLE_ID");
-        config1 = config1.withValue("vehicle_id", ConfigValueFactory.fromAnyRef("343_43"));
+        config1 = config1.withValue(Consts.vehicleFieldName, ConfigValueFactory.fromAnyRef(Consts.vehicleFieldName));
+
+        config1 = config1.withValue(Consts.dateFieldName, config1.getValue("TIMESTAMP"));
+        config1 = config1.withoutPath("TIMESTAMP");
+
 
         System.out.println(config1.root().render(ConfigRenderOptions.concise()));
 
