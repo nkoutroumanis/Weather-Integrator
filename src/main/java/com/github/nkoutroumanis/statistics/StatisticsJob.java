@@ -1,11 +1,15 @@
 package com.github.nkoutroumanis.statistics;
 
+import com.github.nkoutroumanis.datasources.Datasource;
+
 public final class StatisticsJob {
 
 
     public static void main(String args[]) throws InterruptedException {
 
         long start = System.currentTimeMillis();
+
+        Datasource datasource =
 
         Statistics.newStatistics("/home/nikolaos/Documents/theNew/2070/",
                 7, 8, 3, "yyyy-MM-dd HH:mm:ss", 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39)
