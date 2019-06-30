@@ -87,6 +87,13 @@ public final class Statistics {
                 if(recordParser.getLongitude(record).equals("longitude")){
                     continue;
                 }
+
+                if(recordParser.getLongitude(record).isEmpty() || recordParser.getLatitude(record).isEmpty()){
+                    continue;
+                }
+
+
+
                 double longitude = Double.parseDouble(recordParser.getLongitude(record));
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
 
