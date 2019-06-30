@@ -57,6 +57,7 @@ public class FileDatasource implements Datasource {
                 Path path = filesIter.next();
                 filePath = path.toString();
 
+
                 linesStream = Files.lines(path);
                 linesIter = linesStream.iterator();
                 return true;
