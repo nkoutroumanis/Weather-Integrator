@@ -60,11 +60,11 @@ public final class FileOutput implements Output<String> {
 
             try {
 
-                logger.info("Create directory on {}", directory + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1));
+                logger.info("Create directory on {}", getDirectory() + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1));
                 //System.out.println("create directory on " + );
-                Files.createDirectories(Paths.get(directory + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1)));
+                Files.createDirectories(Paths.get(getDirectory() + lineMetaData.substring(0, lineMetaData.lastIndexOf(File.separator) + 1)));
 
-                fos = new FileOutputStream(directory + lineMetaData, true);
+                fos = new FileOutputStream(getDirectory() + lineMetaData, true);
                 osw = new OutputStreamWriter(fos, "utf-8");
                 bw = new BufferedWriter(osw);
                 pw = new PrintWriter(bw, true);
@@ -102,4 +102,7 @@ public final class FileOutput implements Output<String> {
         }
     }
 
+    public String getDirectory() {
+        return directory;
+    }
 }
