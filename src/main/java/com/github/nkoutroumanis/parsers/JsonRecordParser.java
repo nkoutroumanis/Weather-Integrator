@@ -22,26 +22,22 @@ public class JsonRecordParser extends RecordParser {
     private final String vehicleFieldName;
     private final String dateFieldName;
 
-    private final String dateFormat;
-
     public JsonRecordParser(Datasource source, String vehicleFieldName, String longitudeFieldName, String latitudeFieldName, String dateFieldName, String dateFormat) {
-        super(source);
+        super(source, dateFormat);
 
         this.vehicleFieldName = vehicleFieldName;
         this.longitudeFieldName = longitudeFieldName;
         this.latitudeFieldName = latitudeFieldName;
         this.dateFieldName = dateFieldName;
-        this.dateFormat = dateFormat;
     }
 
     public JsonRecordParser(Datasource source, String longitudeFieldName, String latitudeFieldName, String dateFieldName, String dateFormat) {
-        super(source);
+        super(source, dateFormat);
 
         this.vehicleFieldName = "";
         this.longitudeFieldName = longitudeFieldName;
         this.latitudeFieldName = latitudeFieldName;
         this.dateFieldName = dateFieldName;
-        this.dateFormat = dateFormat;
     }
 
     public JsonRecordParser(Datasource source) {
@@ -49,24 +45,22 @@ public class JsonRecordParser extends RecordParser {
     }
 
     public JsonRecordParser(Datasource source, String longitudeFieldName, String latitudeFieldName) {
-        super(source);
+        super(source, null);
 
         this.vehicleFieldName = "";
         this.longitudeFieldName = longitudeFieldName;
         this.latitudeFieldName = latitudeFieldName;
         this.dateFieldName = "";
-        this.dateFormat = null;
 
     }
 
     public JsonRecordParser(JsonRecordParser jsonRecordParser){
-        super(jsonRecordParser.source);
+        super(jsonRecordParser.source, jsonRecordParser.dateFormat);
 
         vehicleFieldName = jsonRecordParser.vehicleFieldName;
         longitudeFieldName = jsonRecordParser.longitudeFieldName;
         latitudeFieldName = jsonRecordParser.latitudeFieldName;
         dateFieldName = jsonRecordParser.dateFieldName;
-        dateFormat = jsonRecordParser.dateFormat;
     }
 
     @Override

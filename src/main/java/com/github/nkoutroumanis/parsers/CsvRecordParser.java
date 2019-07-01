@@ -20,7 +20,7 @@ public class CsvRecordParser extends RecordParser {
     private final int vehicleFieldId;// = AppConfig.config.getInt(inputVehicleFieldIdSetting);
     private final int dateFieldId;// = AppConfig.config.getInt(inputDateFieldIdSetting);
 
-    private final String dateFormat;
+
 
     private final String separator;
     private String[] headers;
@@ -32,25 +32,23 @@ public class CsvRecordParser extends RecordParser {
 //    }
 
     public CsvRecordParser(Datasource source, String separator, String headers, int vehicleFieldId, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat) {
-        super(source);
+        super(source, dateFormat);
         this.separator = separator;
         this.headers = headers.split(separator);
         this.vehicleFieldId = vehicleFieldId;
         this.longitudeFieldId = longitudeFieldId;
         this.latitudeFieldId = latitudeFieldId;
         this.dateFieldId = dateFieldId;
-        this.dateFormat = dateFormat;
     }
 
     public CsvRecordParser(Datasource source, String separator, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat) {
-        super(source);
+        super(source, dateFormat);
         this.separator = separator;
         this.headers = null;
         this.vehicleFieldId = -1;
         this.longitudeFieldId = longitudeFieldId;
         this.latitudeFieldId = latitudeFieldId;
         this.dateFieldId = dateFieldId;
-        this.dateFormat = dateFormat;
     }
 
     public CsvRecordParser(Datasource source, String separator, String headers) {
@@ -58,14 +56,13 @@ public class CsvRecordParser extends RecordParser {
     }
 
     public CsvRecordParser(Datasource source, String separator, int longitudeFieldId, int latitudeFieldId) {
-        super(source);
+        super(source, null);
         this.separator = separator;
         this.headers = null;
         this.vehicleFieldId = -1;
         this.longitudeFieldId = longitudeFieldId;
         this.latitudeFieldId = latitudeFieldId;
         this.dateFieldId = -1;
-        this.dateFormat = null;
 
     }
 
@@ -109,20 +106,6 @@ public class CsvRecordParser extends RecordParser {
 //    }
 
     @Override
-    public String toCsv(Record record) {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(record.getFieldValues().get(0));
-        for (int i = 1; i < record.getFieldValues().size(); i++) {
-            sb.append(separator);
-            sb.append(record.getFieldValues().get(i));
-        }
-
-        return sb.toString();
-    }
-
-    @Override
     public String getLatitude(Record record) {
         return (String) record.getFieldValues().get(latitudeFieldId - 1);
     }
@@ -138,11 +121,6 @@ public class CsvRecordParser extends RecordParser {
     }
 
     @Override
-    public String getDateFormat() {
-        return this.dateFormat;
-    }
-
-    @Override
     public String getVehicle(Record record) {
         return (String) record.getFieldValues().get(vehicleFieldId - 1);
     }
@@ -153,24 +131,22 @@ public class CsvRecordParser extends RecordParser {
     }
 
     private CsvRecordParser(Datasource source, String separator, String[] headers, int vehicleFieldId, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat){
-        super(source);
+        super(source, dateFormat);
         this.separator = separator;
         this.headers = headers;
         this.vehicleFieldId = vehicleFieldId;
         this.longitudeFieldId = longitudeFieldId;
         this.latitudeFieldId = latitudeFieldId;
         this.dateFieldId = dateFieldId;
-        this.dateFormat = dateFormat;
     }
 
     public CsvRecordParser(CsvRecordParser csvRecordParser){
-        super(csvRecordParser.source);
+        super(csvRecordParser.source, csvRecordParser.dateFormat);
         separator = csvRecordParser.separator;
         headers = csvRecordParser.headers;
         vehicleFieldId = csvRecordParser.vehicleFieldId;
         longitudeFieldId = csvRecordParser.longitudeFieldId;
         latitudeFieldId = csvRecordParser.latitudeFieldId;
         dateFieldId = csvRecordParser.dateFieldId;
-        dateFormat = csvRecordParser.dateFormat;
     }
 }

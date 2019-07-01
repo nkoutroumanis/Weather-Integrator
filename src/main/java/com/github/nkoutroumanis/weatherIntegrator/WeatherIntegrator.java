@@ -90,13 +90,13 @@ public final class WeatherIntegrator {
 
     public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws Exception {
         integrate(kafkaOutput, (r) -> {
-            return recordParser.toCsv(r);
+            return recordParser.toCsv(r, ";");
         });
     }
 
     public void integrateAndOutputToDirectory(FileOutput fileOutput) throws Exception {
         integrate(fileOutput, (r) -> {
-            return recordParser.toCsv(r);
+            return recordParser.toCsv(r, ";");
         });
 
     }

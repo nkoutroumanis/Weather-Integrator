@@ -20,9 +20,11 @@ public abstract class RecordParser {
 
     protected Datasource source;
     protected String[] lineWithMeta;
+    protected final String dateFormat;
 
-    public RecordParser(Datasource source) {
+    public RecordParser(Datasource source, String dateFormat) {
         this.source = source;
+        this.dateFormat = dateFormat;
     }
 
     public abstract Record nextRecord() throws ParseException;
@@ -66,8 +68,17 @@ public abstract class RecordParser {
 
     }
 
-    public String toCsv(Record record) {
-        throw new UnsupportedOperationException();
+    public String toCsv(Record record, String separator) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(record.getFieldValues().get(0));
+        for (int i = 1; i < record.getFieldValues().size(); i++) {
+            sb.append(separator);
+            sb.append(record.getFieldValues().get(i));
+        }
+
+        return sb.toString();
     }
 
     public String getLatitude(Record record) {
@@ -83,7 +94,7 @@ public abstract class RecordParser {
     }
 
     public String getDateFormat() {
-        throw new UnsupportedOperationException();
+        return this.dateFormat;
     }
 
     public String getVehicle(Record record) {
