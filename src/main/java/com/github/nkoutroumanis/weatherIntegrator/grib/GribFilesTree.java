@@ -6,6 +6,9 @@ import ucar.nc2.Variable;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -67,10 +70,15 @@ public final class GribFilesTree {
     private long getTimeOfGribFile(String completeFilename) {
         NetcdfFile ncf = null;
         try {
-            ncf = NetcdfFile.open(completeFilename);
+
+
+            ncf = NetcdfFile.open().openInMemory(new URI("file:///home/nikolaos/Desktop/gfs_4_20180303_1200_003.grb2"));
+            //ncf = NetcdfFile.open(completeFilename);
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         Variable timeVariable = ncf.findVariable("time");
@@ -93,7 +101,6 @@ public final class GribFilesTree {
         }
         DateTime date = DateTime.parse(strConverted);
         long unixTime = date.getMillis() / 1000;
-
         return (unixTime + (long) time_val);
     }
 

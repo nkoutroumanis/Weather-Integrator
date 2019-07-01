@@ -18,9 +18,9 @@ public final class PreProcessing {
         long start = System.currentTimeMillis();
 
         try {
-            Stream<String> stream = Files.lines(Paths.get("variables/weather-attributes.txt"));
+            Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
 
-            LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("/home/nikolaos/Documents/grib-files/", ".grb2"),
+            LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("/home/nikolaos/Desktop/weather/", ".grb"),
                     LRUCache.newLRUCache(1), true, Collections.unmodifiableList(stream.collect(Collectors.toList())));
 
             Runtime rt = Runtime.getRuntime();
