@@ -3,12 +3,16 @@ package com.github.nkoutroumanis.weatherIntegrator.grib;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
+import ucar.unidata.io.RandomAccessFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -71,14 +75,11 @@ public final class GribFilesTree {
         NetcdfFile ncf = null;
         try {
 
-
-            ncf = NetcdfFile.open().openInMemory(new URI("file:///home/nikolaos/Desktop/gfs_4_20180303_1200_003.grb2"));
+            ncf = NetcdfFile.openInMemory("",Files.readAllBytes(Paths.get(completeFilename)));
             //ncf = NetcdfFile.open(completeFilename);
 
 
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         Variable timeVariable = ncf.findVariable("time");

@@ -20,7 +20,7 @@ public final class PreProcessing {
         try {
             Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
 
-            LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("/home/nikolaos/Desktop/weather/", ".grb"),
+            LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("./src/test/resources/gribFiles/grib003Files/", ".grb2"),
                     LRUCache.newLRUCache(1), true, Collections.unmodifiableList(stream.collect(Collectors.toList())));
 
             Runtime rt = Runtime.getRuntime();
