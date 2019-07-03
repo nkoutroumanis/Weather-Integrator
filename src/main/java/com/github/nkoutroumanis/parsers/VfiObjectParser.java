@@ -49,8 +49,7 @@ public class VfiObjectParser extends RecordParser {
 
     @Override
     public String getDate(Record record) {
-        Date d = new Date();
-        d.setTime(Long.parseLong(record.getFieldValues().get(VfiMapPoint.dateFieldId).toString()));
-        return dateFormat.format(d);
+        return record.getFieldValues().get(VfiMapPoint.dateFieldId).toString();
     }
+
 }
