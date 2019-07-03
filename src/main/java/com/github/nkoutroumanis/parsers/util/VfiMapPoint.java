@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class VfiMapPoint {
+public class VfiMapPoint implements Serializable, SpatioTemporalPoint {
+    private static final long serialVersionUID = 4810432208345540113L;
 
     private String id;
     private String company;
@@ -538,7 +541,11 @@ public class VfiMapPoint {
      *
      */
 
-    public static final String header = "company;vehicle;localDate;engineStatus;driver;driverEvent;longitude;" +
+    public static transient final String dateFormatStr = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
+    private transient SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
+
+    public transient static final String header = "company;vehicle;localDate;engineStatus;driver;driverEvent;longitude;" +
             "latitude;altitude;angle;speed;odometer;satellites;fuelLevelLt;countryCode;rpm;levelType;fuelTankSize;" +
             "vehicleOdometer;fuelConsumed;engineHours;closeToGasStation;deviceType;VehicleType;fuelRawValue;" +
             "roadID;osm_id;road_lon;road_lat;distance;probability;myspeed;slow_motion;gap;traj_id;path;" +
@@ -548,14 +555,58 @@ public class VfiMapPoint {
         ArrayList<String> lstValues = new ArrayList<>();
         lstValues.add(company);
         lstValues.add(vehicle);
-        //TODO: add more fields here...
+        Date d = new Date();
+        d.setTime(timestamp);
+        lstValues.add(dateFormat.format(d));
+        lstValues.add(engineStatus);
+        lstValues.add(driver);
+        lstValues.add(driverEvent);
+        lstValues.add(longitude + "");
+        lstValues.add(latitude + "");
+        lstValues.add(altitude);
+        lstValues.add(angle + "");
+        lstValues.add(speed + "");
+        lstValues.add(odometer);
+        lstValues.add(satellites);
+        lstValues.add(fuelLevelLt);
+        lstValues.add(countryCode);
+        lstValues.add(rpm);
+        lstValues.add(levelType);
+        lstValues.add(fuelTankSize);
+        lstValues.add(vehicleOdometer);
+        lstValues.add(fuelConsumed);
+        lstValues.add(engineHours);
+        lstValues.add(closeToGasStation);
+        lstValues.add(deviceType);
+        lstValues.add(VehicleType);
+        lstValues.add(fuelRawValue);
+        lstValues.add(roadID + "");
+        lstValues.add(osm_id + "");
+        lstValues.add(road_lon + "");
+        lstValues.add(road_lat + "");
+        lstValues.add(distance + "");
+        lstValues.add(probability + "");
+        lstValues.add(myspeed + "");
+        lstValues.add(slow_motion + "");
+        lstValues.add(gap + "");
+        lstValues.add(traj_id + "");
+        lstValues.add(path);
+        lstValues.add(execution_time + "");
+        lstValues.add(sampling + "");
+        lstValues.add(entrance_time + "");
+        lstValues.add(exit_time + "");
+        lstValues.add(start_stop + "");
+        lstValues.add(end_stop + "");
+        lstValues.add(road_speed + "");
+        lstValues.add(road_type);
+        lstValues.add(fraction + "");
         return lstValues.toArray(new String[0]);
     }
 
-    public static final int longitudeFieldId = 6;
+    public static transient final int longitudeFieldId = 6;
 
-    public static final int latitudeFieldId = 7;
+    public static transient final int latitudeFieldId = 7;
 
-    public static final int dateFieldId = 2;
+    public static transient final int dateFieldId = 2;
 
 }

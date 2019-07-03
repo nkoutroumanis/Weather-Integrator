@@ -3,6 +3,7 @@ package com.github.nkoutroumanis.parsers;
 import com.github.nkoutroumanis.datasources.Datasource;
 import com.github.nkoutroumanis.parsers.util.VfiMapPoint;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,19 +17,18 @@ public class VfiObjectParser extends RecordParser {
     private static final Logger logger = LoggerFactory.getLogger(VfiObjectParser.class);
     private Gson gson;
     private String[] headers;
-    private static final String dateFormatStr = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     private DateFormat dateFormat;
 
     public VfiObjectParser(Datasource source) {
-        super(source, dateFormatStr);
-        this.gson = new Gson();
+        super(source, VfiMapPoint.dateFormatStr);
+        this.gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
         this.headers = VfiMapPoint.header.split(";");
-        this.dateFormat = new SimpleDateFormat(dateFormatStr);
+        this.dateFormat = new SimpleDateFormat(VfiMapPoint.dateFormatStr);
     }
 
     @Override
     public Record nextRecord() throws ParseException {
-        VfiMapPoint p = gson.fromJson(lineWithMeta[0], VfiMapPoint.class);
+        VfiMapPoint p = gson.fromJson(lineWithMeta[0].substring(2), VfiMapPoint.class);
         return new Record(p.getValuesInCsvOrder(), lineWithMeta[1], this.headers);
     }
 
