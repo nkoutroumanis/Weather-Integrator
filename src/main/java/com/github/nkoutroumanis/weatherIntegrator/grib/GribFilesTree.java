@@ -70,10 +70,9 @@ public final class GribFilesTree {
         NetcdfFile ncf = null;
         try {
 
-            ncf = NetcdfFile.openInMemory(completeFilename+"/d",Files.readAllBytes(Paths.get(completeFilename)));
+            //ncf = NetcdfFile.openInMemory(completeFilename+"/d",Files.readAllBytes(Paths.get(completeFilename)));
             //ncf = NetcdfFile.op.openInMemory(completeFilename);
-
-            //ncf = NetcdfFile.open(completeFilename);
+            ncf = NetcdfFile.open(completeFilename);
 
         } catch (IOException e) {
             e.printStackTrace();
