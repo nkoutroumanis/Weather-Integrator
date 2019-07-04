@@ -137,6 +137,8 @@ public final class WeatherIntegrator {
 
                 numberofRecords++;
 
+                logger.debug("CHR {}", ((double) hits / numberofRecords));
+
                 output.out(function.apply(record), record.getMetadata());
 
             } catch (NumberFormatException | ParseException e) {
