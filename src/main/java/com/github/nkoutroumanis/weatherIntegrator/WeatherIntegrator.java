@@ -132,8 +132,8 @@ public final class WeatherIntegrator {
                     //else sb.append(lineWithMeta);
                 }
 
-//                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
-//                record.addFieldValues(values);
+                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
+                record.addFieldValues(values);
 
                 numberofRecords++;
 
