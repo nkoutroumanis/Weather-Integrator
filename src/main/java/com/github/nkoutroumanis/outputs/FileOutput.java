@@ -18,16 +18,16 @@ public final class FileOutput implements Output<String> {
     private PrintWriter pw;
 
     private FileOutput(String directory, boolean deleteDirectoryIfExist) {
-        this.directory = directory;
 
         if (!directory.substring(directory.length() - 1).equals(File.separator)) {
             directory = directory + File.separator;
         }
 
+        this.directory = directory;
+
         if (deleteDirectoryIfExist) {
             deleteDirectory(new File(directory));
         }
-
 
         //create Export Directory
         try {
@@ -35,6 +35,7 @@ public final class FileOutput implements Output<String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public static FileOutput newFileOutput(String directory, boolean deleteDirectoryIfExist) {
@@ -71,7 +72,7 @@ public final class FileOutput implements Output<String> {
 
                 filePath = lineMetaData;
 
-                System.out.println("lineWithMeta meta:" + lineMetaData);
+                System.out.println("lineWithMeta meta:" + getDirectory());
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
