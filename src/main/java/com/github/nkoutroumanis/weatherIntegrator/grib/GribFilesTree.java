@@ -1,13 +1,21 @@
 package com.github.nkoutroumanis.weatherIntegrator.grib;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.dia.HDFSRandomAccessFile;
 import org.joda.time.DateTime;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,14 +25,21 @@ public final class GribFilesTree {
     private final String gribFilesFolderPath;
     private final String gribFilesExtension;
 
-    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension) {
+    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension) throws IOException {
         this.gribFilesTreeMap = new TreeMap<Long, String>();
         this.gribFilesFolderPath = gribFilesFolderPath;
         this.gribFilesExtension = gribFilesExtension;
-        traverseFolder(gribFilesFolderPath);
+
+        if(gribFilesFolderPath.startsWith("hdfs")){
+            traverseGribFilesFromHDFS(new Path(gribFilesFolderPath), FileSystem.get(new Configuration()));
+        }
+        else{
+            traverseFolder(gribFilesFolderPath);
+        }
+
     }
 
-    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) {
+    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) throws IOException {
         return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
     }
 
@@ -46,6 +61,28 @@ public final class GribFilesTree {
                 return (String) tmsmp2.getValue();
             }
         }
+    }
+
+    private void traverseGribFilesFromHDFS(Path filePath, FileSystem fs) throws IOException {
+        List<String> pathsOfGribFiles = getAllPathsOfGribFilesFromHDFS(filePath,fs);
+        pathsOfGribFiles.forEach(gribFilePath->{
+            gribFilesTreeMap.put(getTimeOfGribFile(gribFilePath), gribFilePath);
+        });
+    }
+
+    private List<String> getAllPathsOfGribFilesFromHDFS(Path filePath, FileSystem fs) throws FileNotFoundException, IOException {
+        List<String> fileList = new ArrayList<String>();
+        FileStatus[] fileStatus = fs.listStatus(filePath);
+        for (FileStatus fileStat : fileStatus) {
+            if (fileStat.isDirectory()) {
+                fileList.addAll(getAllPathsOfGribFilesFromHDFS(fileStat.getPath(), fs));
+            } else {
+                if(fileStat.getPath().toString().endsWith(gribFilesExtension)){
+                    fileList.add(fileStat.getPath().toString());
+                }
+            }
+        }
+        return fileList;
     }
 
     private void traverseFolder(String gribFilesFolderPath) {

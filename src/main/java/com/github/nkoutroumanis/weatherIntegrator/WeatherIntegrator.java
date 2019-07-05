@@ -6,6 +6,8 @@ import com.github.nkoutroumanis.outputs.KafkaOutput;
 import com.github.nkoutroumanis.outputs.Output;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
+import org.apache.spark.SparkContext;
+import org.dia.core.SciSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +133,7 @@ public final class WeatherIntegrator {
                     record.deleteLastFieldValue();
                     //else sb.append(lineWithMeta);
                 }
+
 
                 List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
                 record.addFieldValues(values);
