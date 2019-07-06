@@ -9,15 +9,16 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class GribFileWithIndex implements GribFile {
 
     private final List<Map.Entry<Array, Index>> listOfEntries;
 
-    private GribFileWithIndex(String path, List<String> listOfVariables) throws IOException {
+    private GribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
 
-        NetcdfFile ncf = NetcdfFile.open(path);
+        NetcdfFile ncf = netcdfFileFunction.apply(path);
 
         this.listOfEntries = listOfVariables.stream().map(s -> {
             Array array = null;
@@ -31,8 +32,8 @@ public final class GribFileWithIndex implements GribFile {
 
     }
 
-    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables) throws IOException {
-        return new GribFileWithIndex(path, listOfVariables);
+    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
+        return new GribFileWithIndex(path, listOfVariables, netcdfFileFunction);
     }
 
     public List<Object> getDataValuesByLatLon(double lat, double lon) {

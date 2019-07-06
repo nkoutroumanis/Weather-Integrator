@@ -5,11 +5,13 @@ import com.github.nkoutroumanis.weatherIntegrator.grib.GribFile;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithIndex;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFileWithoutIndex;
 import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
+import ucar.nc2.NetcdfFile;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 
 public final class LRUCacheManager {
 
@@ -18,18 +20,21 @@ public final class LRUCacheManager {
     private final boolean useIndex;
     private final List<String> variables;
     private final int numberOfVariables;
+    private final Function<String, NetcdfFile> netcdfFileFunction;
 
-    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
+    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
         this.tree = tree;
         this.cache = cache;
         this.useIndex = useIndex;
         this.variables = Collections.unmodifiableList(variables);
-
         this.numberOfVariables = variables.size();
+
+        this.netcdfFileFunction=netcdfFileFunction;
+
     }
 
-    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables) {
-        return new LRUCacheManager(tree, cache, useIndex, variables);
+    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
+        return new LRUCacheManager(tree, cache, useIndex, variables, netcdfFileFunction);
     }
 
     //we can get safely the size because list is unmodifiable
@@ -43,9 +48,9 @@ public final class LRUCacheManager {
 
         if (!isGribFileContainedInCache(choosenGribFilePath)) {
             if (useIndex) {
-                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables));
+                cache.put(choosenGribFilePath, GribFileWithIndex.newGribFileWithIndex(choosenGribFilePath, variables, netcdfFileFunction));
             } else {
-                cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables));
+                cache.put(choosenGribFilePath, GribFileWithoutIndex.newGribFileWithoutIndex(choosenGribFilePath, variables, netcdfFileFunction));
             }
         } else {
             WeatherIntegrator.hits++;

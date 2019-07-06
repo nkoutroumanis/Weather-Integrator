@@ -18,29 +18,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 public final class GribFilesTree {
 
     private final TreeMap gribFilesTreeMap;
     private final String gribFilesFolderPath;
     private final String gribFilesExtension;
+    private final Function<String, NetcdfFile> netcdfFileFunction;
 
-    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension) throws IOException {
+    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
         this.gribFilesTreeMap = new TreeMap<Long, String>();
         this.gribFilesFolderPath = gribFilesFolderPath;
         this.gribFilesExtension = gribFilesExtension;
-
-        if(gribFilesFolderPath.startsWith("hdfs")){
-            traverseGribFilesFromHDFS(new Path(gribFilesFolderPath), FileSystem.get(new Configuration()));
-        }
-        else{
-            traverseFolder(gribFilesFolderPath);
-        }
-
+        this.netcdfFileFunction = netcdfFileFunction;
+        traverseFolder(gribFilesFolderPath);
     }
 
-    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension) throws IOException {
-        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension);
+    private GribFilesTree(String gribFilesFolderPath, String gribFilesExtension, Function<String, NetcdfFile> netcdfFileFunction, Path path, FileSystem fileSystem) throws IOException {
+        this.gribFilesTreeMap = new TreeMap<Long, String>();
+        this.gribFilesFolderPath = gribFilesFolderPath;
+        this.gribFilesExtension = gribFilesExtension;
+        this.netcdfFileFunction = netcdfFileFunction;
+        traverseGribFilesFromHDFS(path, fileSystem);
+    }
+
+    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
+        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction);
+    }
+
+
+    public static GribFilesTree newGribFilesTree(String gribFilesFolderPath, String gribFilesExtension, Function<String, NetcdfFile> netcdfFileFunction, Path path, FileSystem fileSystem) throws IOException {
+        return new GribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, path, fileSystem);
     }
 
     public String getFilePathByUnixTime(long date) {
@@ -71,7 +80,7 @@ public final class GribFilesTree {
     }
 
     private List<String> getAllPathsOfGribFilesFromHDFS(Path filePath, FileSystem fs) throws FileNotFoundException, IOException {
-        List<String> fileList = new ArrayList<String>();
+        List<String> fileList = new ArrayList<>();
         FileStatus[] fileStatus = fs.listStatus(filePath);
         for (FileStatus fileStat : fileStatus) {
             if (fileStat.isDirectory()) {
@@ -104,16 +113,8 @@ public final class GribFilesTree {
     }
 
     private long getTimeOfGribFile(String completeFilename) {
-        NetcdfFile ncf = null;
-        try {
+        NetcdfFile ncf = netcdfFileFunction.apply(completeFilename);
 
-            //ncf = NetcdfFile.openInMemory(completeFilename+"/d",Files.readAllBytes(Paths.get(completeFilename)));
-            //ncf = NetcdfFile.op.openInMemory(completeFilename);
-            ncf = NetcdfFile.open(completeFilename);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Variable timeVariable = ncf.findVariable("time");
 
         float time_val = 0;

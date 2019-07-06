@@ -7,19 +7,20 @@ import ucar.nc2.Variable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class GribFileWithoutIndex implements GribFile {
 
     private final List<Variable> listOfVariables;
 
-    private GribFileWithoutIndex(String path, List<String> listOfVariables) throws IOException {
-        NetcdfFile ncf = NetcdfFile.open(path);
+    private GribFileWithoutIndex(String path, List<String> listOfVariables, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
+        NetcdfFile ncf = netcdfFileFunction.apply(path);
         this.listOfVariables = listOfVariables.stream().map(s -> ncf.findVariable(s)).collect(Collectors.toList());
     }
 
-    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables) throws IOException {
-        return new GribFileWithoutIndex(path, listOfVariables);
+    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
+        return new GribFileWithoutIndex(path, listOfVariables, netcdfFileFunction);
     }
 
     public List<Object> getDataValuesByLatLon(double lat, double lon) {

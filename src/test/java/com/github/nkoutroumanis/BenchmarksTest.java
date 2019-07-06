@@ -8,6 +8,7 @@ import com.github.nkoutroumanis.weatherIntegrator.grib.GribFilesTree;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCache;
 import com.github.nkoutroumanis.weatherIntegrator.lru.LRUCacheManager;
 import org.openjdk.jmh.annotations.*;
+import ucar.nc2.NetcdfFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -27,6 +29,14 @@ public class BenchmarksTest {
     private final static String gribFilesPath = "./src/test/resources/gribFiles/grib003Files/";
     private final static String gribFilesExtension = ".grb2";
 
+    private final static Function<String, NetcdfFile> netcdfFileFunction = (path) ->{
+        try {
+            return NetcdfFile.open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
 
     private List<String> variables;
 
@@ -101,9 +111,9 @@ public class BenchmarksTest {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @OutputTimeUnit(TimeUnit.SECONDS)
-    public LRUCacheManager preProcessing() {
-        return LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesPath, gribFilesExtension),
-                LRUCache.newLRUCache(4), true, Collections.unmodifiableList(variables));
+    public LRUCacheManager preProcessing() throws IOException {
+        return LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesPath, gribFilesExtension, netcdfFileFunction),
+                LRUCache.newLRUCache(4), true, Collections.unmodifiableList(variables), netcdfFileFunction);
     }
 
 }
