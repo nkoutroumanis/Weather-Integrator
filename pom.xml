@@ -180,6 +180,12 @@
             <version>1.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.dia</groupId>
+            <artifactId>scispark</artifactId>
+            <version>1</version>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>org.datasyslab</groupId>-->
             <!--<artifactId>geospark</artifactId>-->

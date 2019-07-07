@@ -79,7 +79,7 @@ public final class GribFilesTree {
         });
     }
 
-    private List<String> getAllPathsOfGribFilesFromHDFS(Path filePath, FileSystem fs) throws FileNotFoundException, IOException {
+    private List<String> getAllPathsOfGribFilesFromHDFS(Path filePath, FileSystem fs) throws IOException {
         List<String> fileList = new ArrayList<>();
         FileStatus[] fileStatus = fs.listStatus(filePath);
         for (FileStatus fileStat : fileStatus) {

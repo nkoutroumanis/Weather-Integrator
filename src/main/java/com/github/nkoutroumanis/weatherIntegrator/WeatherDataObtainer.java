@@ -19,7 +19,7 @@ public final class WeatherDataObtainer {
 
     private final LRUCacheManager lruCacheManager;
 
-    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException {
+    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException, URISyntaxException {
 
         Function<String, NetcdfFile> netcdfFileFunction;
         GribFilesTree gribFilesTree;
@@ -34,13 +34,14 @@ public final class WeatherDataObtainer {
                     e.printStackTrace();
                 }
 
-                System.out.println("hdfs://"+uri.getAuthority()+ "/");
-                System.out.println(uri.getPath());
-
                 return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", uri.getPath(), JobFilesUsingIndex.BUFFERSIZE, false).getReferencedFile();
             };
 
-            gribFilesTree = GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, new Path(gribFilesFolderPath), FileSystem.get(new Configuration()));
+            URI uri = new URI(gribFilesFolderPath);
+            Configuration conf = new Configuration();
+//            conf.set("fs.defaultFS", );
+
+            gribFilesTree = GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, new Path(gribFilesFolderPath), FileSystem.get(new URI("hdfs://"+uri.getAuthority()+ "/"), conf));
         }
         else{
 
@@ -61,7 +62,7 @@ public final class WeatherDataObtainer {
                 LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, variables, netcdfFileFunction);
     }
 
-    public static WeatherDataObtainer newWeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException {
+    public static WeatherDataObtainer newWeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException, URISyntaxException {
         return new WeatherDataObtainer(gribFilesFolderPath, gribFilesExtension, lruCacheMaxEntries, useIndex, variables);
     }
 
