@@ -39,6 +39,7 @@ public final class WeatherDataObtainer {
 
             URI uri = new URI(gribFilesFolderPath);
             Configuration conf = new Configuration();
+            conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
 //            conf.set("fs.defaultFS", );
 
             gribFilesTree = GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, new Path(gribFilesFolderPath), FileSystem.get(new URI("hdfs://"+uri.getAuthority()+ "/"), conf));
