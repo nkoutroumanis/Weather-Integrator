@@ -34,6 +34,9 @@ public final class WeatherDataObtainer {
                     e.printStackTrace();
                 }
 
+                System.out.println("First: "+"hdfs://"+uri.getAuthority()+ "/");
+                System.out.println("Second: " + uri.getPath().substring(1));
+
                 return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", uri.getPath().substring(1), JobFilesUsingIndex.BUFFERSIZE, false);
             };
 
