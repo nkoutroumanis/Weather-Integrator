@@ -17,7 +17,7 @@ public class WeatherDataObtainerTest {
 //
 //        System.out.println(s.substring(7).substring(s.substring(7).indexOf("/")));
 
-URI uri = new URI("hdfs://localhost:50070/gfgf");
+URI uri = new URI("hdfs://localhost:50070/gfgf/sdsds");
 
 
         System.out.println("hdfs://"+uri.getAuthority()+ "/");
