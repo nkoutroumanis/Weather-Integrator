@@ -21,7 +21,7 @@ URI uri = new URI("hdfs://localhost:50070/user/root/koutroumanis/bjkbhkjh/sfg");
 
 
         System.out.println("hdfs://"+uri.getAuthority()+ "/");
-        System.out.println(uri.getPath().substring(10));
+        System.out.println(uri.getPath());
 
 
     }
