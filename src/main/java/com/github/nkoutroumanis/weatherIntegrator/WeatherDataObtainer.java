@@ -35,9 +35,9 @@ public final class WeatherDataObtainer {
                 }
 
                 System.out.println("hdfs://"+uri.getAuthority()+ "/");
-                System.out.println(uri.getPath());
+                System.out.println("hdfs://"+uri.getAuthority()+uri.getPath());
                 
-                return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", uri.getPath(), JobFilesUsingIndex.BUFFERSIZE, true).getReferencedFile();
+                return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", "hdfs://"+uri.getAuthority()+uri.getPath(), JobFilesUsingIndex.BUFFERSIZE, true).getReferencedFile();
             };
 
             URI uri = new URI(gribFilesFolderPath);
