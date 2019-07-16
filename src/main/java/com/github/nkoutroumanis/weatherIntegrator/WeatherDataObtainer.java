@@ -34,6 +34,9 @@ public final class WeatherDataObtainer {
                     e.printStackTrace();
                 }
 
+//                System.out.println("hdfs://"+uri.getAuthority()+ "/");
+//                System.out.println(uri.getPath());
+
                 System.out.println("hdfs://"+uri.getAuthority()+ "/");
                 System.out.println(uri.getPath());
                 
