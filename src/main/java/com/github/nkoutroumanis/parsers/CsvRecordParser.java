@@ -20,8 +20,6 @@ public class CsvRecordParser extends RecordParser {
     private final int vehicleFieldId;// = AppConfig.config.getInt(inputVehicleFieldIdSetting);
     private final int dateFieldId;// = AppConfig.config.getInt(inputDateFieldIdSetting);
 
-
-
     private final String separator;
     private String[] headers;
 
@@ -53,6 +51,10 @@ public class CsvRecordParser extends RecordParser {
 
     public CsvRecordParser(Datasource source, String separator, String headers) {
         this(source, separator, headers, -1, -1, -1, -1, null);
+    }
+
+    public CsvRecordParser(Datasource source, String separator) {
+        this(source, separator, -1, -1, -1, null);
     }
 
     public CsvRecordParser(Datasource source, String separator, int longitudeFieldId, int latitudeFieldId) {
