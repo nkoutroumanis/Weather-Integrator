@@ -21,7 +21,7 @@ public final class JobKafka {
 
     public static void main(String args[]) {
 
-        Config conf = ConfigFactory.load();
+        Config conf = ConfigFactory.parseFile(new File(args[0]));
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
 
