@@ -21,19 +21,11 @@ public final class JobKafka {
 
     public static void main(String args[]) {
 
-        /*------------------
-         *
-         * REMEMBER TO REMOVE THE LINE 165 FROM THE weather Integrator class. -
-         * it works only for the case of having the semicolumn on the last column.
-         *
-         *
-         * ------------------
-         * */
-
-
         Config conf = ConfigFactory.load();
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
+
+        JobFilesUsingIndex.BUFFERSIZE = wi.getInt("bufferSize");
 
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
@@ -42,7 +34,7 @@ public final class JobKafka {
 
             RecordParser rp = new CsvRecordParser(ds, ";", wi.getInt("numberOfColumnLongitude"), wi.getInt("numberOfColumnLatitude"), wi.getInt("numberOfColumnDate"), wi.getString("dateFormat"));
 
-            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "nikos-trial");
+            KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput(wi.getString("producerPropertiesPath"), wi.getString("producerTopic"));
 
             WeatherIntegrator.Builder w = WeatherIntegrator.newWeatherIntegrator(rp,
                     wi.getString("gribFilesFolderPath"), stream.collect(Collectors.toList()));
@@ -55,7 +47,7 @@ public final class JobKafka {
                 w.removeLastValueFromRecords();
             }
 
-            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).gribFilesExtension(wi.getString("gribFilesExtension")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
 
 
 

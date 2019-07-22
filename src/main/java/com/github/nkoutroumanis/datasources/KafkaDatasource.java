@@ -30,7 +30,7 @@ public class KafkaDatasource implements Datasource {
         this.poll = poll;
 
         Properties props = new Properties();
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
+        //props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
         props.load(new FileInputStream(propertiesFile));
 
         this.consumer = new KafkaConsumer<>(props);

@@ -17,10 +17,8 @@ public class LoadDataOnKafkaTopic {
         KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties","vehiclesWithoutWeather");
 
         while(csvRecordParser.hasNextRecord()){
-
             Record record = csvRecordParser.nextRecord();
             record.deleteLastFieldValue();
-
             kafkaOutput.out(csvRecordParser.toCsv(record,";"),"");
         }
         kafkaOutput.close();
