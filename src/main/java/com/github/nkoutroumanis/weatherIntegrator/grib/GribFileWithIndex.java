@@ -41,7 +41,6 @@ public final class GribFileWithIndex implements GribFile {
         List<Object> values = new ArrayList();
 
         listOfEntries.forEach(e -> {
-            double t1 = System.nanoTime();
 
             try {
                 values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
@@ -52,7 +51,6 @@ public final class GribFileWithIndex implements GribFile {
 //                    values.add(e.getKey().copy());
 //                }
             }
-            System.out.println("Obtain value: " +(System.nanoTime()-t1));
 
         });
 
