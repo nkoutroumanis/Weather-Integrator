@@ -33,13 +33,6 @@ public final class WeatherDataObtainer {
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-
-//                System.out.println("hdfs://"+uri.getAuthority()+ "/");
-//                System.out.println(uri.getPath());
-
-                System.out.println("hdfs://"+uri.getAuthority()+ "/");
-                System.out.println(uri.getPath());
-                
                 return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", uri.getPath(), JobFilesUsingIndex.BUFFERSIZE, true).getReferencedFile();
             };
 
