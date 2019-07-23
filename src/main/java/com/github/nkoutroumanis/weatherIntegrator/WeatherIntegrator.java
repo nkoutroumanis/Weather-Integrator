@@ -140,7 +140,12 @@ public final class WeatherIntegrator {
 
                 numberofRecords++;
 
-                logger.debug("CHR {}", ((double) hits / numberofRecords));
+                if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
+                    logger.info("CHR {}", ((double) hits / numberofRecords));
+                    logger.info("Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+                }
+
+
 
                 output.out(function.apply(record), record.getMetadata());
 

@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 public final class JobFilesUsingIndex {
 
     public static int BUFFERSIZE;
+    public static int INFOEVERYN;
 
     public static void main(String args[]) {
 
@@ -26,6 +27,7 @@ public final class JobFilesUsingIndex {
         Config filter = conf.getConfig("filter");
 
         BUFFERSIZE = wi.getInt("bufferSize");
+        INFOEVERYN = wi.getInt("infoEveryN");
 
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));

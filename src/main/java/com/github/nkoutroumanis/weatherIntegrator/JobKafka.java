@@ -26,6 +26,7 @@ public final class JobKafka {
         Config filter = conf.getConfig("filter");
 
         JobFilesUsingIndex.BUFFERSIZE = wi.getInt("bufferSize");
+        JobFilesUsingIndex.INFOEVERYN = wi.getInt("infoEveryN");
 
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
