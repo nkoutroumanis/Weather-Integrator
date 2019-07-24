@@ -110,6 +110,7 @@ public final class WeatherIntegrator {
         DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
 
         long window = 0;
+        long startTimeWindow = System.currentTimeMillis();
 
         while (recordParser.hasNextRecord()) {
 
@@ -144,9 +145,11 @@ public final class WeatherIntegrator {
 
                 if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
                     logger.info("CHR {}", ((double) hits / numberofRecords));
-                    logger.info("Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+                    logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+                    logger.info("Window Throughtput {}", JobFilesUsingIndex.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000));
                     logger.info("Opened {}", (numberofRecords - hits) - window);
                     window = numberofRecords - hits;
+                    startTimeWindow = System.currentTimeMillis();
                 }
 
 

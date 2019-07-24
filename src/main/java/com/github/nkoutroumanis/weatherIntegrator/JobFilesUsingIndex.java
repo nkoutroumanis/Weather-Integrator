@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public final class JobFilesUsingIndex {
 
     public static int BUFFERSIZE;
-    public static int INFOEVERYN;
+    public static long INFOEVERYN;
 
     public static void main(String args[]) {
 
