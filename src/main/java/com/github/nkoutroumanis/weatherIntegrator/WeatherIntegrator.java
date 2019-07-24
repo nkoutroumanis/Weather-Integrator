@@ -143,6 +143,7 @@ public final class WeatherIntegrator {
                 if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
                     logger.info("CHR {}", ((double) hits / numberofRecords));
                     logger.info("Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+                    logger.info("Open {}", (numberofRecords - hits));
                 }
 
 
