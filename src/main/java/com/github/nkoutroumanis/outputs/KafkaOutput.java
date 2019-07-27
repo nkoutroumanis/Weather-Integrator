@@ -31,7 +31,7 @@ public class KafkaOutput implements Output<String> {
 
     @Override
     public void out(String line, String lineMeta) {
-        producer.send(new ProducerRecord<String, String>(topicName, line));
+        producer.send(new ProducerRecord<String, String>(topicName, line.split(";")[1], line));
     }
 
     @Override
