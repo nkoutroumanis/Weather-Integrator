@@ -33,7 +33,7 @@ public class FileDatasource implements Datasource {
             directoryName = directoryName + File.separator;
         }
 
-        filesStream = Files.walk(Paths.get(directoryName)).filter(path -> path.getFileName().toString().endsWith(filesExtension));
+        filesStream = Files.walk(Paths.get(directoryName)).filter(path -> path.getFileName().toString().endsWith(filesExtension)).sorted();
         filesIter = filesStream.iterator();
 
         Path path = filesIter.next();
