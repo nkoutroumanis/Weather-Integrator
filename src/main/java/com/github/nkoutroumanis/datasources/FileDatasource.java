@@ -1,5 +1,9 @@
 package com.github.nkoutroumanis.datasources;
 
+import com.github.nkoutroumanis.parsers.VfiObjectParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +13,8 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 public class FileDatasource implements Datasource {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileDatasource.class);
 
     private final String directoryName;
     private final String filesExtension;
@@ -32,6 +38,8 @@ public class FileDatasource implements Datasource {
 
         Path path = filesIter.next();
         filePath = path.toString();
+
+        logger.info("File opened {}",filePath);
 
         linesStream = Files.lines(path);
         linesIter = linesStream.iterator();
@@ -57,6 +65,7 @@ public class FileDatasource implements Datasource {
                 Path path = filesIter.next();
                 filePath = path.toString();
 
+                logger.info("File opened {}", filePath);
 
                 linesStream = Files.lines(path);
                 linesIter = linesStream.iterator();
