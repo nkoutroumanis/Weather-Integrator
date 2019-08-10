@@ -115,52 +115,52 @@ public final class WeatherIntegrator {
         while (recordParser.hasNextRecord()) {
 
             Record record = recordParser.nextRecord();
-
-            try {
-
-                double longitude = Double.parseDouble(recordParser.getLongitude(record));
-                double latitude = Double.parseDouble(recordParser.getLatitude(record));
-                Date d = dateFormat.parse(recordParser.getDate(record));
-
-
-                if (rectangle != null) {
-                    //filtering
-                    if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
-                        logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
-                        continue;
-                    }
-                }
-
-                if (removeLastValueFromRecords) {
-                    //if dataset finishes with ;
-                    record.deleteLastFieldValue();
-                    //else sb.append(lineWithMeta);
-                }
-
-
-                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
-                record.addFieldValues(values);
-
+//
+//            try {
+//
+//                double longitude = Double.parseDouble(recordParser.getLongitude(record));
+//                double latitude = Double.parseDouble(recordParser.getLatitude(record));
+//                Date d = dateFormat.parse(recordParser.getDate(record));
+//
+//
+//                if (rectangle != null) {
+//                    //filtering
+//                    if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
+//                        logger.warn("Spatial information of record out of range \nLine{}", record.getMetadata());
+//                        continue;
+//                    }
+//                }
+//
+//                if (removeLastValueFromRecords) {
+//                    //if dataset finishes with ;
+//                    record.deleteLastFieldValue();
+//                    //else sb.append(lineWithMeta);
+//                }
+//
+//
+//                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
+//                record.addFieldValues(values);
+//
                 numberofRecords++;
-
-                if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
-                    logger.info("CHR {}", ((double) hits / numberofRecords));
-                    logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
-                    logger.info("Window Throughtput {}", ((double) JobFilesUsingIndex.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000)));
-                    logger.info("Opened {}", (numberofRecords - hits) - window);
-                    window = numberofRecords - hits;
-                    startTimeWindow = System.currentTimeMillis();
-                }
-
-
-
-                output.out(function.apply(record), record.getMetadata());
-
-            } catch (NumberFormatException | ParseException e) {
-                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
-            } catch (ArrayIndexOutOfBoundsException e) {
-                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
-            }
+//
+//                if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
+//                    logger.info("CHR {}", ((double) hits / numberofRecords));
+//                    logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+//                    logger.info("Window Throughtput {}", ((double) JobFilesUsingIndex.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000)));
+//                    logger.info("Opened {}", (numberofRecords - hits) - window);
+//                    window = numberofRecords - hits;
+//                    startTimeWindow = System.currentTimeMillis();
+//                }
+//
+//
+//
+//                output.out(function.apply(record), record.getMetadata());
+//
+//            } catch (NumberFormatException | ParseException e) {
+//                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+//            } catch (ArrayIndexOutOfBoundsException e) {
+//                logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
+//            }
 
         }
 
