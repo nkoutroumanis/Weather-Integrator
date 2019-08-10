@@ -162,44 +162,6 @@ public final class WeatherIntegrator {
                 logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
             }
 
-
-//            try {
-//                String[] a = datasource.nextLine();
-//
-//                String line = a[0];
-//                String[] separatedLine = line.split(separator);
-//
-//                if (Datasource.empty.test(separatedLine[numberOfColumnLongitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnLatitude - 1]) || Datasource.empty.test(separatedLine[numberOfColumnDate - 1])) {
-//                    continue;
-//                }
-//
-//                double longitude = Double.parseDouble(separatedLine[numberOfColumnLongitude - 1]);
-//                double latitude = Double.parseDouble(separatedLine[numberOfColumnLatitude - 1]);
-//                Date d = dateFormat.parse(separatedLine[numberOfColumnDate - 1]);
-//
-//                //filtering
-//                if (((Double.compare(longitude, rectangle.getMaxx()) == 1) || (Double.compare(longitude, rectangle.getMinx()) == -1)) || ((Double.compare(latitude, rectangle.getMaxy()) == 1) || (Double.compare(latitude, rectangle.getMiny()) == -1))) {
-//                    continue;
-//                }
-//
-//
-//                StringBuilder sb = new StringBuilder();
-//
-//                //if dataset finishes with ;
-//                sb.append(line.substring(0, line.length() - 1));
-//                //else sb.append(lineWithMeta);
-//
-//                numberofRecords++;
-//
-//                List<String> values = wdo.obtainAttributes(longitude, latitude, d);
-//
-//                values.forEach(s -> sb.append(separator + s));
-//
-//                output.out(sb.toString(), a[1]);
-//            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | ParseException e) {
-//                continue;
-//            }
-
         }
 
         elapsedTime = (System.currentTimeMillis() - start) / 1000;
