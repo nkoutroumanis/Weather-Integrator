@@ -18,6 +18,8 @@ public final class GribFileWithIndex implements GribFile {
 
     private GribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
 
+        long start = System.currentTimeMillis();
+
         NetcdfFile ncf = netcdfFileFunction.apply(path);
 
         this.listOfEntries = listOfVariables.stream().map(s -> {
@@ -29,6 +31,8 @@ public final class GribFileWithIndex implements GribFile {
             }
             return new AbstractMap.SimpleEntry<>(array, array.getIndex());
         }).collect(Collectors.toList());
+
+        System.out.println("WEATHER FILE TIME OPENING: " + (System.currentTimeMillis() - start));
 
     }
 
