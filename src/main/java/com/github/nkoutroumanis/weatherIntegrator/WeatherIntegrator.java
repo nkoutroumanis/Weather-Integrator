@@ -143,10 +143,10 @@ public final class WeatherIntegrator {
 
                 numberofRecords++;
 
-                if(numberofRecords%JobFilesUsingIndex.INFOEVERYN == 0){
+                if(numberofRecords%WeatherIntegratorJob.INFOEVERYN == 0){
                     logger.info("CHR {}", ((double) hits / numberofRecords));
                     logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
-                    logger.info("Window Throughtput {}", ((double) JobFilesUsingIndex.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000)));
+                    logger.info("Window Throughtput {}", ((double) WeatherIntegratorJob.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000)));
                     logger.info("Opened {}", (numberofRecords - hits) - window);
                     window = numberofRecords - hits;
                     startTimeWindow = System.currentTimeMillis();

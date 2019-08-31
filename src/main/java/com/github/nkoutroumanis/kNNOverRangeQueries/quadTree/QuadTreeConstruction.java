@@ -9,6 +9,7 @@ import com.github.nkoutroumanis.parsers.CsvRecordParser;
 import com.github.nkoutroumanis.parsers.Record;
 import com.github.nkoutroumanis.parsers.RecordParser;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ import java.util.Date;
 public class QuadTreeConstruction {
 
     private static final Logger logger = LoggerFactory.getLogger(QuadTreeConstruction.class);
-    private static final Config config = AppConfig.config;
+    private static final Config config = ConfigFactory.load();
 
     public static void main(String args[]) throws IOException, ParseException {
 

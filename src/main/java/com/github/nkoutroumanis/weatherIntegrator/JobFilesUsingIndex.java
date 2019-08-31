@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 
 public final class JobFilesUsingIndex {
 
-    public static int BUFFERSIZE;
-    public static long INFOEVERYN;
+
 
     public static void main(String args[]) {
 
@@ -26,8 +25,8 @@ public final class JobFilesUsingIndex {
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
 
-        BUFFERSIZE = wi.getInt("bufferSize");
-        INFOEVERYN = wi.getInt("infoEveryN");
+        WeatherIntegratorJob.BUFFERSIZE = wi.getInt("bufferSize");
+        WeatherIntegratorJob.INFOEVERYN = wi.getInt("infoEveryN");
 
         try {
             Stream<String> stream = Files.lines(Paths.get(wi.getString("variablesPath")));
