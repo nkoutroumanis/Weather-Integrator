@@ -63,5 +63,8 @@ public class WeatherIntegratorJob {
                 w.build().integrateAndOutputToKafkaTopic((KafkaOutput) output);
             }
 
+            output.close();
+
+
     }
 }

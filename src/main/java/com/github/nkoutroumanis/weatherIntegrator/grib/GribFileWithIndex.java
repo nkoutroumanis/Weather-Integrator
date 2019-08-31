@@ -16,8 +16,8 @@ public final class GribFileWithIndex implements GribFile {
 
     private final List<Map.Entry<Array, Index>> listOfEntries;
 
-    private static long sum = 0;
-    private static long count = 0;
+    //private static long sum = 0;
+    //private static long count = 0;
 
     private GribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
 
@@ -35,11 +35,11 @@ public final class GribFileWithIndex implements GribFile {
             return new AbstractMap.SimpleEntry<>(array, array.getIndex());
         }).collect(Collectors.toList());
 
-        long end = System.currentTimeMillis();
-        sum = sum + (end - start);
-        count++;
-
-        System.out.println("WEATHER FILE TIME OPENING: " + (end - start) + " Average: " + ((double)sum)/count);
+//        long end = System.currentTimeMillis();
+//        sum = sum + (end - start);
+//        count++;
+//
+//        System.out.println("WEATHER FILE TIME OPENING: " + (end - start) + " Average: " + ((double)sum)/count);
 
     }
 
