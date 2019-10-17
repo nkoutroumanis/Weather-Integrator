@@ -1,6 +1,6 @@
 package gr.ds.unipi.wi;
 
-import gr.ds.unipi.stpin.AppConfig;
+import gr.ds.unipi.wi.AppConfig;
 import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.datasources.Datasource;
 import gr.ds.unipi.stpin.outputs.FileOutput;

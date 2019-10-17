@@ -4,7 +4,6 @@ reftime
 reftime_ISO
 time
 time1
-time1_bounds
 isobaric
 height_above_ground_layer
 height_above_ground_layer_bounds

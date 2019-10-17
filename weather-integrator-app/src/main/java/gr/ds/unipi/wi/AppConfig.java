@@ -1,15 +1,15 @@
 package gr.ds.unipi.wi;
 
-import com.github.nkoutroumanis.datasources.Datasource;
-import com.github.nkoutroumanis.datasources.FileDatasource;
-import com.github.nkoutroumanis.datasources.KafkaDatasource;
-import com.github.nkoutroumanis.outputs.FileOutput;
-import com.github.nkoutroumanis.outputs.KafkaOutput;
-import com.github.nkoutroumanis.outputs.Output;
-import com.github.nkoutroumanis.parsers.CsvRecordParser;
-import com.github.nkoutroumanis.parsers.JsonRecordParser;
-import com.github.nkoutroumanis.parsers.RecordParser;
-import com.github.nkoutroumanis.parsers.VfiObjectParser;
+import gr.ds.unipi.stpin.datasources.Datasource;
+import gr.ds.unipi.stpin.datasources.FileDatasource;
+import gr.ds.unipi.stpin.datasources.KafkaDatasource;
+import gr.ds.unipi.stpin.outputs.FileOutput;
+import gr.ds.unipi.stpin.outputs.KafkaOutput;
+import gr.ds.unipi.stpin.outputs.Output;
+import gr.ds.unipi.stpin.parsers.CsvRecordParser;
+import gr.ds.unipi.stpin.parsers.JsonRecordParser;
+import gr.ds.unipi.stpin.parsers.RecordParser;
+import gr.ds.unipi.stpin.parsers.VfiObjectParser;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
