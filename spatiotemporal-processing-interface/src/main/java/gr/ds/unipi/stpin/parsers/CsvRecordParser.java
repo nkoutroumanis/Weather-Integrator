@@ -127,6 +127,26 @@ public class CsvRecordParser extends RecordParser {
         return new CsvRecordParser(source, separator, headers, vehicleFieldId, longitudeFieldId, latitudeFieldId, dateFieldId, dateFormat);
     }
 
+    @Override
+    public String getVehicleFieldName(Record record) {
+        return record.getFieldNames().get(vehicleFieldId - 1);
+    }
+
+    @Override
+    public String getLatitudeFieldName(Record record) {
+        return record.getFieldNames().get(latitudeFieldId - 1);
+    }
+
+    @Override
+    public String getLongitudeFieldName(Record record) {
+        return record.getFieldNames().get(longitudeFieldId - 1);
+    }
+
+    @Override
+    public String getDateFieldName(Record record) {
+        return record.getFieldNames().get(dateFieldId - 1);
+    }
+
     private CsvRecordParser(Datasource source, String separator, String[] headers, int vehicleFieldId, int longitudeFieldId, int latitudeFieldId, int dateFieldId, String dateFormat){
         super(source, dateFormat);
         this.separator = separator;

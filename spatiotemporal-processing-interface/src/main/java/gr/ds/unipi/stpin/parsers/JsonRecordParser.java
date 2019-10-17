@@ -187,6 +187,27 @@ public class JsonRecordParser extends RecordParser {
     }
 
     @Override
+    public String getVehicleFieldName(Record record) {
+        return vehicleFieldName;
+    }
+
+    @Override
+    public String getLatitudeFieldName(Record record) {
+        return latitudeFieldName;
+    }
+
+    @Override
+    public String getLongitudeFieldName(Record record) {
+        return longitudeFieldName;
+    }
+
+    @Override
+    public String getDateFieldName(Record record) {
+        return dateFieldName;
+    }
+
+
+    @Override
     public RecordParser cloneRecordParser(Datasource datasource) {
         return null;
     }

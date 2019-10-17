@@ -92,6 +92,22 @@ public abstract class RecordParser {
         throw new UnsupportedOperationException();
     }
 
+    public String getVehicleFieldName(Record record) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getLatitudeFieldName(Record record) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getLongitudeFieldName(Record record) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getDateFieldName(Record record) {
+        throw new UnsupportedOperationException();
+    }
+
     public String getDateFormat() {
         return this.dateFormat;
     }
