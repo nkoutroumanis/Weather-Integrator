@@ -123,6 +123,11 @@ public class CsvRecordParser extends RecordParser {
     }
 
     @Override
+    public String toDefaultOutputFormat(Record record) {
+        return toCsv(record, ";");
+    }
+
+    @Override
     public RecordParser cloneRecordParser(Datasource source) {
         return new CsvRecordParser(source, separator, headers, vehicleFieldId, longitudeFieldId, latitudeFieldId, dateFieldId, dateFormat);
     }

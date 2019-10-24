@@ -43,9 +43,7 @@ public abstract class RecordParser {
 
 
     public String toJsonString(Record record) {
-
         return toConfig(record).root().render(ConfigRenderOptions.concise());
-
     }
 
     public Config toConfig(Record record) {
@@ -119,6 +117,8 @@ public abstract class RecordParser {
     public Datasource getDatasource() {
         return source;
     }
+
+    public abstract String toDefaultOutputFormat(Record record);
 
     public abstract RecordParser cloneRecordParser(Datasource datasource);
 }

@@ -6,6 +6,8 @@ import gr.ds.unipi.stpin.outputs.KafkaOutput;
 import gr.ds.unipi.stpin.outputs.Output;
 import gr.ds.unipi.stpin.parsers.Record;
 import gr.ds.unipi.stpin.parsers.RecordParser;
+import org.apache.log4j.helpers.AbsoluteTimeDateFormat;
+import org.apache.log4j.helpers.DateTimeDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,13 +92,13 @@ public final class WeatherIntegrator {
 
     public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws Exception {
         integrate(kafkaOutput, (r) -> {
-            return recordParser.toCsv(r, ";");
+            return recordParser.toDefaultOutputFormat(r);
         });
     }
 
     public void integrateAndOutputToDirectory(FileOutput fileOutput) throws Exception {
         integrate(fileOutput, (r) -> {
-            return recordParser.toCsv(r, ";");
+            return recordParser.toDefaultOutputFormat(r);
         });
 
     }
@@ -105,7 +107,25 @@ public final class WeatherIntegrator {
 
         start = System.currentTimeMillis();
 
-        DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
+        Function<Record, Date> dateFunction;
+
+        if(recordParser.getDateFormat().equals("unixTimestamp")){
+            dateFunction = (record) ->{
+                return new Date(Long.valueOf(recordParser.getDate(record)));
+            };
+        }
+        else{
+            DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
+            dateFunction = (record) ->{
+                Date d = null;
+                try {
+                    d = dateFormat.parse(recordParser.getDate(record));
+                } catch (ParseException e) {
+                    logger.warn("Temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                }
+                return d;
+            };
+        }
 
         long window = 0;
         long startTimeWindow = System.currentTimeMillis();
@@ -118,7 +138,7 @@ public final class WeatherIntegrator {
 
                 double longitude = Double.parseDouble(recordParser.getLongitude(record));
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
-                Date d = dateFormat.parse(recordParser.getDate(record));
+                Date d = dateFunction.apply(record);/*dateFormat.parse(recordParser.getDate(record));*/
 
 
                 if (rectangle != null) {
@@ -154,8 +174,8 @@ public final class WeatherIntegrator {
 
                 output.out(function.apply(record), record.getMetadata());
 
-            } catch (NumberFormatException | ParseException e) {
-                logger.warn("Spatio-temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+            } catch (NumberFormatException e) {
+                logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
             } catch (ArrayIndexOutOfBoundsException e) {
                 logger.warn("Record is incorrect {} \nLine {}", e, record.getMetadata());
             }

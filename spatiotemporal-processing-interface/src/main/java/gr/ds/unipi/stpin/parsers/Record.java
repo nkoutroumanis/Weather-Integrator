@@ -11,11 +11,6 @@ public class Record {
 
     private static final Logger logger = LoggerFactory.getLogger(Record.class);
 
-//    private static int longitudeFieldId = AppConfig.getInstance().getConfig().getInt(inputLongitudeFieldIdSetting);
-//    private static int latitudeFieldId = AppConfig.getInstance().getConfig().getInt(inputLatitudeFieldIdSetting);
-//    private static int vehicleFieldId = AppConfig.getInstance().getConfig().getInt(inputVehicleFieldIdSetting);
-//    private static int dateFieldId = AppConfig.getInstance().getConfig().getInt(inputDateFieldIdSetting);
-
     private List<Object> fieldValues;
     private List<String> fieldNames;
     private String metadata;

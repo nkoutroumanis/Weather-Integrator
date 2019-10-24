@@ -51,4 +51,9 @@ public class VfiObjectParser extends RecordParser {
         return record.getFieldValues().get(VfiMapPoint.dateFieldId).toString();
     }
 
+    @Override
+    public String toDefaultOutputFormat(Record record) {
+        return null;
+    }
+
 }

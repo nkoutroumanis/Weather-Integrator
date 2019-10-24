@@ -187,6 +187,11 @@ public class JsonRecordParser extends RecordParser {
     }
 
     @Override
+    public String toDefaultOutputFormat(Record record) {
+        return toJsonString(record);
+    }
+
+    @Override
     public String getVehicleFieldName(Record record) {
         return vehicleFieldName;
     }
