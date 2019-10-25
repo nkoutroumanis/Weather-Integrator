@@ -4,6 +4,7 @@ import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.outputs.FileOutput;
 import gr.ds.unipi.stpin.outputs.KafkaOutput;
 import gr.ds.unipi.stpin.outputs.Output;
+import gr.ds.unipi.stpin.parsers.JsonRecordParser;
 import gr.ds.unipi.stpin.parsers.Record;
 import gr.ds.unipi.stpin.parsers.RecordParser;
 import org.apache.log4j.helpers.AbsoluteTimeDateFormat;
@@ -24,10 +25,10 @@ public final class WeatherIntegrator {
 
     private final RecordParser recordParser;
     private final WeatherDataObtainer wdo;
+    private final List<String> variables;
 
     private final boolean removeLastValueFromRecords;
-
-    private final Rectangle rectangle;// = Rectangle.newRectangle(-180, -90, 180, 90);
+    private final Rectangle rectangle;
 
     public static class Builder {
 
@@ -86,6 +87,7 @@ public final class WeatherIntegrator {
         recordParser = builder.recordParser;
         wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
 
+        variables = builder.variables;
         rectangle = builder.rectangle;
         removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
@@ -158,6 +160,10 @@ public final class WeatherIntegrator {
 
                 List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
                 record.addFieldValues(values);
+
+                if(recordParser instanceof JsonRecordParser){
+                    record.addFieldNames(variables);
+                }
 
                 numberofRecords++;
 
