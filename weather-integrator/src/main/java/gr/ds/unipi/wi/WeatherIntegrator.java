@@ -109,25 +109,26 @@ public final class WeatherIntegrator {
 
         start = System.currentTimeMillis();
 
-        Function<Record, Date> dateFunction;
+        Function<Record, Date> dateFunction = RecordParser.dateFunction(recordParser);
 
-        if(recordParser.getDateFormat().equals("unixTimestamp")){
-            dateFunction = (record) ->{
-                return new Date(Long.valueOf(recordParser.getDate(record)));
-            };
-        }
-        else{
-            DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
-            dateFunction = (record) ->{
-                Date d = null;
-                try {
-                    d = dateFormat.parse(recordParser.getDate(record));
-                } catch (ParseException e) {
-                    logger.warn("Temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
-                }
-                return d;
-            };
-        }
+//        if(recordParser.getDateFormat().equals("unixTimestamp")){
+//            dateFunction = (record) ->{
+//                return new Date(Long.valueOf(recordParser.getDate(record)));
+//            };
+//        }
+//        else{
+//            DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
+//            dateFunction = (record) ->{
+//                Date d = null;
+//                try {
+//                    d = dateFormat.parse(recordParser.getDate(record));
+//                } catch (ParseException e) {
+//                    logger.warn("Temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+//                }
+//                return d;
+//            };
+//        }
+
 
         long window = 0;
         long startTimeWindow = System.currentTimeMillis();
@@ -140,7 +141,11 @@ public final class WeatherIntegrator {
 
                 double longitude = Double.parseDouble(recordParser.getLongitude(record));
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
-                Date d = dateFunction.apply(record);/*dateFormat.parse(recordParser.getDate(record));*/
+                Date d = dateFunction.apply(record);
+
+                if(d == null){
+                    continue;
+                }
 
 
                 if (rectangle != null) {

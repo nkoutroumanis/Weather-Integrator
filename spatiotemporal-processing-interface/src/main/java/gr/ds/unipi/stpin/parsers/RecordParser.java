@@ -8,10 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public abstract class RecordParser {
 
@@ -124,4 +128,24 @@ public abstract class RecordParser {
     public abstract String toDefaultOutputFormat(Record record);
 
     public abstract RecordParser cloneRecordParser(Datasource datasource);
+
+    public static Function<Record, Date> dateFunction(RecordParser recordParser){
+
+        if(recordParser.getDateFormat().equals("unixTimestamp")){
+            return (record) -> new Date(Long.valueOf(recordParser.getDate(record)));
+        }
+        else{
+            DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
+            return (record) -> {
+                Date d = null;
+                try {
+                    d = dateFormat.parse(recordParser.getDate(record));
+                } catch (ParseException e) {
+                    logger.warn("Temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
+                }
+                return d;
+            };
+        }
+    }
+
 }
