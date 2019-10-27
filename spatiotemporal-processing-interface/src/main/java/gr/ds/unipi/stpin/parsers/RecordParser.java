@@ -55,9 +55,6 @@ public abstract class RecordParser {
         List<String> fieldNames = record.getFieldNames();
         List<Object> fieldValues = record.getFieldValues();
 
-        System.out.println(record.getFieldNames().size());
-        System.out.println(record.getFieldValues().size());
-
         if ((record.getFieldNames() == null) || (record.getFieldNames().size() != record.getFieldValues().size())) {
             logger.error("Field names is wrong!");
             return null;
