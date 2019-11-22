@@ -8,7 +8,13 @@ This work provides a mechanism for enriching spatio-temporal point records (reco
 attributes that describe characteristics of the prevailing weather conditions, such as temperature. The weather data can be found in GRIB files that store the values 
 of weather attributes in serialized form and refer to a specific time period and to a specific geographical area (or the whole globe). 
 
-GRIB is a standarized data format by the World Meteorological Organization's Commission for Basic Systems, commonly used in meteorology to store historical and forecast weather data.
+GRIB is a standardized binary data format by the World Meteorological Organization's Commission for Basic Systems, commonly used in meteorology to store historical and forecast weather data.
+Publicly GRIB files with forecast weather data are offered by [NoAA](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs) and [ECMWF](https://apps.ecmwf.int/datasets/).
+Other organizations may also distribute for free weather data sources in the form of GRIB files.
+
+When choosing the GRIB files as the weather data source for the enrichment procedure, it is preferable to opt for those with the lowest grid scale for better accuracy.
+Also, since 4 models are run per day each one starting at 00:00, 06:00, 12:00 and 18:00, prefer the files for each model with steps 000 or 003 or 006.
+The step number of a grib file declares the hours ahead from the starting time of the model that the contained weather information are referring to. 
 
  
 Available Features that can be Integrated in Files 
