@@ -2,7 +2,19 @@ Weather Integrator
 =========
 [![Travis CI](https://travis-ci.org/nkoutroumanis/Weather-Integrator.svg?branch=master)](https://travis-ci.org/nkoutroumanis/Weather-Integrator)<br/>
 
-This work provides a mechanism for integrating weather data in files (such as csv) consisting of records that contain information about Absolute Time and Coordinates (longitude and latitude) of a location.
+Data integrator implementation in java for integrating weather information to spatio-temporal points.
+
+This work provides a mechanism for enriching spatio-temporal point records (records that contain longitude, latitude and date information) with weather data;
+attributes that describe characteristics of the prevailing weather conditions, such as temperature. The weather data can be found in GRIB files that store the values 
+of weather attributes in serialized form and refer to a specific time period and to a specific geographical area (or the whole globe). 
+
+GRIB is a standarized data format by the World Meteorological Organization's Commission for Basic Systems, commonly used in meteorology to store historical and forecast weather data.
+
+ 
+Available Features that can be Integrated in Files 
+------------                                       
+ 
+integrating weather data in files (such as csv) consisting of records that contain information about Absolute Time and Coordinates (longitude and latitude) of a location.
 
 Weather data is exported from [Grib files](http://weather.mailasail.com/Franks-Weather/Grib-Files-Explained)
 (in a few words, a grib file contains weather data - features about weather for a certain time in a serialized form), and then is integrated in the records of files (csv, txt etc.). Grib files can be found [here](ftp://nomads.ncdc.noaa.gov/GFS/Grid4/)
