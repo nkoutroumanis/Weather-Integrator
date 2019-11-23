@@ -61,7 +61,7 @@ $ cp ../../weather-integrator-app/src/main/resources/reference-WeatherIntegrator
 ```
 
 Now, you can set the parameters about the integration procedure such as input files directory and etc.
-with the following command;
+with the following command. You can also open it with your favourite text editor.
 
 ```
 $ sudo nano application.conf
