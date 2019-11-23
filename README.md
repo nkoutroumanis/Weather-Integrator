@@ -14,8 +14,12 @@ Other organizations may also distribute for free weather data sources in the for
 
 When choosing the GRIB files as the weather data source for the enrichment procedure, it is preferable to opt for those with the lowest grid scale for better accuracy.
 Also, since 4 models are run per day each one starting at 00:00, 06:00, 12:00 and 18:00, prefer the files for each model with steps 000 or 003 or 006.
-The step number of a grib file declares the hours ahead from the starting time of the model that the contained weather information are referring to. 
 
+The step number of a grib file declares the hours ahead from the starting time of the model. The contained weather information is referring to that time ahead. 
+GRIB files with steps > 000, contain both instantaneous weather attributes and average variables for some passed time. For instance, a GRIB file with step 006 
+contain weather attributes that refer to 6-hours ahead from the starting time of the model and 6-hour average attributes that refer to the passed time period. 
+ 
+ 
  
 Available Features that can be Integrated in Files 
 ------------                                       
