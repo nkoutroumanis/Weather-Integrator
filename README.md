@@ -84,8 +84,8 @@ $ java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.u
               
 **Weather Integrator API usage**
 
-If you want to run the integration procedure by its API, then you have at first add 
-to your pom.xml file the following dependency;
+If you want to run the integration procedure by using its API, then you have at first to add the following  
+to your pom dependencies;
 
 ```xml
 <dependency>
