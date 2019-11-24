@@ -13,7 +13,7 @@ Features
 * The records of spatio-temporal points (dataset) that are to be enriched, may be stored in files (such as CSV) or in a Kafka topic  
 * The records of spatio-temporal points (dataset) that are to be enriched may be either in JSON or in delimiter separated format
 * The output result (enriched records) may be written either in files or in Kafka topic                                         
-* The weather data source (GRIB files) can be accessed either locally or via HDFS during the integration procedure              
+* The weather data source can be accessed either locally or via HDFS during the integration procedure            
 
 What are GRIB files and where can I find them? 
 -                                              
@@ -39,7 +39,14 @@ How can I see the available weather attributes of a GRIB file so as to choose wh
 
 Case of storing and accessing GRIB files on HDFS
 -       
-+++ 
+Since the size of GRIB files for a specific time period is quite large, it may surpass the size of a local disk.
+In order to handle them, you may want to store them on HDFS. The case of accessing the weather data files on HDFS 
+requires a different format from GRIB (**.grb2**). Specifically, GRIB files should be converted to **.nc** files. 
+Currently, accessing GRIB files from HDFS is not supported by the library +++. Note that the size an '.nc' file
+is quite larger than the size of its corresponding GRIB file.
+
+You can convert a GRIB file to an nc file +++
+
 
 Getting started
 -                                               
@@ -77,13 +84,24 @@ $ java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.u
               
 **Weather Integrator API usage**
 
+If you want to run the integration procedure by its API, then you have at first add 
+to your pom.xml file the following dependency;
+
+```xml
+<dependency>
+  <groupId>gr.ds.unipi</groupId>
+  <artifactId>weather-integrator</artifactId>
+   <version>1.0-SNAPSHOT</version>
+</dependency>
+```  
+
 +++
 
 Further reading
 -        
 If you are interested to see more details about the weather integrator mechanism or any other information, 
-please refer to this [paper](http://ceur-ws.org/Vol-2322/BMDA_1.pdf) which was presented at the 2nd 
-International Workshop on "Big Mobility Data Analytics" (EDBT/ICDT Workshops 2019) Mar 26, 2019 – Lisbon, Portugal.
+please refer to [this]((http://ceur-ws.org/Vol-2322/BMDA_1.pdf)) paper which was presented at the 2nd 
+International Workshop on "Big Mobility Data Analytics" (EDBT/ICDT Workshops 2019) on March 26, 2019 at Lisbon, Portugal.
 
 
 

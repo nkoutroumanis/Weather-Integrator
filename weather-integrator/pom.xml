@@ -87,7 +87,6 @@
             <groupId>gr.ds.unipi</groupId>
             <artifactId>spatiotemporal-processing-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>
