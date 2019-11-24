@@ -59,7 +59,7 @@ $ cd  Weather-Integrator/
 $ mvn install
 ```
 
-**Weather Integrator out of the box**
+### Weather Integrator out of the box
 
 In case you want to use the weather integrator instantly, then you have to continue with a few commands;
 
@@ -82,7 +82,7 @@ Then, you are ready to start the integration procedure with the following comman
 $ java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.unipi.wi.WeatherIntegratorJob ./application.conf
 ```  
               
-**Weather Integrator API usage**
+### Weather Integrator API usage
 
 If you want to run the integration procedure by using its API, then you have at first to add the following  
 to your pom dependencies;
@@ -95,7 +95,7 @@ to your pom dependencies;
 </dependency>
 ```  
 
-+++
+**Define the following objects**
 
 Further reading
 -        
