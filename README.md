@@ -84,8 +84,7 @@ $ java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.u
               
 ### Weather Integrator API usage
 
-If you want to run the integration procedure by using its API, then you have at first to add the following  
-to your pom dependencies;
+If you want to run the integration procedure by using its API, then you have at first to add the following to your pom dependencies;
 
 ```xml
 <dependency>
@@ -95,7 +94,41 @@ to your pom dependencies;
 </dependency>
 ```  
 
-**Define the following objects**
+**Instantiate a Datasource object**
+
+This object defines the datasource of the input spatio-temporal records.
+
+The Datasource may be Files in a specific local path;
+
+or may be a Kafka topic; 
+
+
+**Instantiate a RecordParser object**
+
+This object defines the format type of the input spatio-temporal records.
+
+The records may exist in a delimiter separated format type;
+
+or may exist in a JSON format type;
+
+
+**Instantiate an Output object**
+
+This object defines output source of the enriched spatio-temporal records.
+
+The enriched records may be written to Files;
+
+or to a Kafka Topic;
+
+**Instantiate an WeatherIntegrator object**
+
+This object can trigger the data integration procedure.
+
+
+
+
+
+
 
 Further reading
 -        
