@@ -36,7 +36,10 @@ _Important Note:_ be sure to download the GRIB files that will cover the spannin
 How can I see the available weather attributes of a GRIB file so as to choose what information to integrate?
 -                                                                          
 +++
- 
+
+Case of storing and accessing GRIB files on HDFS
+-       
++++ 
 
 Getting started
 -                                               
@@ -75,6 +78,12 @@ $ java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.u
 **Weather Integrator API usage**
 
 +++
+
+Further reading
+-        
+If you are interested to see more details about the weather integrator mechanism or any other information, 
+please refer to this [paper](http://ceur-ws.org/Vol-2322/BMDA_1.pdf) which was presented at the 2nd 
+International Workshop on "Big Mobility Data Analytics" (EDBT/ICDT Workshops 2019) Mar 26, 2019 – Lisbon, Portugal.
 
 
 
