@@ -51,39 +51,45 @@ Case of storing and accessing GRIB files on HDFS
 Since the size of GRIB files for a specific time period is quite large, it may surpass the size of a local disk.
 In order to handle them, you may want to store them on HDFS. The case of accessing the weather data files on HDFS 
 requires a different format from GRIB (**.grb2**). Specifically, GRIB files should be converted to **.nc** files. 
-Currently, accessing GRIB files from HDFS is not supported by the library +++. Note that the size an '.nc' file
+Currently, accessing GRIB files remotely is not supported by the NetCDF library. Note that the size of an '.nc' file
 is quite larger than the size of its corresponding GRIB file.
 
-You can convert a GRIB file to an nc file +++
+You can convert a GRIB file to an nc file by using the NetCDF library. Download from [here](https://www.unidata.ucar.edu/downloads/netcdf-java/index.jsp)
+the netcdfAll-Y.Y.Y.jar file and then run the following command;
+
+```
+$ java -Xmx512m -classpath netcdfAll-Y.Y.Y.jar ucar.nc2.dataset.NetcdfDataset -in /full/path/of/gribFile/file.grb2 -out /full/path/of/ncFile/file.nc
+```
 
 
 Getting started
 -                                               
 Having downloaded the GRIB files, you may follow the steps below so as to start using the weather data integrator.
 
-Clone the Weather Integrator repositoty;
+Since the Weather Integrator uses the library of [SciSpark](https://scispark.jpl.nasa.gov/),
+it is required to clone its repository, build the Jar file through _sbt_, and then install it to your local maven repository.
+In case you have not installed _sbt_, refer to [this](https://www.scala-sbt.org/1.x/docs/Setup.html) before continuing.
 
+```
+$ git clone https://github.com/SciSpark/SciSpark
+$ cd SciSpark/
+$ sbt assembly
+$ mvn install:install-file -Dfile=target/scala-2.11/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar  
+```
+ 
+Now, you open a new terminal window and clone the Weather Integrator repository;
 ```
 $ git clone https://github.com/nkoutroumanis/Weather-Integrator
 ```
 
-Since the Weather Integrator uses the library of [SciSpark](https://scispark.jpl.nasa.gov/),
-it is required to run the following commands for its installation in your local maven repository. 
-The library is already included in the Weather Integrator repository as a Jar file (SciSpark.jar).
+Execute some lifecycle stages in Maven for the Weather Integrator repository. 
 
 ```
-$ mvn install:install-file -Dfile=Weather-Integrator/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar
-```
-
-
-For the installation,
-the library will be installed in your local Maven repository.
-
-All that is left, is executing some lifecycle stages in Maven for the Weather Integrator repository. 
-
-```
-$ cd  Weather-Integrator/
+$ cd  WeatherIntegrator/spatiotemporal-processing-interface/
 $ mvn install
+$ cd ../weather-integrator
+$ mvn install
+$ cd ../
 ```
 
 ### Weather Integrator out of the box
