@@ -132,7 +132,7 @@ or may exist in a JSON format type;
 // The second argument is the field name of the longitude
 // The third argument is the field name of the latitude
 // The forth argument is the field name of the date
-// The sixth argument is the date format in Java which is represented as string. This field can also be 'unixTimestamp'
+// The sixth argument is the date format in Java which is represented as a string. This field can also be 'unixTimestamp'
 RecordParser recordParser = new JsonRecordParser(datasource, "longitudeFieldName", "latitudeFieldName", "dateFieldName", "yyyy-MM-dd HH:mm:ss");
 ```
 
@@ -152,188 +152,36 @@ or to a Kafka Topic;
 Output output = KafkaOutput.newKafkaOutput("/path/of/output", "topicName");
 ```
 
-**Instantiate an WeatherIntegrator object**
+**Instantiate a WeatherIntegrator object**
 
 This object can trigger the data integration procedure.
 
 ```java
 // The first argument is the RecordParser type object
-// The first argument is the path where the GRIB files are stored. Can also, be an HDFS path, starting hdfs://.../.../
+// The second argument is the path where the GRIB files are stored. It can also be an HDFS path, starting hdfs://.../.../
 // The third argument is a list with the weather attributes which will be integrated to the records
 
-WeatherIntegrator weatherIntegrator = WeatherIntegrator.newWeatherIntegrator(recordParser, "/path/to/grib/files/folder", List.of("weatherattr1","weatherattr1"))
+WeatherIntegrator weatherIntegrator = WeatherIntegrator.newWeatherIntegrator(recordParser, "/path/to/grib/files/folder", List.of("weatherattr1", "weatherattr1"))
         .useIndex().build();
 
 weatherIntegrator.integrate(output);
-
-// The builder pattern method has also
-.lruCacheMaxEntries().gribFilesExtension().removeLastValueFromRecords().filter()
 ```
 
+The builder pattern of the WeatherIntegrator object has the following methods;
+* useIndex -  it is highly recommended to use this method. An index of the NetCDF library will be used for boosting the accessing of the weather data files.
+* lruCacheMaxEntries - it accepts as an argument an integer which is the number of the cache entries. The higher the number, the higher the throughtput of the enriched records (if temporally unsorted). If the spatio-temporal records are already sorted by date, then set this 1. If not set, the default passed int argument is 4. 
+* gribFilesExtension - it accepts as an argument a string which is the extension of the grib files. If not set, the default passed string argument is '.grb2'.
+* removeLastValueFromRecords - if used, for each record that is to be enriched, the last value of every input record will not be included to the enriched record.
+* filter - if used, only the spatio-temporal records that are enclosed by the (spatial) filter (Rectangle object argument) will taken into account for the enrichment procedure. You can create a Rectangle object with the following command; 
 
+        // all of the arguments are double
+        // longitude1 and latitude1 are the coordinates of the rectangle's lower bound
+        // longitude2 and latitude2 are the coordinates of the rectangle's upper bound
 
-
+        Rectangle.newRectangle(longitude1, latitude1, longitude2, latitude2)
 
 Further reading
 -        
 If you are interested to see more details about the weather integrator mechanism or any other information, 
 please refer to [this](http://ceur-ws.org/Vol-2322/BMDA_1.pdf) paper which was presented at the 2nd 
 International Workshop on "Big Mobility Data Analytics" (EDBT/ICDT Workshops 2019) on March 26, 2019 at Lisbon, Portugal.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
