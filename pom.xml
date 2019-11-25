@@ -30,6 +30,7 @@
                 <configuration>
                     <source>${maven.compiler.target}</source>
                     <target>${maven.compiler.target}</target>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
