@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <module>spatiotemporal-processing-interface</module>
         <module>weather-integrator</module>
         <module>weather-integrator-app</module>
-        <module>spatiotemporal-processing-interface</module>
     </modules>
 
     <properties>
