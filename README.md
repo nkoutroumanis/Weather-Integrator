@@ -174,7 +174,7 @@ The builder pattern of the WeatherIntegrator object has the following methods;
 * removeLastValueFromRecords - if used, for each record that is to be enriched, the last value of every input record will not be included to the enriched record.
 * filter - if used, only the spatio-temporal records that are enclosed by the (spatial) filter (Rectangle object argument) will taken into account for the enrichment procedure. You can create a Rectangle object with the following command; 
 
-        // all of the arguments are double
+        // all of the arguments are double type variables
         // longitude1 and latitude1 are the coordinates of the rectangle's lower bound
         // longitude2 and latitude2 are the coordinates of the rectangle's upper bound
 
