@@ -99,32 +99,76 @@ If you want to run the integration procedure by using its API, then you have at 
 This object defines the datasource of the input spatio-temporal records.
 
 The Datasource may be Files in a specific local path;
+```java
+// The first argument is the path of the files (dataset) that contain the records
+// The second argument is the files extension such as .csv
+Datasource datasource = FileDatasource.newFileDatasource("/path/folder/of/files", ".csv");
+```
 
 or may be a Kafka topic; 
-
+```java
+// The first argument is the path of the property file of the kafka consumer that will access the records from the topic
+// The second argument is the name of the topic that contains the records
+Datasource datasource = KafkaDatasource.newKafkaDatasource("/path/to/propertyFile/of/consumer", "topicName");
+```
 
 **Instantiate a RecordParser object**
 
 This object defines the format type of the input spatio-temporal records.
-
 The records may exist in a delimiter separated format type;
+```java
+// The first argument is the Datasource type object
+// The second argument is the separator of the delimeter separated records
+// The third argument is the field number of longitude (the first field in a row is represented as 1)
+// The forth argument is the field number of latitude
+// The fifth argument is the field number of date
+// The sixth argument is the date format in Java which is represented as string. This field can also be 'unixTimestamp'
+RecordParser recordParser = new CsvRecordParser(datasource, ";", 1, 2, 3, "yyyy-MM-dd HH:mm:ss");
 
+```
 or may exist in a JSON format type;
-
+```java
+// The first argument is the Datasource type object
+// The second argument is the field name of the longitude
+// The third argument is the field name of the latitude
+// The forth argument is the field name of the date
+// The sixth argument is the date format in Java which is represented as string. This field can also be 'unixTimestamp'
+RecordParser recordParser = new JsonRecordParser(datasource, "longitudeFieldName", "latitudeFieldName", "dateFieldName", "yyyy-MM-dd HH:mm:ss");
+```
 
 **Instantiate an Output object**
 
 This object defines output source of the enriched spatio-temporal records.
-
 The enriched records may be written to Files;
-
+```java
+// The first argument is the path of in which the output (enriched) records will be stored
+// The second argument is the boolean value which determines if the declared output path should be deleted (if exist) before starting to write the enriched records 
+Output output = FileOutput.newFileOutput("/path/of/output/", false);
+```
 or to a Kafka Topic;
+```java
+// The first argument is the property file path of the kafka producer
+// The second argument is the name of the topic in which the enriched records will be produced
+Output output = KafkaOutput.newKafkaOutput("/path/of/output", "topicName");
+```
 
 **Instantiate an WeatherIntegrator object**
 
 This object can trigger the data integration procedure.
 
+```java
+// The first argument is the RecordParser type object
+// The first argument is the path where the GRIB files are stored. Can also, be an HDFS path, starting hdfs://.../.../
+// The third argument is a list with the weather attributes which will be integrated to the records
 
+WeatherIntegrator weatherIntegrator = WeatherIntegrator.newWeatherIntegrator(recordParser, "/path/to/grib/files/folder", List.of("weatherattr1","weatherattr1"))
+        .useIndex().build();
+
+weatherIntegrator.integrate(output);
+
+// The builder pattern method has also
+.lruCacheMaxEntries().gribFilesExtension().removeLastValueFromRecords().filter()
+```
 
 
 
