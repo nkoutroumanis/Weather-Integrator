@@ -35,7 +35,16 @@ _Important Note:_ be sure to download the GRIB files that will cover the spannin
  
 How can I see the available weather attributes of a GRIB file so as to choose what information to integrate?
 -                                                                          
-+++
+You can do it in two ways; either by opening a GRIB file with a GRIB data viewer or by fetching the weather attributes with NetCDF library.
+
+If you choose to download a GRIB data viewer, I would recommend using [Panoply](https://www.giss.nasa.gov/tools/panoply/download/). Of course, 
+there are other GRIB data viewers that you can also use.
+ 
+If you prefer to use code for fetching the weather attributes, refer to one of the `exportVariablesFromFile` methods of
+[this](https://github.com/nkoutroumanis/Weather-Integrator/blob/master/weather-integrator/src/test/java/gr/ds/unipi/wi/ExportVariablesFromGribFileTest.java) class.
+Just modify the single argument of `NetcdfFile.open()` with the local path of the GRIB file, and the argument of `new PrintWriter()` with the local path of the 
+txt file in which the attributes will be exported.
+
 
 Case of storing and accessing GRIB files on HDFS
 -       
@@ -50,11 +59,29 @@ You can convert a GRIB file to an nc file +++
 
 Getting started
 -                                               
-Having downloaded the GRIB files, you are almost a step before starting using the weather data integrator. 
-All that is left, is cloning the repository and executing some lifecycle stages in Maven. 
+Having downloaded the GRIB files, you may follow the steps below so as to start using the weather data integrator.
+
+Clone the Weather Integrator repositoty;
 
 ```
 $ git clone https://github.com/nkoutroumanis/Weather-Integrator
+```
+
+Since the Weather Integrator uses the library of [SciSpark](https://scispark.jpl.nasa.gov/),
+it is required to run the following commands for its installation in your local maven repository. 
+The library is already included in the Weather Integrator repository as a Jar file (SciSpark.jar).
+
+```
+$ mvn install:install-file -Dfile=Weather-Integrator/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar
+```
+
+
+For the installation,
+the library will be installed in your local Maven repository.
+
+All that is left, is executing some lifecycle stages in Maven for the Weather Integrator repository. 
+
+```
 $ cd  Weather-Integrator/
 $ mvn install
 ```
@@ -168,10 +195,10 @@ weatherIntegrator.integrate(output);
 ```
 
 The builder pattern of the WeatherIntegrator object has the following methods;
-* useIndex -  it is highly recommended to use this method. An index of the NetCDF library will be used for boosting the accessing of the weather data files.
+* useIndex -  it is highly recommended to use this method. An index of the NetCDF library will be used for boosting the accessing on the weather data files.
 * lruCacheMaxEntries - it accepts as an argument an integer which is the number of the cache entries. The higher the number, the higher the throughtput of the enriched records (if temporally unsorted). If the spatio-temporal records are already sorted by date, then set this 1. If not set, the default passed int argument is 4. 
 * gribFilesExtension - it accepts as an argument a string which is the extension of the grib files. If not set, the default passed string argument is '.grb2'.
-* removeLastValueFromRecords - if used, for each record that is to be enriched, the last value of every input record will not be included to the enriched record.
+* removeLastValueFromRecords - if used, the last value of every input record will not be included to the enriched output record.
 * filter - if used, only the spatio-temporal records that are enclosed by the (spatial) filter (Rectangle object argument) will taken into account for the enrichment procedure. You can create a Rectangle object with the following command; 
 
         // all of the arguments are double type variables
