@@ -1,4 +1,5 @@
 language: java
 jdk:
 - oraclejdk9
-install: mvn install -Dmaven.compiler.target=1.6 -Dmaven.compiler.source=1.6
+script: mvn clean verify
+install: mvn install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8
