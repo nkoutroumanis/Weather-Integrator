@@ -19,6 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- keep jmh at 1.11.3 to support java 6 -->
         <jmh.version>1.21</jmh.version>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
 
@@ -30,7 +31,6 @@
                 <configuration>
                     <source>${maven.compiler.target}</source>
                     <target>${maven.compiler.target}</target>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
