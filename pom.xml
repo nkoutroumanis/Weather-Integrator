@@ -23,7 +23,7 @@
 
     <profiles>
         <profile>
-            <id>ci</id>
+            <id>default</id>
             <modules>
                 <module>spatiotemporal-processing-interface</module>
             </modules>
