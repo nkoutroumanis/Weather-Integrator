@@ -21,18 +21,18 @@
         <!--<jmh.version>1.21</jmh.version>-->
     <!--</properties>-->
 
-    <!--<build>-->
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<version>3.7.0</version>-->
-                <!--<configuration>-->
-                    <!--<source>${maven.compiler.target}</source>-->
-                    <!--<target>${maven.compiler.target}</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-    <!--</build>-->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${maven.compiler.target}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <!--<dependencies>-->
         <!--<dependency>-->
