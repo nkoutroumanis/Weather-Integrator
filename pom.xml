@@ -15,26 +15,17 @@
     </modules>
 
     <properties>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- keep jmh at 1.11.3 to support java 6 -->
         <jmh.version>1.21</jmh.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>default</id>
-            <modules>
-                <module>spatiotemporal-processing-interface</module>
-            </modules>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>${maven.compiler.target}</source>
                     <target>${maven.compiler.target}</target>
