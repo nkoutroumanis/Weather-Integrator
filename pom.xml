@@ -14,12 +14,12 @@
         <!--<module>weather-integrator-app</module>-->
     <!--</modules>-->
 
-    <!--<properties>-->
-        <!--<maven.compiler.target>10</maven.compiler.target>-->
-        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-        <!--&lt;!&ndash; keep jmh at 1.11.3 to support java 6 &ndash;&gt;-->
-        <!--<jmh.version>1.21</jmh.version>-->
-    <!--</properties>-->
+    <properties>
+        <maven.compiler.target>10</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- keep jmh at 1.11.3 to support java 6 -->
+        <jmh.version>1.21</jmh.version>
+    </properties>
 
     <build>
         <plugins>
@@ -34,14 +34,14 @@
         </plugins>
     </build>
 
-    <!--<dependencies>-->
-        <!--<dependency>-->
-            <!--<groupId>junit</groupId>-->
-            <!--<artifactId>junit</artifactId>-->
-            <!--<version>4.12</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!--</dependencies>-->
+    </dependencies>
 
 </project>
