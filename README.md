@@ -61,6 +61,7 @@ the netcdfAll-Y.Y.Y.jar file and then run the following command;
 $ java -Xmx512m -classpath netcdfAll-Y.Y.Y.jar ucar.nc2.dataset.NetcdfDataset -in /full/path/of/gribFile/file.grb2 -out /full/path/of/ncFile/file.nc
 ```
 
+Refer to [this](https://github.com/nkoutroumanis/Weather-Integrator/convertToNcFiles.sh) script if you want to convert a group of GRIBs to nc files.
 
 Getting started
 -                                               
@@ -77,7 +78,7 @@ $ sbt assembly
 $ mvn install:install-file -Dfile=target/scala-2.11/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar  
 ```
  
-Now, you open a new terminal window and clone the Weather Integrator repository;
+Now, open a new terminal window and clone the Weather Integrator repository;
 ```
 $ git clone https://github.com/nkoutroumanis/Weather-Integrator
 ```
@@ -94,7 +95,7 @@ $ cd ../
 
 ### Weather Integrator out of the box
 
-In case you want to use the weather integrator instantly, then you have to continue with a few commands;
+In case you want to use the weather integrator instantly, then you have to continue with a few more commands;
 
 ```
 $ cd weather-integrator-app/
@@ -207,7 +208,7 @@ The builder pattern of the WeatherIntegrator object has the following methods;
 * removeLastValueFromRecords - if used, the last value of every input record will not be included to the enriched output record.
 * filter - if used, only the spatio-temporal records that are enclosed by the (spatial) filter (Rectangle object argument) will taken into account for the enrichment procedure. You can create a Rectangle object with the following command; 
 
-        // all of the arguments are double type variables
+        // all arguments are double type variables
         // longitude1 and latitude1 are the coordinates of the rectangle's lower bound
         // longitude2 and latitude2 are the coordinates of the rectangle's upper bound
 

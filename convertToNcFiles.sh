@@ -1,0 +1,1 @@
+for f in $(find /directory/that/contains/gribs/ -name '*.grb2'); do java -Xmx512m -classpath /path/to/netcdfAll-4.6.13.jar ucar.nc2.dataset.NetcdfDataset -in $f -out /path/to/nc/files/$(basename ${f%.*})".nc"; done
