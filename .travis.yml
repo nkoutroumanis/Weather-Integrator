@@ -2,7 +2,8 @@ language: java
 jdk:
 - openjdk10
 scala:
-- 2.11.0
+- 2.10.4
+- 2.11.2
 before_install:
   - git clone https://github.com/SciSpark/SciSpark
   - cd SciSpark/
