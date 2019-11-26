@@ -61,7 +61,7 @@ the netcdfAll-Y.Y.Y.jar file and then run the following command;
 $ java -Xmx512m -classpath netcdfAll-Y.Y.Y.jar ucar.nc2.dataset.NetcdfDataset -in /full/path/of/gribFile/file.grb2 -out /full/path/of/ncFile/file.nc
 ```
 
-Refer to [this](https://github.com/nkoutroumanis/Weather-Integrator/convertToNcFiles.sh) script if you want to convert a group of GRIBs to nc files.
+Refer to [this](https://github.com/nkoutroumanis/Weather-Integrator/blob/master/convertToNcFiles.sh) script if you want to convert a group of GRIBs to nc files.
 
 Getting started
 -                                               
