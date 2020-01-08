@@ -46,7 +46,7 @@ public final class JobKafka {
                 w.removeLastValueFromRecords();
             }
 
-            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).gribFilesExtension(wi.getString("gribFilesExtension")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).gribFilesExtension(wi.getString("gribFilesExtension")).useIndex().build().integrate(kafkaOutput);
 
 
 

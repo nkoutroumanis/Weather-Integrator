@@ -43,7 +43,7 @@ public final class JobVFIKafka {
                 w.removeLastValueFromRecords();
             }
 
-            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).useIndex().build().integrate(kafkaOutput);
 
 
 

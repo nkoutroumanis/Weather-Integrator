@@ -47,7 +47,7 @@ public final class JobFilesUsingIndex {
                 w.removeLastValueFromRecords();
             }
 
-            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).gribFilesExtension(wi.getString("gribFilesExtension")).useIndex().build().integrateAndOutputToDirectory(fileOutput);
+            w.lruCacheMaxEntries(wi.getInt("lruCacheMaxEntries")).gribFilesExtension(wi.getString("gribFilesExtension")).useIndex().build().integrate(fileOutput);
 
         } catch (Exception e) {
             e.printStackTrace();

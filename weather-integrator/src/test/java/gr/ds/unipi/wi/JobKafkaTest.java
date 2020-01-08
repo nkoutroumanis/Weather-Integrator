@@ -33,7 +33,7 @@ public class JobKafkaTest {
 
             WeatherIntegrator.newWeatherIntegrator(rp,
                     "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
-                    .lruCacheMaxEntries(1).useIndex().build().integrateAndOutputToKafkaTopic(kafkaOutput);
+                    .lruCacheMaxEntries(1).useIndex().build().integrate(kafkaOutput);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

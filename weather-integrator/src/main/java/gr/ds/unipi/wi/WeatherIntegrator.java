@@ -92,13 +92,13 @@ public final class WeatherIntegrator {
         removeLastValueFromRecords = builder.removeLastValueFromRecords;
     }
 
-    public void integrateAndOutputToKafkaTopic(KafkaOutput kafkaOutput) throws Exception {
+    public void integrate(KafkaOutput kafkaOutput) throws Exception {
         integrate(kafkaOutput, (r) -> {
             return recordParser.toDefaultOutputFormat(r);
         });
     }
 
-    public void integrateAndOutputToDirectory(FileOutput fileOutput) throws Exception {
+    public void integrate(FileOutput fileOutput) throws Exception {
         integrate(fileOutput, (r) -> {
             return recordParser.toDefaultOutputFormat(r);
         });
@@ -106,6 +106,11 @@ public final class WeatherIntegrator {
     }
 
     private void integrate(Output output, Function<Record, String> function) throws Exception {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date msy = sdf.parse("2017-01-01 00:00:00");
+        Date mey = sdf.parse("2017-12-31 23:59:59");
+
 
         start = System.currentTimeMillis();
 
@@ -162,14 +167,16 @@ public final class WeatherIntegrator {
                     //else sb.append(lineWithMeta);
                 }
 
+                if((d.compareTo(msy) >= 0) && (d.compareTo(mey) <= 0 )) {
 
-                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
-                record.addFieldValues(values);
+                    List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
+                    record.addFieldValues(values);
 
-                if(recordParser instanceof JsonRecordParser){
-                    record.addFieldNames(variables);
+                    if (recordParser instanceof JsonRecordParser) {
+                        record.addFieldNames(variables);
+                    }
+
                 }
-
                 numberofRecords++;
 
 //                if(numberofRecords%WeatherIntegratorJob.INFOEVERYN == 0){

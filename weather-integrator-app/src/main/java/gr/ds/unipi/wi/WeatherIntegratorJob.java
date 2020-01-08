@@ -56,10 +56,10 @@ public class WeatherIntegratorJob {
             }
 
             if(output instanceof FileOutput){
-                w.build().integrateAndOutputToDirectory((FileOutput) output);
+                w.build().integrate((FileOutput) output);
             }
             else if(output instanceof KafkaOutput){
-                w.build().integrateAndOutputToKafkaTopic((KafkaOutput) output);
+                w.build().integrate((KafkaOutput) output);
             }
 
             output.close();
