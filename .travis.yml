@@ -9,6 +9,10 @@ matrix:
 
 before_install:
   - cd ../
+  - git clone https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface
+  - cd Spatiotemporal-Processing-Interface/
+  - mvn install
+  - cd ../
   - git clone https://github.com/SciSpark/SciSpark
   - cd SciSpark/
   - sbt -Dspark.version=2.1.2 -Dscala.version=2.11.12 clean assembly
