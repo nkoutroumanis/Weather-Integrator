@@ -77,7 +77,7 @@ $ cd Spatiotemporal-Toolbox-Kit/
 $ mvn install
 ```
 
-For the _SciSpark_, it is required after cloning the library to build the Jar file through _sbt_. Then, you may proceed to the repository installation.
+For the _SciSpark_, it is required after cloning the library, to build the Jar file through _sbt_. Then, you may proceed to the repository installation.
 In case you have not installed _sbt_, refer to [this](https://www.scala-sbt.org/1.x/docs/Setup.html) link before continuing. All these can be done by executing the following commands;
 ```
 $ git clone https://github.com/SciSpark/SciSpark
