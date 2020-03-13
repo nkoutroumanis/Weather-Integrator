@@ -94,9 +94,9 @@ $ git clone https://github.com/nkoutroumanis/Weather-Integrator
 Execute some lifecycle stages in Maven for the Weather Integrator repository. 
 
 ```
-$ cd  WeatherIntegrator/spatiotemporal-processing-interface/
+$ cd  WeatherIntegrator/weather-integrator
 $ mvn install
-$ cd ../weather-integrator
+$ cd ../weather-integrator-app
 $ mvn install
 $ cd ../
 ```
