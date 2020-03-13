@@ -12,7 +12,7 @@
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
+            <level>INFO</level>
         </filter>
         <file>enrich.log</file>
         <append>true</append>
@@ -38,4 +38,4 @@
     </root>
 
     <logger name="org" level="OFF"/>
-</configuration>\
+</configuration>

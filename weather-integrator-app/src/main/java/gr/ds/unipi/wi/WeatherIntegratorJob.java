@@ -1,13 +1,13 @@
 package gr.ds.unipi.wi;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.datasources.Datasource;
 import gr.ds.unipi.stpin.outputs.FileOutput;
 import gr.ds.unipi.stpin.outputs.KafkaOutput;
 import gr.ds.unipi.stpin.outputs.Output;
 import gr.ds.unipi.stpin.parsers.RecordParser;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -17,18 +17,12 @@ import java.util.stream.Stream;
 
 public class WeatherIntegratorJob {
 
-    public static int BUFFERSIZE;
-    public static long INFOEVERYN;
-
     public static void main(String args[]) throws Exception {
 
         Config conf = ConfigFactory.parseFile(new File(args[0]));
 
         Config wi = conf.getConfig("wi");
         Config filter = conf.getConfig("filter");
-
-        BUFFERSIZE = wi.getInt("bufferSize");
-        INFOEVERYN = wi.getInt("infoEveryN");
 
             AppConfig appConfig = AppConfig.newAppConfig(args[0]);
 

@@ -1,5 +1,6 @@
 package gr.ds.unipi.wi;
 
+import ch.qos.logback.classic.LoggerContext;
 import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.outputs.FileOutput;
 import gr.ds.unipi.stpin.outputs.KafkaOutput;
@@ -7,17 +8,14 @@ import gr.ds.unipi.stpin.outputs.Output;
 import gr.ds.unipi.stpin.parsers.JsonRecordParser;
 import gr.ds.unipi.stpin.parsers.Record;
 import gr.ds.unipi.stpin.parsers.RecordParser;
-import org.apache.log4j.helpers.AbsoluteTimeDateFormat;
-import org.apache.log4j.helpers.DateTimeDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class WeatherIntegrator {
 
@@ -93,47 +91,27 @@ public final class WeatherIntegrator {
     }
 
     public void integrate(KafkaOutput kafkaOutput) throws Exception {
-        integrate(kafkaOutput, (r) -> {
-            return recordParser.toDefaultOutputFormat(r);
-        });
+        integrate(kafkaOutput, recordParser::toDefaultOutputFormat);
     }
 
     public void integrate(FileOutput fileOutput) throws Exception {
-        integrate(fileOutput, (r) -> {
-            return recordParser.toDefaultOutputFormat(r);
-        });
+        integrate(fileOutput, recordParser::toDefaultOutputFormat);
 
     }
 
     private void integrate(Output output, Function<Record, String> function) throws Exception {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date msy = sdf.parse("2017-01-01 00:00:00");
-        Date mey = sdf.parse("2017-12-31 23:59:59");
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        System.out.println(lc.getProperty("reportEveryXlines"));
+        long reportEveryXlines = Long.valueOf(lc.getProperty("reportEveryXlines"));
+        if(lc.getProperty("reportEveryXlines") == null){
+            logger.error("reportEveryXlines property is not found in logback.xml");
+        }
 
 
         start = System.currentTimeMillis();
 
         Function<Record, Date> dateFunction = RecordParser.dateFunction(recordParser);
-
-//        if(recordParser.getDateFormat().equals("unixTimestamp")){
-//            dateFunction = (record) ->{
-//                return new Date(Long.valueOf(recordParser.getDate(record)));
-//            };
-//        }
-//        else{
-//            DateFormat dateFormat = new SimpleDateFormat(recordParser.getDateFormat());
-//            dateFunction = (record) ->{
-//                Date d = null;
-//                try {
-//                    d = dateFormat.parse(recordParser.getDate(record));
-//                } catch (ParseException e) {
-//                    logger.warn("Temporal information of record can not be parsed {} \nLine {}", e, record.getMetadata());
-//                }
-//                return d;
-//            };
-//        }
-
 
         long window = 0;
         long startTimeWindow = System.currentTimeMillis();
@@ -162,33 +140,32 @@ public final class WeatherIntegrator {
                 }
 
                 if (removeLastValueFromRecords) {
-                    //if dataset finishes with ;
+                    //if dataset finishes with ; (for csv)
                     record.deleteLastFieldValue();
+                    if(record.getFieldNames()!=null){
+                        record.deleteLastFieldName();
+                    }
                     //else sb.append(lineWithMeta);
                 }
 
-                if((d.compareTo(msy) >= 0) && (d.compareTo(mey) <= 0 )) {
 
                     List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
                     record.addFieldValues(values);
 
                     if (recordParser instanceof JsonRecordParser) {
-                        record.addFieldNames(variables);
+                        record.addFieldNames(variables.stream().map(u->"weather_information."+ u).collect(Collectors.toList()));
                     }
 
-                }
                 numberofRecords++;
 
-//                if(numberofRecords%WeatherIntegratorJob.INFOEVERYN == 0){
-//                    logger.info("CHR {}", ((double) hits / numberofRecords));
-//                    logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
-//                    logger.info("Window Throughtput {}", ((double) WeatherIntegratorJob.INFOEVERYN/((System.currentTimeMillis() - startTimeWindow) / 1000)));
-//                    logger.info("Opened {}", (numberofRecords - hits) - window);
-//                    window = numberofRecords - hits;
-//                    startTimeWindow = System.currentTimeMillis();
-//                }
-
-
+                if(numberofRecords%reportEveryXlines == 0){
+                    logger.info("CHR {}", ((double) hits / numberofRecords));
+                    logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
+                    logger.info("Window Throughtput {}", ((double) reportEveryXlines/((System.currentTimeMillis() - startTimeWindow) / 1000)));
+                    logger.info("Opened {}", (numberofRecords - hits) - window);
+                    window = numberofRecords - hits;
+                    startTimeWindow = System.currentTimeMillis();
+                }
 
                 output.out(function.apply(record), record.getMetadata());
 

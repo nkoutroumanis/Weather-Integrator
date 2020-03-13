@@ -1,18 +1,17 @@
 package gr.ds.unipi.wi;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.datasources.Datasource;
 import gr.ds.unipi.stpin.datasources.FileDatasource;
 import gr.ds.unipi.stpin.outputs.FileOutput;
 import gr.ds.unipi.stpin.parsers.CsvRecordParser;
 import gr.ds.unipi.stpin.parsers.RecordParser;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -1,13 +1,13 @@
 package gr.ds.unipi.wi;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.datasources.Datasource;
 import gr.ds.unipi.stpin.datasources.KafkaDatasource;
 import gr.ds.unipi.stpin.outputs.KafkaOutput;
 import gr.ds.unipi.stpin.parsers.CsvRecordParser;
 import gr.ds.unipi.stpin.parsers.RecordParser;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
 import java.nio.file.Files;
