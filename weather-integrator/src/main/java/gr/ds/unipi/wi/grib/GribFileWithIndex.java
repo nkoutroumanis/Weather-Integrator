@@ -19,7 +19,7 @@ public final class GribFileWithIndex implements GribFile {
     //private static long sum = 0;
     //private static long count = 0;
 
-    private GribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
+    private GribFileWithIndex(String path, List<String> listOfVariables, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
 
         long start = System.currentTimeMillis();
 
@@ -43,7 +43,7 @@ public final class GribFileWithIndex implements GribFile {
 
     }
 
-    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
+    public static GribFileWithIndex newGribFileWithIndex(String path, List<String> listOfVariables, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
         return new GribFileWithIndex(path, listOfVariables, netcdfFileFunction);
     }
 
@@ -57,7 +57,7 @@ public final class GribFileWithIndex implements GribFile {
                 values.add(e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
             } catch (ArrayIndexOutOfBoundsException k) {
 //                try {
-                    values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
+                values.add(e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/);
 //                } catch (ArrayIndexOutOfBoundsException j) {
 //                    values.add(e.getKey().copy());
 //                }

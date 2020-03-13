@@ -29,7 +29,7 @@ public final class LRUCacheManager {
         this.variables = Collections.unmodifiableList(variables);
         this.numberOfVariables = variables.size();
 
-        this.netcdfFileFunction=netcdfFileFunction;
+        this.netcdfFileFunction = netcdfFileFunction;
 
     }
 

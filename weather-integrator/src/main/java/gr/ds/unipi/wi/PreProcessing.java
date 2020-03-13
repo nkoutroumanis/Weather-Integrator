@@ -22,7 +22,7 @@ public final class PreProcessing {
         try {
             Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
 
-            Function<String, NetcdfFile> netcdfFileFunction = (path) ->{
+            Function<String, NetcdfFile> netcdfFileFunction = (path) -> {
                 try {
                     return NetcdfFile.open(path);
                 } catch (IOException e) {

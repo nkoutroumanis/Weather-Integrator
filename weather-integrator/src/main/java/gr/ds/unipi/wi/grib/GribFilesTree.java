@@ -68,8 +68,8 @@ public final class GribFilesTree {
     }
 
     private void traverseGribFilesFromHDFS(Path filePath, FileSystem fs) throws IOException {
-        List<String> pathsOfGribFiles = getAllPathsOfGribFilesFromHDFS(filePath,fs);
-        pathsOfGribFiles.forEach(gribFilePath->{
+        List<String> pathsOfGribFiles = getAllPathsOfGribFilesFromHDFS(filePath, fs);
+        pathsOfGribFiles.forEach(gribFilePath -> {
             gribFilesTreeMap.put(getTimeOfGribFile(gribFilePath), gribFilePath);
         });
     }
@@ -81,7 +81,7 @@ public final class GribFilesTree {
             if (fileStat.isDirectory()) {
                 fileList.addAll(getAllPathsOfGribFilesFromHDFS(fileStat.getPath(), fs));
             } else {
-                if(fileStat.getPath().toString().endsWith(gribFilesExtension)){
+                if (fileStat.getPath().toString().endsWith(gribFilesExtension)) {
                     fileList.add(fileStat.getPath().toString());
                 }
             }

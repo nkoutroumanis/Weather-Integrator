@@ -8,13 +8,13 @@ matrix:
     env: SPARK_VERSION=2.1.2 SCALA_VERSION=2.11.12
 
 before_install:
-  - cd ../
-  - git clone https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface
-  - cd Spatiotemporal-Processing-Interface/
-  - mvn install
-  - cd ../
-  - git clone https://github.com/SciSpark/SciSpark
-  - cd SciSpark/
-  - sbt -Dspark.version=2.1.2 -Dscala.version=2.11.12 clean assembly
-  - mvn install:install-file -Dfile=target/scala-2.11/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar
-  - cd ../Weather-Integrator/
+- cd ../
+- git clone https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface
+- cd Spatiotemporal-Processing-Interface/
+- mvn install
+- cd ../
+- git clone https://github.com/SciSpark/SciSpark
+- cd SciSpark/
+- sbt -Dspark.version=2.1.2 -Dscala.version=2.11.12 clean assembly
+- mvn install:install-file -Dfile=target/scala-2.11/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar
+- cd ../Weather-Integrator/

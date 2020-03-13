@@ -11,7 +11,6 @@ import gr.ds.unipi.stpin.parsers.RecordParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -96,7 +95,6 @@ public final class WeatherIntegrator {
 
     public void integrate(FileOutput fileOutput) throws Exception {
         integrate(fileOutput, recordParser::toDefaultOutputFormat);
-
     }
 
     private void integrate(Output output, Function<Record, String> function) throws Exception {
@@ -104,10 +102,9 @@ public final class WeatherIntegrator {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         System.out.println(lc.getProperty("reportEveryXlines"));
         long reportEveryXlines = Long.valueOf(lc.getProperty("reportEveryXlines"));
-        if(lc.getProperty("reportEveryXlines") == null){
+        if (lc.getProperty("reportEveryXlines") == null) {
             logger.error("reportEveryXlines property is not found in logback.xml");
         }
-
 
         start = System.currentTimeMillis();
 
@@ -126,10 +123,9 @@ public final class WeatherIntegrator {
                 double latitude = Double.parseDouble(recordParser.getLatitude(record));
                 Date d = dateFunction.apply(record);
 
-                if(d == null){
+                if (d == null) {
                     continue;
                 }
-
 
                 if (rectangle != null) {
                     //filtering
@@ -142,26 +138,25 @@ public final class WeatherIntegrator {
                 if (removeLastValueFromRecords) {
                     //if dataset finishes with ; (for csv)
                     record.deleteLastFieldValue();
-                    if(record.getFieldNames()!=null){
+                    if (record.getFieldNames() != null) {
                         record.deleteLastFieldName();
                     }
                     //else sb.append(lineWithMeta);
                 }
 
+                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
+                record.addFieldValues(values);
 
-                    List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
-                    record.addFieldValues(values);
-
-                    if (recordParser instanceof JsonRecordParser) {
-                        record.addFieldNames(variables.stream().map(u->"weather_information."+ u).collect(Collectors.toList()));
-                    }
+                if (recordParser instanceof JsonRecordParser) {
+                    record.addFieldNames(variables.stream().map(u -> "weather_information." + u).collect(Collectors.toList()));
+                }
 
                 numberofRecords++;
 
-                if(numberofRecords%reportEveryXlines == 0){
+                if (numberofRecords % reportEveryXlines == 0) {
                     logger.info("CHR {}", ((double) hits / numberofRecords));
                     logger.info("Overall Throughtput {}", ((double) WeatherIntegrator.numberofRecords / ((System.currentTimeMillis() - start) / 1000)));
-                    logger.info("Window Throughtput {}", ((double) reportEveryXlines/((System.currentTimeMillis() - startTimeWindow) / 1000)));
+                    logger.info("Window Throughtput {}", ((double) reportEveryXlines / ((System.currentTimeMillis() - startTimeWindow) / 1000)));
                     logger.info("Opened {}", (numberofRecords - hits) - window);
                     window = numberofRecords - hits;
                     startTimeWindow = System.currentTimeMillis();

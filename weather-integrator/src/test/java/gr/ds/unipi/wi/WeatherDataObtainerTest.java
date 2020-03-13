@@ -15,10 +15,10 @@ public class WeatherDataObtainerTest {
 //
 //        System.out.println(s.substring(7).substring(s.substring(7).indexOf("/")));
 
-URI uri = new URI("hdfs://localhost:50070/user/root/koutroumanis/bjkbhkjh/sfg");
+        URI uri = new URI("hdfs://localhost:50070/user/root/koutroumanis/bjkbhkjh/sfg");
 
 
-        System.out.println("hdfs://"+uri.getAuthority()+ "/");
+        System.out.println("hdfs://" + uri.getAuthority() + "/");
         System.out.println(uri.getPath());
 
 

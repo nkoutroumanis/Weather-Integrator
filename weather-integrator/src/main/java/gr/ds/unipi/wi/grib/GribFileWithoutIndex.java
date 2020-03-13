@@ -19,7 +19,7 @@ public final class GribFileWithoutIndex implements GribFile {
         this.listOfVariables = listOfVariables.stream().map(ncf::findVariable).collect(Collectors.toList());
     }
 
-    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables, Function<String,NetcdfFile> netcdfFileFunction) throws IOException {
+    public static GribFileWithoutIndex newGribFileWithoutIndex(String path, List<String> listOfVariables, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
         return new GribFileWithoutIndex(path, listOfVariables, netcdfFileFunction);
     }
 

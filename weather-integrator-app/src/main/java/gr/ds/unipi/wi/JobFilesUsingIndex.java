@@ -38,11 +38,11 @@ public final class JobFilesUsingIndex {
             WeatherIntegrator.Builder w = WeatherIntegrator.newWeatherIntegrator(rp,
                     wi.getString("gribFilesFolderPath"), stream.collect(Collectors.toList()));
 
-            if(wi.getBoolean("filter")){
+            if (wi.getBoolean("filter")) {
                 w.filter(Rectangle.newRectangle(filter.getDouble("minLon"), filter.getDouble("minLat"), filter.getDouble("maxLon"), filter.getDouble("maxLat")));
             }
 
-            if(wi.getBoolean("removeLastValueFromRecords")){
+            if (wi.getBoolean("removeLastValueFromRecords")) {
                 w.removeLastValueFromRecords();
             }
 

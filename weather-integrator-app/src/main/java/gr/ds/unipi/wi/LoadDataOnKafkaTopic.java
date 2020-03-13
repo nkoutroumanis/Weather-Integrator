@@ -12,14 +12,14 @@ public class LoadDataOnKafkaTopic {
 
     public static void main(String args[]) throws IOException, ParseException {
 
-        FileDatasource fileDatasource = FileDatasource.newFileDatasource("/home/user/vehicles/",".csv");
-        CsvRecordParser csvRecordParser = new CsvRecordParser(fileDatasource,";");
-        KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties","vehiclesWithoutWeather");
+        FileDatasource fileDatasource = FileDatasource.newFileDatasource("/home/user/vehicles/", ".csv");
+        CsvRecordParser csvRecordParser = new CsvRecordParser(fileDatasource, ";");
+        KafkaOutput kafkaOutput = KafkaOutput.newKafkaOutput("./producer.properties", "vehiclesWithoutWeather");
 
-        while(csvRecordParser.hasNextRecord()){
+        while (csvRecordParser.hasNextRecord()) {
             Record record = csvRecordParser.nextRecord();
             record.deleteLastFieldValue();
-            kafkaOutput.out(csvRecordParser.toCsv(record,";"),"");
+            kafkaOutput.out(csvRecordParser.toCsv(record, ";"), "");
         }
         kafkaOutput.close();
         fileDatasource.cloneDatasource();

@@ -24,8 +24,8 @@ public final class WeatherDataObtainer {
         Function<String, NetcdfFile> netcdfFileFunction;
         GribFilesTree gribFilesTree;
 
-        if(gribFilesFolderPath.startsWith("hdfs")){
-            netcdfFileFunction = (path) ->{
+        if (gribFilesFolderPath.startsWith("hdfs")) {
+            netcdfFileFunction = (path) -> {
 
                 URI uri = null;
                 try {
@@ -33,18 +33,17 @@ public final class WeatherDataObtainer {
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://"+uri.getAuthority()+ "/", uri.getPath(), 1048576/*WeatherIntegratorJob.BUFFERSIZE*/, true).getReferencedFile();
+                return org.dia.utils.NetCDFUtils.loadDFSNetCDFDataSet("hdfs://" + uri.getAuthority() + "/", uri.getPath(), 1048576/*WeatherIntegratorJob.BUFFERSIZE*/, true).getReferencedFile();
             };
 
             URI uri = new URI(gribFilesFolderPath);
             Configuration conf = new Configuration();
             conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
 //            conf.set("fs.defaultFS", );
-            gribFilesTree = GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, new Path(gribFilesFolderPath), FileSystem.get(new URI("hdfs://"+uri.getAuthority()+ "/"), conf));
-        }
-        else{
+            gribFilesTree = GribFilesTree.newGribFilesTree(gribFilesFolderPath, gribFilesExtension, netcdfFileFunction, new Path(gribFilesFolderPath), FileSystem.get(new URI("hdfs://" + uri.getAuthority() + "/"), conf));
+        } else {
 
-            netcdfFileFunction = (path) ->{
+            netcdfFileFunction = (path) -> {
                 try {
                     return NetcdfFile.open(path);
                 } catch (IOException e) {

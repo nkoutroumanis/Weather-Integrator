@@ -28,7 +28,7 @@ public class BenchmarksTest {
     private final static String gribFilesPath = "./src/test/resources/gribFiles/grib003Files/";
     private final static String gribFilesExtension = ".grb2";
 
-    private final static Function<String, NetcdfFile> netcdfFileFunction = (path) ->{
+    private final static Function<String, NetcdfFile> netcdfFileFunction = (path) -> {
         try {
             return NetcdfFile.open(path);
         } catch (IOException e) {
