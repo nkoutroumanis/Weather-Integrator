@@ -1,5 +1,7 @@
 <configuration debug="FALSE">
 
+    <property scope="context" name="reportEveryXlines" value="20000"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
