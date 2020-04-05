@@ -141,15 +141,14 @@ public final class WeatherIntegrator {
                     if (record.getFieldNames() != null) {
                         record.deleteLastFieldName();
                     }
-                    //else sb.append(lineWithMeta);
                 }
 
-                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
-                record.addFieldValues(values);
-
-                if (recordParser instanceof JsonRecordParser) {
-                    record.addFieldNames(variables.stream().map(u -> "weather_information." + u).collect(Collectors.toList()));
-                }
+//                List<Object> values = wdo.obtainAttributes(longitude, latitude, d);
+//                record.addFieldValues(values);
+//
+//                if (recordParser instanceof JsonRecordParser) {
+//                    record.addFieldNames(variables.stream().map(u -> "weather_information." + u).collect(Collectors.toList()));
+//                }
 
                 numberofRecords++;
 
