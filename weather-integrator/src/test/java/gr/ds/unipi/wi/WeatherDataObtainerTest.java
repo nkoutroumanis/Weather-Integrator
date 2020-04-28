@@ -1,5 +1,6 @@
 package gr.ds.unipi.wi;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -7,6 +8,7 @@ import java.net.URISyntaxException;
 
 public class WeatherDataObtainerTest {
 
+    @Ignore("Ignore test for hdfs")
     @Test
     public void stirngTest() throws URISyntaxException {
 //        String s = "hdfs://localhost:50070/dfioijfd/sidfjosidf/fsodjfoio/osijdf/dkfkmmk";
