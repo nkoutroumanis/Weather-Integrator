@@ -78,7 +78,7 @@ public class AppConfig {
             Config json = parser.getConfig("json");
 
             if (parser.hasPath("dateFormat")) {
-                rp = new JsonRecordParser(datasource, json.getString("longitudeFieldName"), json.getString("latitudeFieldName"), json.getString("dateFieldName"), parser.getString("dateFormat"));
+                rp = new JsonRecordParser(datasource,"vehicleId", json.getString("longitudeFieldName"), json.getString("latitudeFieldName"), json.getString("dateFieldName"), parser.getString("dateFormat"));
             } else {
                 rp = new JsonRecordParser(datasource, json.getString("longitudeFieldName"), json.getString("latitudeFieldName"));
             }

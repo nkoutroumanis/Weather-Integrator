@@ -174,7 +174,8 @@ public final class WeatherIntegrator {
                     startTimeWindow = System.currentTimeMillis();
                 }
 
-                output.out(function.apply(record), (String) record.getFieldValues().get(3)/*record.getMetadata()*/);
+
+                output.out(function.apply(record), (String) record.getFieldValues().get(3));
 
             } catch (NumberFormatException e) {
                 logger.warn("Spatial information of record can not be parsed {} \nLine {}", e, record.getMetadata());
