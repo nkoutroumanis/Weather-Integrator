@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class JobKafkaTest {
 
-    @Ignore("kafka can not run while testing")
+    @Ignore("Kafka can not run while testing")
     @Test
     public void main() {
 

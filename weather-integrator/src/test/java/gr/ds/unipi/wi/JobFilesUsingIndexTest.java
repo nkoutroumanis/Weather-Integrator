@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 public class JobFilesUsingIndexTest {
 
-    @Ignore("")
     @Test
     public void main() throws Exception {
 

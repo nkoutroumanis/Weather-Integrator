@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 public class WeatherIntegrationJsonSubdocumentTest {
 
-    @Ignore("")
     @Test
     public void jsonTest() throws Exception {
 
