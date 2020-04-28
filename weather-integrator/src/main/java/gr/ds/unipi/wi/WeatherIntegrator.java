@@ -109,7 +109,6 @@ public final class WeatherIntegrator {
         start = System.currentTimeMillis();
 
         Function<Record, Date> dateFunction;
-
         if(recordParser.getDateFormat().equals("unixTimestampSec")){
             dateFunction = RecordParser.dateFunctionUnixTimestampSec(recordParser);
         }
