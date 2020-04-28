@@ -20,7 +20,7 @@ public class WeatherIntegrationJsonSubdocumentTest {
 
         Stream<String> stream = Files.lines(Paths.get("./src/test/resources/weather-attributes/weather-attributes.txt"));
         Datasource ds = FileDatasource.newFileDatasource("./src/test/resources/json/", ".json");
-        RecordParser rp = new JsonRecordParser(ds, "location.lon", "location.lat", "TIMESTAMP.\"$date\"", "unixTimestamp");
+        RecordParser rp = new JsonRecordParser(ds, "location.lon", "location.lat", "TIMESTAMP.\"$date\"", "unixTimestampMillis");
         FileOutput fileOutput = FileOutput.newFileOutput("./src/test/resources/json-enriched/", true);
 
         WeatherIntegrator.newWeatherIntegrator(rp,
