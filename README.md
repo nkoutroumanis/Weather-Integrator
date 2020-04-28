@@ -164,7 +164,7 @@ The records may exist in a delimiter separated format type;
 // The third argument is the field number of longitude (the first field in a row is represented as 1)
 // The forth argument is the field number of latitude
 // The fifth argument is the field number of date
-// The sixth argument is the date format in Java which is represented as string. This field can also be 'unixTimestamp'
+// The sixth argument is the date format in Java which is represented as string. This field can also be 'unixTimestampSec', 'unixTimestampMillis' or 'unixTimestampDecimals'
 RecordParser recordParser = new CsvRecordParser(datasource, ";", 1, 2, 3, "yyyy-MM-dd HH:mm:ss");
 
 ```
