@@ -72,8 +72,8 @@ it is required to clone the repositories and install them to your local maven re
 
 For the _Spatiotemporal Processing Interface_, you may execute the following commands;
 ```
-$ git clone https://github.com/nkoutroumanis/Spatiotemporal-Toolbox-Kit
-$ cd Spatiotemporal-Toolbox-Kit/
+$ git clone https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface
+$ cd Spatiotemporal-Processing-Interface/
 $ mvn install
 ```
 
