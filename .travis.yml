@@ -7,6 +7,8 @@ matrix:
   - scala: 2.11.12
     env: SPARK_VERSION=2.1.2 SCALA_VERSION=2.11.12
 
+
+
 before_install:
 - cd ../
 - git clone https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface
