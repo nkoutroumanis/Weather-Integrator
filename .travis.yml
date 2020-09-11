@@ -1,7 +1,3 @@
-before_script:
-  - mkdir -p $HOME/.sbt/launchers/0.13.17/
-  - curl -L -o $HOME/.sbt/launchers/0.13.17/sbt-launch.jar https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.17/sbt-launch.jar
-  
 language: scala
 jdk:
 - openjdk8
