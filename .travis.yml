@@ -5,7 +5,7 @@ jdk:
 matrix:
   include:
   - scala: 2.10.6
-    env: SPARK_VERSION=2.1.2 SCALA_VERSION=2.11.12
+    env: SPARK_VERSION=2.1.2 SCALA_VERSION=2.10.6
 
 before_install:
 - cd ../
@@ -15,6 +15,6 @@ before_install:
 - cd ../
 - git clone https://github.com/SciSpark/SciSpark
 - cd SciSpark/
-- sbt ++$TRAVIS_SCALA_VERSION -Dspark.version=2.1.2 -Dscala.version=2.10.6 clean assembly
+- sbt -Dspark.version=2.1.2 -Dscala.version=2.10.6 clean assembly
 - mvn install:install-file -Dfile=target/scala-2.10/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar
 - cd ../Weather-Integrator/
