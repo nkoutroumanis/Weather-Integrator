@@ -1,6 +1,7 @@
 before_script:
-- curl -L -o $HOME/.sbt/launchers/0.13.17/sbt-launch.jar http://dl.bintray.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.17/sbt-launch.jar
-
+  - mkdir -p $HOME/.sbt/launchers/0.13.17/
+  - curl -L -o $HOME/.sbt/launchers/0.13.17/sbt-launch.jar https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.17/sbt-launch.jar
+  
 language: java
 jdk:
 - openjdk8
