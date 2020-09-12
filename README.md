@@ -67,7 +67,7 @@ Getting started
 -                                               
 Having downloaded the GRIB files, you may follow the steps below so as to start using the weather data integrator.
 
-Since the Weather Integrator uses the [_Spatiotemporal Processing Interface_](https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface) dependency and the library of [_SciSpark_](https://scispark.jpl.nasa.gov/),
+Since the Weather Integrator is a maven project which uses the [_Spatiotemporal Processing Interface_](https://github.com/nkoutroumanis/Spatiotemporal-Processing-Interface) dependency and the library of [_SciSpark_](https://scispark.jpl.nasa.gov/),
 it is required to clone the repositories and install them to your local maven repository.
 
 For the _Spatiotemporal Processing Interface_, you may execute the following commands;
@@ -77,14 +77,16 @@ $ cd Spatiotemporal-Processing-Interface/
 $ mvn install
 ```
 
-For the _SciSpark_, it is required after cloning the library, to build the Jar file through _sbt_. Then, you may proceed to the repository installation.
+For the _SciSpark_, it is required after cloning the library, to build the Jar file through _sbt_ (tested with Java 8. Newer Java versions may not be suitable, as errors may occur during the creation of the Jar). Then, you may proceed to the repository installation.
 In case you have not installed _sbt_, refer to [this](https://www.scala-sbt.org/1.x/docs/Setup.html) link before continuing. All these can be done by executing the following commands;
 ```
 $ git clone https://github.com/SciSpark/SciSpark
 $ cd SciSpark/
 $ sbt assembly
 $ mvn install:install-file -Dfile=target/scala-2.11/SciSpark.jar -DgroupId=org.dia -DartifactId=scispark -Dversion=1 -Dpackaging=jar  
-```
+``` 
+ 
+ If you have any problems concerning the building the SciSpark project, contact me to pass you directly the Jar file you need.
  
 Now, open a new terminal window and clone the Weather Integrator repository;
 ```
