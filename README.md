@@ -230,6 +230,8 @@ If you are interested to see more details about the weather integrator mechanism
 please refer to [this](http://ceur-ws.org/Vol-2322/BMDA_1.pdf) paper which was presented at the 2nd 
 International Workshop on "Big Mobility Data Analytics" (EDBT/ICDT Workshops 2019) on March 26, 2019 at Lisbon, Portugal.
 
+An extension of the weather integrator mechanism for distributed enrichment on streaming data, is presented in [this](https://link.springer.com/article/10.1007/s10707-020-00423-w) article of GeoInformatica (2020) journal.
+
 Contributors
 -
 Nikolaos Koutroumanis, Christos Doulkeridis; Data Science Lab., University of Piraeus.
