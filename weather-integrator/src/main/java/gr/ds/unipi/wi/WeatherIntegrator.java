@@ -37,7 +37,7 @@ public final class WeatherIntegrator {
         private String gribFilesExtension = ".grb2";
         private int lruCacheMaxEntries = 4;
         private boolean useIndex = false;
-
+        private boolean interpolate = false;
         private Rectangle rectangle = null;
         private boolean removeLastValueFromRecords = false;
 
@@ -73,6 +73,10 @@ public final class WeatherIntegrator {
             return this;
         }
 
+        public Builder interpolate() {
+            this.interpolate = true;
+            return this;
+        }
         public WeatherIntegrator build() throws Exception {
             return new WeatherIntegrator(this);
         }
@@ -82,7 +86,7 @@ public final class WeatherIntegrator {
     private WeatherIntegrator(WeatherIntegrator.Builder builder) throws Exception {
 
         recordParser = builder.recordParser;
-        wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.variables);
+        wdo = WeatherDataObtainer.newWeatherDataObtainer(builder.gribFilesFolderPath, builder.gribFilesExtension, builder.lruCacheMaxEntries, builder.useIndex, builder.interpolate, builder.variables);
 
         variables = builder.variables;
         rectangle = builder.rectangle;

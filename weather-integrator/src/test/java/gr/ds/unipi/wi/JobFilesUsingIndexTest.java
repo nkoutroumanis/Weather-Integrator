@@ -26,7 +26,7 @@ public class JobFilesUsingIndexTest {
 
         WeatherIntegrator.newWeatherIntegrator(rp,
                 "./src/test/resources/gribFiles/grib003Files/", stream.collect(Collectors.toList())).filter(Rectangle.newRectangle(-180, -90, 180, 90)).removeLastValueFromRecords()
-                .useIndex().lruCacheMaxEntries(1).gribFilesExtension(".grb2").build().integrate(fileOutput);
+                .useIndex().interpolate().lruCacheMaxEntries(1).gribFilesExtension(".grb2").build().integrate(fileOutput);
 
 
     }

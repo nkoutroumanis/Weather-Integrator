@@ -114,7 +114,7 @@ public final class GribFilesTree {
 
         float time_val = 0;
         try {
-            time_val = (60 * 60) * ((float) timeVariable.readScalarDouble());
+            time_val = (60 * 60) * ((float) timeVariable.readScalarFloat());
         } catch (IOException e) {
             e.printStackTrace();
         }

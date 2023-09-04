@@ -19,7 +19,7 @@ public final class WeatherDataObtainer {
 
     private final LRUCacheManager lruCacheManager;
 
-    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException, URISyntaxException {
+    private WeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, boolean interpolate, List<String> variables) throws IOException, URISyntaxException {
 
         Function<String, NetcdfFile> netcdfFileFunction;
         GribFilesTree gribFilesTree;
@@ -57,11 +57,11 @@ public final class WeatherDataObtainer {
         }
 
         lruCacheManager = LRUCacheManager.newLRUCacheManager(gribFilesTree,
-                LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, variables, netcdfFileFunction);
+                LRUCache.newLRUCache(lruCacheMaxEntries), useIndex, interpolate, variables, netcdfFileFunction);
     }
 
-    public static WeatherDataObtainer newWeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, List<String> variables) throws IOException, URISyntaxException {
-        return new WeatherDataObtainer(gribFilesFolderPath, gribFilesExtension, lruCacheMaxEntries, useIndex, variables);
+    public static WeatherDataObtainer newWeatherDataObtainer(String gribFilesFolderPath, String gribFilesExtension, int lruCacheMaxEntries, boolean useIndex, boolean interpolate, List<String> variables) throws IOException, URISyntaxException {
+        return new WeatherDataObtainer(gribFilesFolderPath, gribFilesExtension, lruCacheMaxEntries, useIndex, interpolate, variables);
     }
 
     public List<Object> obtainAttributes(double longitude, double latitude, Date date) throws IOException {

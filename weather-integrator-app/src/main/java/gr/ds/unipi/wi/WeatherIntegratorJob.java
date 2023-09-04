@@ -49,6 +49,10 @@ public class WeatherIntegratorJob {
             w.useIndex();
         }
 
+        if (wi.getBoolean("interpolate")) {
+            w.interpolate();
+        }
+
         if (output instanceof FileOutput) {
             w.build().integrate((FileOutput) output);
         } else if (output instanceof KafkaOutput) {

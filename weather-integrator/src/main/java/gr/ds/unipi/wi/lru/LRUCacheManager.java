@@ -18,14 +18,17 @@ public final class LRUCacheManager {
     private final GribFilesTree tree;
     private final LRUCache cache;
     private final boolean useIndex;
+    private final boolean interpolate;
     private final List<String> variables;
     private final int numberOfVariables;
     private final Function<String, NetcdfFile> netcdfFileFunction;
 
-    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
+
+    private LRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, boolean interpolate, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
         this.tree = tree;
         this.cache = cache;
         this.useIndex = useIndex;
+        this.interpolate = interpolate;
         this.variables = Collections.unmodifiableList(variables);
         this.numberOfVariables = variables.size();
 
@@ -33,8 +36,8 @@ public final class LRUCacheManager {
 
     }
 
-    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
-        return new LRUCacheManager(tree, cache, useIndex, variables, netcdfFileFunction);
+    public static LRUCacheManager newLRUCacheManager(GribFilesTree tree, LRUCache cache, boolean useIndex, boolean interpolate, List<String> variables, Function<String, NetcdfFile> netcdfFileFunction) {
+        return new LRUCacheManager(tree, cache, useIndex, interpolate, variables, netcdfFileFunction);
     }
 
     //we can get safely the size because list is unmodifiable
@@ -57,8 +60,10 @@ public final class LRUCacheManager {
         }
 
         GribFile gribFile = (GribFile) cache.get(choosenGribFilePath);
+        if(interpolate){
+            return gribFile.getDataValuesByLatLonInterpolated(lat, lon);
+        }
         return gribFile.getDataValuesByLatLon(lat, lon);
-
     }
 
     private boolean isGribFileContainedInCache(String filePath) {

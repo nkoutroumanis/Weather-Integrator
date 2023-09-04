@@ -32,7 +32,7 @@ public final class PreProcessing {
             };
 
             LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree("./src/test/resources/gribFiles/grib003Files/", ".nc", netcdfFileFunction),
-                    LRUCache.newLRUCache(1), true, Collections.unmodifiableList(stream.collect(Collectors.toList())), netcdfFileFunction);
+                    LRUCache.newLRUCache(1), true,true, Collections.unmodifiableList(stream.collect(Collectors.toList())), netcdfFileFunction);
 
             Runtime rt = Runtime.getRuntime();
             System.out.println("Approximation of used Memory: " + (rt.totalMemory() - rt.freeMemory()) / 1000000 + " MB");

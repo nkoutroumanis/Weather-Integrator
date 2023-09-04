@@ -112,7 +112,7 @@ public class BenchmarksTest {
     @OutputTimeUnit(TimeUnit.SECONDS)
     public LRUCacheManager preProcessing() throws IOException {
         return LRUCacheManager.newLRUCacheManager(GribFilesTree.newGribFilesTree(gribFilesPath, gribFilesExtension, netcdfFileFunction),
-                LRUCache.newLRUCache(4), true, Collections.unmodifiableList(variables), netcdfFileFunction);
+                LRUCache.newLRUCache(4), true, true, Collections.unmodifiableList(variables), netcdfFileFunction);
     }
 
 }

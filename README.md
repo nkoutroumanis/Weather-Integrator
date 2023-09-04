@@ -206,13 +206,14 @@ This object can trigger the data integration procedure.
 // The third argument is a list with the weather attributes which will be integrated to the records
 
 WeatherIntegrator weatherIntegrator = WeatherIntegrator.newWeatherIntegrator(recordParser, "/path/to/grib/files/folder", List.of("weatherattr1", "weatherattr2"))
-        .useIndex().build();
+        .useIndex().interpolate().build();
 
 weatherIntegrator.integrate(output);
 ```
 
 The builder pattern of the WeatherIntegrator object has the following methods;
 * useIndex -  it is highly recommended to use this method. An index of the NetCDF library will be used for boosting the accessing on the weather data files.
+* interpolate - it is highly recommended to use this method. Performs interpolation on the values of an attribute, obtained from the four nearest reference points of the given point. If set to false, the value is obtained exclusively from the nearest reference point of the given point.
 * lruCacheMaxEntries - it accepts as an argument an integer which is the number of the cache entries. The higher the number, the higher the throughtput of the enriched records (if temporally unsorted). If the spatio-temporal records are already sorted by date, then set this 1. If not set, the default passed int argument is 4. 
 * gribFilesExtension - it accepts as an argument a string which is the extension of the grib files. If not set, the default passed string argument is '.grb2'.
 * removeLastValueFromRecords - if used, the last value of every input record will not be included to the enriched output record.
