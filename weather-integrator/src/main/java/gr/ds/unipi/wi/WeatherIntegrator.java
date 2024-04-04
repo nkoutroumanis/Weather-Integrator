@@ -5,6 +5,7 @@ import gr.ds.unipi.stpin.Rectangle;
 import gr.ds.unipi.stpin.outputs.FileOutput;
 import gr.ds.unipi.stpin.outputs.KafkaOutput;
 import gr.ds.unipi.stpin.outputs.Output;
+import gr.ds.unipi.stpin.parsers.CsvRecordParser;
 import gr.ds.unipi.stpin.parsers.JsonRecordParser;
 import gr.ds.unipi.stpin.parsers.Record;
 import gr.ds.unipi.stpin.parsers.RecordParser;
@@ -94,11 +95,19 @@ public final class WeatherIntegrator {
     }
 
     public void integrate(KafkaOutput kafkaOutput) throws Exception {
-        integrate(kafkaOutput, recordParser::toDefaultOutputFormat);
+        if(recordParser instanceof CsvRecordParser){
+            integrate(kafkaOutput, record -> recordParser.toCsv(record,((CsvRecordParser)recordParser).getSeparator()));
+        }else{
+            integrate(kafkaOutput, recordParser::toDefaultOutputFormat);
+        }
     }
 
     public void integrate(FileOutput fileOutput) throws Exception {
-        integrate(fileOutput, recordParser::toDefaultOutputFormat);
+        if(recordParser instanceof CsvRecordParser){
+            integrate(fileOutput, record -> recordParser.toCsv(record, ((CsvRecordParser)recordParser).getSeparator()));
+        }else{
+            integrate(fileOutput, recordParser::toDefaultOutputFormat);
+        }
     }
 
     private void integrate(Output output, Function<Record, String> function) throws Exception {

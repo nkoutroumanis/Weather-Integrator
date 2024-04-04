@@ -1,0 +1,2 @@
+mvn package
+java -cp weather-integrator-app-1.0-SNAPSHOT-jar-with-dependencies.jar gr.ds.unipi.wi.WeatherIntegratorJob ~/application.conf

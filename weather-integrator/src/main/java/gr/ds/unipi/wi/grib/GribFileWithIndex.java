@@ -21,7 +21,7 @@ public final class GribFileWithIndex implements GribFile {
 
     private GribFileWithIndex(String path, List<String> listOfVariables, Function<String, NetcdfFile> netcdfFileFunction) throws IOException {
 
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
 
         NetcdfFile ncf = netcdfFileFunction.apply(path);
 
@@ -89,20 +89,27 @@ public final class GribFileWithIndex implements GribFile {
             Object v3;
             Object v4;
 
+//            Object v;
+
             try {
                 v1 = e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(Math.ceil(lat * 2) / 2.0), GribFile.getLonIndex(Math.ceil(lon * 2) / 2.0))));
                 v2 = e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(Math.floor(lat * 2) / 2.0), GribFile.getLonIndex(Math.floor(lon * 2) / 2.0))));
                 v3 = e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(Math.floor(lat * 2) / 2.0), GribFile.getLonIndex(Math.ceil(lon * 2) / 2.0))));
                 v4 = e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(Math.ceil(lat * 2) / 2.0), GribFile.getLonIndex(Math.floor(lon * 2) / 2.0))));
 
+//                v = e.getKey().getObject((e.getValue().set(0, 0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/;
+
             } catch (ArrayIndexOutOfBoundsException k) {
                 v1 = e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(Math.ceil(lat * 2) / 2.0), GribFile.getLonIndex(Math.ceil(lon * 2) / 2.0))));
                 v2 = e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(Math.floor(lat * 2) / 2.0), GribFile.getLonIndex(Math.floor(lon * 2) / 2.0))));
                 v3 = e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(Math.floor(lat * 2) / 2.0), GribFile.getLonIndex(Math.ceil(lon * 2) / 2.0))));
                 v4 = e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(Math.ceil(lat * 2) / 2.0), GribFile.getLonIndex(Math.floor(lon * 2) / 2.0))));
+
+//                v = e.getKey().getObject((e.getValue().set(0, GribFile.getLatIndex(lat), GribFile.getLonIndex(lon))))/*.toString()*/;
             }
 
             values.add(((float)v1*(1/d1) + (float)v2*(1/d2) + (float)v3*(1/d3) + (float)v4*(1/d4)) / ( (1/d1) + (1/d2) + (1/d3) + (1/d4) ));
+//            values.add(Math.abs((((float)v1*(1/d1) + (float)v2*(1/d2) + (float)v3*(1/d3) + (float)v4*(1/d4)) / ( (1/d1) + (1/d2) + (1/d3) + (1/d4) ))-(float)v));
 
         });
         return values;
